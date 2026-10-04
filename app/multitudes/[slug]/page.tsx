@@ -62,7 +62,9 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
       <nav className="u-detail-top relative z-30">
         <SiteMenu />
         <span className="flex items-center gap-5">
-          <Link href="/#top">← All multitudes</Link>
+          <Link href="/#top" className="whitespace-nowrap">
+            ← <span className="hidden min-[400px]:inline">All </span>multitudes
+          </Link>
           <span className="hidden sm:inline">
             {m.n} / {String(multitudes.length).padStart(2, "0")}
           </span>

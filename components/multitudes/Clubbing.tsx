@@ -6,10 +6,10 @@ import { Heading } from "./ui";
 // Clubbing: a night-poster. Always dark, whatever the site theme — it's a club.
 export default function Clubbing({ m }: { m: Multitude }) {
   return (
-    <div className="m-club space-y-16 rounded-3xl px-6 py-14 sm:px-12 lg:px-16">
+    <div className="m-club space-y-16 rounded-3xl px-5 py-12 sm:px-12 sm:py-14 lg:px-16">
       <header className="m-rise">
         <p className="font-mono text-xs uppercase tracking-[0.4em] text-ink">{m.sub}</p>
-        <h1 className="m-neon mt-4 font-sans text-[clamp(4rem,14vw,12rem)] font-black uppercase leading-[0.85] tracking-[-0.05em]">
+        <h1 className="m-neon mt-4 font-sans text-[clamp(2.5rem,14vw,12rem)] font-black uppercase leading-[0.85] tracking-[-0.05em]">
           {m.title}
         </h1>
         <div className="mt-8 flex flex-wrap items-end justify-between gap-8">

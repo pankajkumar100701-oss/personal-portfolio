@@ -414,6 +414,16 @@ export default function MultitudesHero() {
                 })}
               </ul>
 
+              {/* Phones skip the dive, so the arrival's call to action lives here. */}
+              <div className="u-mobile-cta">
+                <a href="#projects" className="u-cta-primary">
+                  See my work <span aria-hidden>→</span>
+                </a>
+                <a href="#contact" className="u-cta-ghost">
+                  <i className="u-live" aria-hidden /> Open for projects
+                </a>
+              </div>
+
               <span className="u-micro u-m1" aria-hidden>CREATIVE</span>
               <span className="u-micro u-m2" aria-hidden>CURIOUS</span>
               <span className="u-micro u-m3" aria-hidden>BUILDING</span>

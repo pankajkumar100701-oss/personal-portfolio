@@ -18,7 +18,7 @@ export default function Home() {
       <Cosmos />
       <ScrollReveal />
 
-      <header className="fixed inset-x-0 top-0 z-20">
+      <header className="site-header fixed inset-x-0 top-0 z-20">
         <nav className="flex items-center justify-between gap-3 px-4 py-4 sm:px-8 lg:px-12">
           <SiteMenu />
           <ul className="glass hidden rounded-full p-1 text-sm sm:flex sm:gap-1">
@@ -38,8 +38,8 @@ export default function Home() {
 
         {/* About */}
         <section id="about" className="section">
-          <div className="grid items-center gap-6 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
-            <TiltCard className="glass rounded-3xl p-8 sm:p-10" data-reveal>
+          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
+            <TiltCard className="glass rounded-3xl p-6 sm:p-10" data-reveal>
               <SectionLabel n="01" text="About me" />
               <h2 className="mt-3 text-3xl font-bold sm:text-5xl">
                 Hi, I&apos;m <span className="gradient-text">Pankaj.</span>
@@ -48,11 +48,11 @@ export default function Home() {
               {profile.about.map((p) => (
                 <p key={p} className="mt-4 leading-relaxed text-fg/70">{p}</p>
               ))}
-              <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-fg/10 pt-6">
+              <dl className="mt-8 grid grid-cols-3 gap-3 border-t border-fg/10 pt-6">
                 {profile.stats.map((s) => (
                   <div key={s.label}>
                     <dt className="sr-only">{s.label}</dt>
-                    <dd className="gradient-text text-3xl font-bold sm:text-4xl">{s.value}</dd>
+                    <dd className="gradient-text text-2xl font-bold sm:text-4xl">{s.value}</dd>
                     <dd className="mt-1 text-xs text-fg/60">{s.label}</dd>
                   </div>
                 ))}
@@ -67,7 +67,7 @@ export default function Home() {
                 </p>
                 <ul className="mt-4 space-y-3">
                   {profile.now.map((n) => (
-                    <li key={n.label} className="flex gap-4 text-sm">
+                    <li key={n.label} className="flex flex-col gap-1 text-sm sm:flex-row sm:gap-4">
                       <span className="w-20 shrink-0 font-mono text-xs uppercase tracking-widest text-fg/50">{n.label}</span>
                       <span className="text-fg/85">{n.value}</span>
                     </li>
@@ -125,13 +125,13 @@ export default function Home() {
 
         {/* Contact — the email and links come from data/profile.ts */}
         <section id="contact" className="section items-center text-center">
-          <div className="glass mx-auto w-full max-w-3xl rounded-3xl p-8 sm:p-14" data-reveal>
+          <div className="glass mx-auto w-full max-w-3xl rounded-3xl px-5 py-10 sm:p-14" data-reveal>
             <SectionLabel n="04" text="Contact" />
-            <h2 className="mt-3 text-4xl font-bold sm:text-6xl">
+            <h2 className="mt-3 text-[2rem] font-bold leading-tight sm:text-6xl">
               Let&apos;s build something <span className="gradient-text">out of this world.</span>
             </h2>
             <p className="mt-5 text-fg/70">Have a project in mind or just want to say hi? My inbox is always open.</p>
-            <a href={`mailto:${profile.contact.email}`} className="btn-primary mt-8 inline-block">{profile.contact.email}</a>
+            <a href={`mailto:${profile.contact.email}`} className="btn-primary mt-8 inline-block max-w-full break-all">{profile.contact.email}</a>
             <ul className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
               {profile.contact.links.map((l) => (
                 <li key={l.label}>

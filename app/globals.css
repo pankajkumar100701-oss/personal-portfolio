@@ -104,8 +104,17 @@ body {
   max-width: 96rem;
   padding: 6rem 1rem;
 }
+@media (max-width: 639px) {
+  .section { min-height: 0; padding-block: 5rem; }
+  .section:first-of-type { padding-top: 6rem; }
+}
 @media (min-width: 640px) {
   .section { padding-inline: 2rem; }
+}
+
+/* Phones: the logo sits over scrolling content, so fade the page out under it. */
+@media (max-width: 639px) {
+  .site-header { background: linear-gradient(var(--background) 45%, transparent); }
 }
 @media (min-width: 1024px) {
   .section { padding-inline: 3rem; }
@@ -196,6 +205,7 @@ body {
 .code-body {
   overflow-x: auto;
   padding: 1.25rem 1.5rem 1.5rem;
+  -webkit-overflow-scrolling: touch;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.8;
@@ -795,7 +805,9 @@ body {
   opacity: clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1);
   translate: 0 calc((1 - clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1)) * 1rem);
 }
-.u-arrive-cta a {
+.u-mobile-cta { display: none; }
+.u-arrive-cta a,
+.u-mobile-cta a {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1033,7 +1045,12 @@ body {
 .u-detail-pager a { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9375rem; transition: color 0.2s; }
 .u-detail-pager a:last-child { text-align: right; }
 .u-detail-pager a:hover { color: var(--ink); }
-.u-detail-pager small { font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-dim); }
+.u-detail-pager small { font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-dim); }
+
+@media (max-width: 639px) {
+  .u-detail-main { padding: 2.5rem 0 4rem; }
+  .m-frame { padding: 0.5rem; }
+}
 
 /* ---------- Multitude layouts (components/multitudes) ---------- */
 .m-rise { animation: u-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
@@ -1179,7 +1196,25 @@ body {
   .u-copy h1 { font-size: clamp(56px, 17vw, 90px); }
   .u-nodes { position: relative; inset: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 48px; }
   .u-node { position: relative; left: auto; top: auto; transform: none !important; animation: none; }
-  .u-node > * { width: auto; height: 100%; backdrop-filter: none; background: var(--u-card); }
+  .u-node > * { width: auto; height: 100%; padding: 0.875rem 0.875rem 0.9375rem; backdrop-filter: none; background: var(--u-card); }
+  .u-node small { font-size: 0.625rem; line-height: 1.5; }
+  .u-mobile-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.625rem;
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+  }
+  .u-mobile-cta a { flex: 1 1 100%; justify-content: center; white-space: nowrap; }
+  /* The edge vignette is sized for a one-screen stage; on the tall stacked
+     layout it just dims the bottom cards and buttons. */
+  .u-stage::after { display: none; }
+}
+@media (max-width: 380px) {
+  .u-stage { padding-inline: 12px; }
+  .u-nodes { gap: 8px; }
+  .u-node strong { font-size: 0.9375rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .u-node, .u-node > *, .u-copy > *, .u-copy h1 em, .u-orb, .u-halo, .u-wheel { animation: none; }

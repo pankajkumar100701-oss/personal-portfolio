@@ -13,13 +13,13 @@ export default function Art({ m }: { m: Multitude }) {
       </blockquote>
       <section>
         <Heading n="01">Selected works</Heading>
-        <div className="columns-1 gap-5 sm:columns-2 lg:columns-3">
+        <div className="columns-2 gap-3 sm:gap-5 lg:columns-3">
           {art.works.map((w) => (
-            <figure key={w.title} className="m-frame mb-5 break-inside-avoid">
+            <figure key={w.title} className="m-frame mb-3 break-inside-avoid sm:mb-5">
               <div className={`m-canvas m-canvas-${w.art} ${w.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`} />
-              <figcaption className="flex items-baseline justify-between gap-3 px-1 pt-3">
-                <span className="font-display text-xl italic">{w.title}</span>
-                <span className="text-xs uppercase tracking-widest text-muted">{w.medium} · {w.year}</span>
+              <figcaption className="flex flex-col gap-0.5 px-1 pt-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
+                <span className="font-display text-lg italic sm:text-xl">{w.title}</span>
+                <span className="text-[0.625rem] uppercase tracking-widest text-muted sm:text-xs">{w.medium} · {w.year}</span>
               </figcaption>
             </figure>
           ))}
