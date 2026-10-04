@@ -1,0 +1,145 @@
+// Edit this file to personalise the portfolio — every section reads from here.
+
+export type Multitude = {
+  n: string;
+  slug: string;
+  title: string;
+  sub: string;
+  x: number;
+  y: number;
+  depth: number;
+  color: string;
+  intro: string;
+  points: string[];
+  link?: { label: string; href: string };
+};
+
+export const profile = {
+  name: "Pankaj Kumar",
+  role: "Web Developer & UI Designer",
+  tagline: "I build fast, playful and beautifully crafted web experiences.",
+  location: "India",
+  hero: {
+    first: "Pankaj",
+    accent: "Multitudes",
+    eyebrow: "UI Designer / Website Developer",
+    subline: "interfaces · websites · art · ideas",
+  },
+  // Floating nodes in the hero. x/y are % positions in the hero "world"; depth sets how fast each flies toward you on zoom.
+  multitudes: [
+    {
+      n: "01", slug: "web-development", title: "Web Development", sub: "Work / Build / Code", x: 7, y: 22, depth: 1.05, color: "#d7ff3f",
+      intro: "Where most of my days go — turning ideas into fast, polished products with React, Next.js and TypeScript.",
+      points: ["NGO websites, e-commerce storefronts and browser games", "Motion, performance and interfaces that feel good to use", "From first sketch to deployed product"],
+      link: { label: "See my projects", href: "/#projects" },
+    },
+    {
+      n: "02", slug: "painting-art", title: "Painting / Art", sub: "Colour / Form / Vision", x: 69, y: 13, depth: 0.92, color: "#ff6338",
+      intro: "Painting keeps my eye honest. Colour, composition and texture all feed back into the way I design for the screen.",
+      points: ["Experiments with colour and form", "Sketchbooks full of half-finished ideas", "Art as a way of slowing down"],
+    },
+    {
+      n: "03", slug: "twitter", title: "Twitter / X", sub: "Thoughts / Signals", x: 79, y: 47, depth: 1.18, color: "#6e8cff",
+      intro: "Where I think out loud — notes on building, design, tech and whatever caught my attention this week.",
+      points: ["Build-in-public updates", "Threads on web, design and tools", "Signals worth sharing"],
+      link: { label: "Follow on X", href: "https://x.com/" },
+    },
+    {
+      n: "04", slug: "education", title: "Education", sub: "Learn / Unlearn / Grow", x: 12, y: 63, depth: 0.82, color: "#d7ff3f",
+      intro: "Learning never really stopped after the classroom. I keep picking up new tools, ideas and ways of seeing.",
+      points: ["Formal education and the foundations it gave me", "Self-taught everything else, one project at a time", "Unlearning habits that no longer serve"],
+      link: { label: "More about me", href: "/#about" },
+    },
+    {
+      n: "05", slug: "clubbing", title: "Clubbing", sub: "Music / Night / Energy", x: 42, y: 7, depth: 1.25, color: "#ff6338",
+      intro: "Music, lights and a room full of energy — nights out are where I recharge.",
+      points: ["Favourite venues and sounds", "Music that ends up on my coding playlists", "The rhythm that carries into the work"],
+    },
+    {
+      n: "06", slug: "parties", title: "Parties", sub: "People / Moments", x: 53, y: 82, depth: 0.9, color: "#6e8cff",
+      intro: "Good people, good conversations, moments worth remembering.",
+      points: ["Hosting and gathering friends", "Celebrations big and small", "Memories that outlast the night"],
+    },
+    {
+      n: "07", slug: "restaurants", title: "Restaurants", sub: "Places / Taste", x: 2, y: 43, depth: 1.12, color: "#d7ff3f",
+      intro: "Always hunting for the next great plate — street stalls to sit-down dinners.",
+      points: ["Places I keep going back to", "New spots worth the trip", "Notes on taste, service and atmosphere"],
+    },
+    {
+      n: "08", slug: "recipes", title: "Recipes", sub: "Make / Taste / Repeat", x: 30, y: 78, depth: 0.76, color: "#ff6338",
+      intro: "Cooking is just building with ingredients — iterate until it tastes right.",
+      points: ["Everyday recipes I swear by", "Kitchen experiments, wins and failures", "Endless cups of chai"],
+    },
+    {
+      n: "09", slug: "rental", title: "Rental", sub: "Service / System / Ride", x: 76, y: 78, depth: 1.28, color: "#6e8cff",
+      intro: "A rental service built on simple systems — easy booking, reliable rides.",
+      points: ["How the service works", "The systems behind bookings and fleet", "What's coming next"],
+    },
+    {
+      n: "10", slug: "business", title: "Business", sub: "Ideas / Products / Systems", x: 89, y: 27, depth: 0.88, color: "#d7ff3f",
+      intro: "Ideas that grow into products, and products that need good systems behind them.",
+      points: ["Ventures I'm building and backing", "Product thinking beyond code", "Open to collaborations"],
+      link: { label: "Get in touch", href: "/#contact" },
+    },
+  ] as Multitude[],
+  about: [
+    "Hi, I'm Pankaj — a web developer. Over the past year I've worked on all kinds of websites: NGO sites, e-commerce storefronts, portfolios, landing pages and even browser games.",
+    "I work mostly with React, Next.js and TypeScript, and I care about the details — motion, performance and interfaces that feel good to use.",
+  ],
+  stats: [
+    { value: "10+", label: "Projects shipped" },
+    { value: "1 yr", label: "Experience" },
+    { value: "∞", label: "Cups of chai" },
+  ],
+  // The "now" list in the About section.
+  now: [
+    { label: "Building", value: "this portfolio, one multitude at a time" },
+    { label: "Learning", value: "motion design & 3D on the web" },
+    { label: "Open to", value: "freelance websites & collaborations" },
+  ],
+  skills: [
+    { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js", "Framer Motion"] },
+    { group: "Backend", items: ["Node.js", "REST APIs", "PostgreSQL", "MongoDB", "Prisma"] },
+    { group: "Tools", items: ["Git", "Figma", "Vercel", "Docker", "Linux"] },
+  ],
+  projects: [
+    {
+      title: "Jagori Rural",
+      description: "Website for a rural women's rights organisation — programme portfolio, journey timeline and community stories.",
+      tags: ["Next.js", "Tailwind", "Design"],
+      href: "#",
+      color: "#f472b6",
+    },
+    {
+      title: "Flappy Bird",
+      description: "A browser remake of the classic arcade game rendered on HTML canvas with smooth physics.",
+      tags: ["Canvas", "Game", "TypeScript"],
+      href: "#",
+      color: "#facc15",
+    },
+    {
+      title: "Photography Portfolio",
+      description: "A minimal, image-first gallery that lets the photographs do the talking.",
+      tags: ["Next.js", "Gallery", "UI"],
+      href: "#",
+      color: "#38bdf8",
+    },
+    {
+      title: "Be Unique Himwoollen",
+      description: "Storefront for handmade Himalayan woollens with a warm, crafted look.",
+      tags: ["E-commerce", "React", "Branding"],
+      href: "#",
+      color: "#a78bfa",
+    },
+  ],
+  // Swap in your real email and profile links here; the Contact section and
+  // the site menu both read from this.
+  contact: {
+    email: "hello@example.com",
+    links: [
+      { label: "GitHub", href: "https://github.com/" },
+      { label: "LinkedIn", href: "https://linkedin.com/" },
+      { label: "Twitter / X", href: "https://x.com/" },
+    ],
+  },
+};
