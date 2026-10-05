@@ -1,10 +1,11 @@
 import Cosmos from "@/components/Cosmos";
 import MultitudesHero from "@/components/MultitudesHero";
+import MultitudesTrack from "@/components/MultitudesTrack";
 import SiteMenu from "@/components/SiteMenu";
 import { profile } from "@/data/profile";
 
-// The page ends inside the dot: the hero's arrival screen is the last thing
-// you see, centred, with only the footer line laid over its bottom edge.
+// Dive into the dot, then scroll on through the multitudes as a sideways row
+// of cards; the footer line sits over the bottom edge of the last screen.
 export default function Home() {
   return (
     <>
@@ -18,6 +19,7 @@ export default function Home() {
 
       <main id="top" className="relative">
         <MultitudesHero />
+        <MultitudesTrack />
 
         <footer className="pointer-events-none absolute inset-x-0 bottom-3 z-30 px-4 text-center text-xs text-fg/50">
           <p>

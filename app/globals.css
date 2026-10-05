@@ -628,8 +628,8 @@ body {
 }
 /* --ink: a multitude's colour when used for text. The neon accents wash out on
    paper, so light mode darkens them. */
-:is(.u-node, .u-arrive-chips li, .u-detail) { --ink: var(--c); }
-[data-theme="light"] :is(.u-node, .u-arrive-chips li, .u-detail) { --ink: color-mix(in oklab, var(--c) 80%, #000); }
+:is(.u-node, .u-arrive-chips li, .u-detail, .u-card) { --ink: var(--c); }
+[data-theme="light"] :is(.u-node, .u-arrive-chips li, .u-detail, .u-card) { --ink: color-mix(in oklab, var(--c) 80%, #000); }
 
 .u-i { position: relative; }
 /* The real dot of the "i" (the glyph is a dotless ı). Sized/placed in em so it
@@ -1338,4 +1338,95 @@ body {
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: -0.04em;
+}
+
+/* ---------- Multitudes row after the arrival (components/MultitudesTrack.tsx) ---------- */
+.u-track { position: relative; height: 420svh; font-family: var(--font-display); color: var(--u-fg); }
+.u-track-stage { position: sticky; top: 0; display: flex; align-items: center; height: 100svh; overflow: hidden; }
+.u-track-row { display: flex; align-items: center; gap: 1.5rem; padding-inline: max(1.5rem, 8vw); will-change: transform; }
+.u-track-intro { flex: none; width: 26rem; margin-right: 3rem; }
+.u-track-kicker { font-family: var(--font-sans); font-size: 0.6875rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--u-acid); }
+.u-track-intro h2 { margin-top: 1rem; font-size: clamp(2.75rem, 5vw, 4.5rem); font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+.u-track-intro em { color: var(--u-acid); }
+.u-track-hint { margin-top: 1.5rem; max-width: 20rem; font-family: var(--font-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--u-muted); }
+.u-card {
+  --d: 0;
+  --a: 0;
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: 21rem;
+  height: min(33rem, 68svh);
+  padding: 1.75rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--c) 30%, var(--u-line));
+  border-radius: 1.5rem;
+  background: linear-gradient(165deg, color-mix(in srgb, var(--c) 16%, var(--u-card)), var(--u-card) 55%);
+  box-shadow: 0 30px 60px -40px var(--u-shade);
+  /* Set per frame from the card's distance to the centre (-1..1, and |d|). */
+  rotate: calc(var(--d) * -5deg);
+  scale: calc(1 - var(--a) * 0.12);
+  opacity: calc(1 - var(--a) * 0.45);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+/* A big soft disk of the card's colour: the multitude's "dot". */
+.u-card::before {
+  content: "";
+  position: absolute;
+  right: -5rem;
+  bottom: -5rem;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c) 45%, transparent), transparent 70%);
+  transition: scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-card:hover { border-color: var(--c); box-shadow: 0 30px 70px -30px color-mix(in srgb, var(--c) 55%, transparent); }
+.u-card:hover::before { scale: 1.5; }
+.u-card:focus-visible { outline: 2px solid var(--c); outline-offset: 4px; }
+.u-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; font-family: var(--font-sans); }
+.u-card-top b { font-family: var(--font-display); font-size: 4.5rem; font-style: italic; font-weight: 400; line-height: 0.9; color: var(--ink); }
+.u-card-top small { font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; text-align: right; color: var(--u-muted); }
+.u-card strong { margin-top: auto; font-size: 2.5rem; font-style: italic; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+.u-card p { position: relative; margin-top: 1rem; font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.6; color: var(--u-soft); }
+.u-card-go {
+  position: relative;
+  align-self: flex-start;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--u-bg);
+  transition: translate 0.25s;
+}
+.u-card:hover .u-card-go { translate: 0.25rem 0; }
+.u-track-meter {
+  position: absolute;
+  left: 50%;
+  bottom: 3.25rem;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--u-muted);
+}
+.u-track-meter span { color: var(--u-fg); }
+.u-track-meter i { width: 8rem; height: 2px; margin-left: 0.75rem; overflow: hidden; border-radius: 2px; background: var(--u-line); }
+.u-track-meter b { display: block; height: 100%; background: var(--u-acid); scale: 0 1; transform-origin: left; }
+/* Phones and reduced motion: a plain swipeable row. */
+@media (max-width: 799px), (prefers-reduced-motion: reduce) {
+  .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
+  .u-track-stage { position: static; display: block; height: auto; overflow: visible; }
+  .u-track-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 0.5rem 16px 1rem; scrollbar-width: none; }
+  .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
+  .u-track-intro h2 { font-size: 2.75rem; }
+  .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
+  .u-track-meter { display: none; }
 }
