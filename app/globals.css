@@ -29,11 +29,16 @@
   --u-card-hover: rgb(20 22 28 / 0.9);
   --u-line: rgb(255 255 255 / 0.08);
   --u-shade: rgb(0 0 0 / 0.42);
+
+  /* The multitudes' colours (data/profile.ts points at these). */
+  --m-lime: #d7ff3f;
+  --m-coral: #ff6338;
+  --m-blue: #6e8cff;
 }
 :root[data-theme="light"] {
-  --background: #f5f3ee;
+  --background: #faf8f4;
   --foreground: #121318;
-  --cosmos: #f5f3ee;
+  --cosmos: #faf8f4;
   --glass-bg: rgb(255 255 255 / 0.85);
   --panel-bg: rgb(255 255 255 / 0.98);
   --accent: #0e7490;
@@ -41,10 +46,12 @@
   --grid-dot: rgb(18 19 24 / 0.09);
   --glow-o: 0.85;
 
-  --u-bg: #f5f3ee;
+  --u-bg: #faf8f4;
   --u-fg: #121318;
   --u-paper: #121318;
-  --u-acid: #4a6600;
+  /* Neon lime turns olive when darkened for paper, so light mode swaps it
+     for a warm terracotta that reads cleanly on cream. */
+  --u-acid: #c2461c;
   --u-muted: #4a4d46;
   --u-soft: #2b2d28;
   --u-dim: #5b5e57;
@@ -52,7 +59,11 @@
   --u-card: rgb(255 255 255 / 0.9);
   --u-card-hover: #fff;
   --u-line: rgb(0 0 0 / 0.1);
-  --u-shade: rgb(70 60 30 / 0.1);
+  --u-shade: rgb(70 55 35 / 0.05);
+
+  --m-lime: #2f9e5a;
+  --m-coral: #e5532d;
+  --m-blue: #4c68e8;
 }
 
 @theme inline {
@@ -147,9 +158,9 @@ body {
 .cosmos-glow-a { --g: #6e8cff; --o: 0.22; width: 70vmax; height: 70vmax; left: -25vmax; top: -20vmax; }
 .cosmos-glow-b { --g: #ff6338; --o: 0.16; width: 60vmax; height: 60vmax; right: -22vmax; bottom: -25vmax; }
 .cosmos-glow-c { --g: #d7ff3f; --o: 0.1; width: 46vmax; height: 46vmax; left: 35%; top: 30%; }
-[data-theme="light"] .cosmos-glow-a { --g: #a5b8ff; }
-[data-theme="light"] .cosmos-glow-b { --g: #ffb199; }
-[data-theme="light"] .cosmos-glow-c { --g: #e3ff7a; --o: 0.3; }
+[data-theme="light"] .cosmos-glow-a { --g: #c3cfff; }
+[data-theme="light"] .cosmos-glow-b { --g: #ffc4ae; }
+[data-theme="light"] .cosmos-glow-c { --g: #ffe6c7; --o: 0.25; }
 .cosmos-grid {
   position: absolute;
   inset: 0;
@@ -515,6 +526,7 @@ body {
   background: radial-gradient(32.5rem circle at var(--px, 50%) var(--py, 50%), rgb(215 255 63 / 0.06), transparent 70%);
 }
 .u-stage:hover::before { opacity: 1; }
+[data-theme="light"] .u-stage::before { background: radial-gradient(32.5rem circle at var(--px, 50%) var(--py, 50%), rgb(194 70 28 / 0.05), transparent 70%); }
 /* Soft glows drawn as radial gradients (a blur() filter this size is very
    expensive to animate). */
 .u-orb { will-change: translate; position: absolute; border-radius: 50%; opacity: 0.16; pointer-events: none; background: radial-gradient(circle, var(--o) 0%, transparent 70%); animation: u-drift 22s ease-in-out infinite; }
@@ -523,6 +535,7 @@ body {
 .u-orb-c { --o: #d7ff3f; width: 40vw; height: 40vw; left: 34vw; top: -26vh; opacity: 0.08; }
 .u-orb-b { animation-duration: 27s; animation-direction: reverse; }
 .u-orb-c { animation-duration: 18s; animation-delay: -6s; }
+[data-theme="light"] .u-orb-c { --o: #ffd2a8; }
 
 .u-camera {
   position: absolute;
@@ -556,6 +569,8 @@ body {
   background: radial-gradient(circle, rgb(215 255 63 / 0.09), rgb(110 140 255 / 0.035) 38%, transparent 70%);
   animation: u-breathe 7s ease-in-out infinite;
 }
+[data-theme="light"] .u-halo { background: radial-gradient(circle, rgb(194 70 28 / 0.06), rgb(76 104 232 / 0.03) 38%, transparent 70%); }
+[data-theme="light"] .u-orbit-2 { border-color: rgb(194 70 28 / 0.12); }
 .u-orbit {
   position: absolute;
   left: 50%;
@@ -600,7 +615,7 @@ body {
 /* --ink: a multitude's colour when used for text. The neon accents wash out on
    paper, so light mode darkens them. */
 :is(.u-node, .u-arrive-chips li, .u-detail) { --ink: var(--c); }
-[data-theme="light"] :is(.u-node, .u-arrive-chips li, .u-detail) { --ink: color-mix(in oklab, var(--c) 55%, #000); }
+[data-theme="light"] :is(.u-node, .u-arrive-chips li, .u-detail) { --ink: color-mix(in oklab, var(--c) 80%, #000); }
 
 .u-i { position: relative; }
 /* The real dot of the "i" (the glyph is a dotless ı). Sized/placed in em so it
@@ -621,6 +636,10 @@ body {
 /* Idle loops repaint the title / cards every frame; freeze them during the
    dive so the zoom gets the whole frame budget. */
 .u-section[data-zooming] :is(.u-copy h1 em, .u-halo, .u-node, .u-orb) { animation-play-state: paused; }
+[data-theme="light"] .u-dot { animation-name: u-beckon-light; }
+@keyframes u-beckon-light {
+  50% { box-shadow: 0 0 0 0.05em rgb(194 70 28 / 0.3), 0 0 0.35em rgb(194 70 28 / 0.35); }
+}
 @keyframes u-beckon {
   50% { box-shadow: 0 0 0 0.05em rgb(215 255 63 / 0.35), 0 0 0.35em rgb(215 255 63 / 0.45); }
 }
@@ -735,6 +754,7 @@ body {
   color: var(--u-acid);
   text-shadow: 0 0 0.35em color-mix(in srgb, var(--u-acid) 35%, transparent);
 }
+[data-theme="light"] .u-arrive-accent span { text-shadow: none; }
 .u-arrive-sub {
   margin-top: 1.25rem;
   font-size: 0.6875rem;
@@ -787,6 +807,19 @@ body {
   box-shadow: 0 0 8px var(--c);
   vertical-align: 1px;
 }
+/* On paper the tinted fills turn muddy: plain white chips with a soft shadow,
+   the colour kept to the dot, border and hover. */
+[data-theme="light"] .u-arrive-chips a {
+  border-color: color-mix(in srgb, var(--c) 22%, rgb(0 0 0 / 0.08));
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(30 25 15 / 0.05), 0 6px 16px -10px rgb(30 25 15 / 0.18);
+}
+[data-theme="light"] .u-arrive-chips b::before { box-shadow: none; }
+[data-theme="light"] .u-arrive-chips a:hover {
+  border-color: color-mix(in srgb, var(--c) 55%, transparent);
+  background: color-mix(in srgb, var(--c) 6%, #fff);
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--c) 45%, transparent);
+}
 .u-stage[data-arrived] .u-arrive-chips a { pointer-events: auto; }
 .u-arrive-chips a:hover {
   translate: 0 -2px;
@@ -819,6 +852,8 @@ body {
 }
 .u-stage[data-arrived] .u-arrive-cta a { pointer-events: auto; }
 .u-cta-primary { background: var(--u-acid); color: var(--u-bg); }
+[data-theme="light"] .u-cta-primary { color: #fff; box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--u-acid) 70%, transparent); }
+[data-theme="light"] .u-cta-ghost { background: #fff; border-color: rgb(0 0 0 / 0.12); }
 .u-cta-primary:hover { translate: 0 -2px; box-shadow: 0 10px 30px -8px color-mix(in srgb, var(--u-acid) 60%, transparent); }
 .u-cta-ghost { border: 1px solid color-mix(in srgb, var(--u-fg) 22%, transparent); color: var(--u-fg); background: color-mix(in srgb, var(--u-bg) 60%, transparent); }
 .u-cta-ghost:hover { translate: 0 -2px; background: color-mix(in srgb, var(--u-fg) 8%, var(--u-bg)); }
@@ -1077,6 +1112,7 @@ body {
   transition: translate 0.25s, box-shadow 0.25s;
 }
 .m-cta:hover { translate: 0 -2px; box-shadow: 0 12px 30px -10px var(--c); }
+[data-theme="light"] .m-cta { background: var(--ink); color: #fff; }
 .m-pill, .m-option {
   padding: 0.45rem 1rem;
   border: 1px solid var(--u-line);
