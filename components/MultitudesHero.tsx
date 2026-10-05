@@ -360,6 +360,20 @@ export default function MultitudesHero() {
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");
+  // The websites I've built, shown under the title on phones and in the
+  // bottom bar on desktop (where the cards leave no room under the title).
+  const sites = (
+    <>
+      <span>Websites I&apos;ve built</span>
+      <ul>
+        {profile.projects.map((p) => (
+          <li key={p.title} style={{ "--c": p.color } as CSSProperties}>
+            <a href={p.href}>{p.title}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 
   return (
     <section ref={sectionRef} className="u-section" aria-label="Introduction">
@@ -397,6 +411,8 @@ export default function MultitudesHero() {
                   </em>
                 </h1>
                 <p className="u-subline">{hero.subline}</p>
+                {/* Phones: the websites list sits under the title (desktop has it in the bottom bar). */}
+                <div className="u-sites u-sites-mobile">{sites}</div>
               </div>
 
               <ul className="u-nodes">
@@ -495,6 +511,7 @@ export default function MultitudesHero() {
           <span>
             <span className="u-wheel" aria-hidden>↕</span> Scroll to dive into the i
           </span>
+          <div className="u-sites">{sites}</div>
           <span ref={readoutRef} className="u-readout" aria-hidden>
             Zoom 1.00×
           </span>

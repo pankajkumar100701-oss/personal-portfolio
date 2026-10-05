@@ -899,6 +899,30 @@ body {
 .u-copy > :nth-child(2) { animation-delay: 0.12s; }
 .u-copy > :nth-child(3) { animation-delay: 0.24s; }
 .u-subline { margin-top: 1.5625rem; font-size: 1.0625rem; font-style: italic; letter-spacing: 0; color: var(--u-dim); }
+.u-copy > :nth-child(4) { animation-delay: 0.36s; }
+/* The websites I've built, as a row of small pills: in the bottom bar on
+   desktop, under the title on phones. */
+.u-sites { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-sans); }
+.u-sites > span { font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-dim); }
+.u-sites ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.375rem; list-style: none; letter-spacing: normal; text-transform: none; }
+.u-sites-mobile { display: none; }
+.u-stage[data-arrived] .u-bottom .u-sites a { pointer-events: none; }
+.u-sites a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--u-line);
+  border-radius: 999px;
+  background: var(--u-card);
+  font-size: 0.6875rem;
+  color: var(--u-soft);
+  pointer-events: auto;
+  transition: border-color 0.25s, color 0.25s, translate 0.25s;
+}
+.u-sites a::before { content: ""; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--c); }
+.u-sites a:hover { translate: 0 -1px; border-color: var(--c); color: var(--u-fg); }
+.u-sites a:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
 
 .u-nodes { position: absolute; inset: 0; list-style: none; }
 .u-node {
@@ -1019,6 +1043,8 @@ body {
   bottom: 1.5625rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   font-family: var(--font-sans);
   font-size: 0.625rem;
   letter-spacing: 0.15em;
@@ -1257,6 +1283,7 @@ body {
     font-family: var(--font-sans);
   }
   .u-mobile-cta a { flex: 1 1 100%; justify-content: center; white-space: nowrap; }
+  .u-sites-mobile { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.125rem; }
   /* The edge vignette is sized for a one-screen stage; on the tall stacked
      layout it just dims the bottom cards and buttons. */
   .u-stage::after { display: none; }
