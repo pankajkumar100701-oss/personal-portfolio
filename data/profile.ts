@@ -83,6 +83,11 @@ export const profile = {
       points: ["Ventures I'm building and backing", "Product thinking beyond code", "Open to collaborations"],
       link: { label: "Get in touch", href: `mailto:${email}` },
     },
+    {
+      n: "11", slug: "medical", title: "Medical", sub: "Health / Care / Science", x: 21, y: 6, depth: 1.02, color: "var(--m-coral)",
+      intro: "Health, care and the science behind it — the side of me that's curious about how people heal.",
+      points: ["What I'm learning about health and medicine", "Care, habits and staying well", "Where tech can help people get better care"],
+    },
   ] as Multitude[],
   about: [
     "Hi, I'm Pankaj — a web developer. Over the past year I've worked on all kinds of websites: NGO sites, e-commerce storefronts, portfolios, landing pages and even browser games.",

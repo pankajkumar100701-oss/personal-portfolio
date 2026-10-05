@@ -1302,3 +1302,40 @@ body {
   .u-readout { display: none; }
   .u-bottom > span:first-child { visibility: hidden; }
 }
+
+/* ---------- Page-to-page portal (components/PortalTransition.tsx) ---------- */
+/* A multitude-coloured cover that floods out of the clicked link, then opens
+   onto the next page through a growing hole: a full layer minus a circle
+   (mask exclude), whose mask-size the script animates. */
+.portal-x {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  place-items: center;
+  background: var(--c);
+  color: var(--u-bg);
+  mask:
+    radial-gradient(circle closest-side, #000 calc(100% - 1px), transparent) center / 0 0 no-repeat,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.portal-x[data-on] { display: grid; }
+.portal-x-label { padding: 0 1rem; text-align: center; font-family: var(--font-display); }
+.portal-x-label b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  opacity: 0.7;
+}
+.portal-x-label strong {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}

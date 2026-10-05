@@ -1,0 +1,121 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { profile } from "@/data/profile";
+
+const ENTER = 720; // ms: the disk floods the screen
+const EXIT = 850; // ms: the new page opens out of its centre
+
+// The page-to-page version of the hero's dive. Clicking any link to a
+// multitude grows a disk in that multitude's colour out of the click (its
+// "dot"), names the page, navigates underneath, then hollows out from the
+// centre into an ever-wider ring that opens onto the new page. Lives in the
+// root layout so it survives the navigation. Skipped for reduced motion,
+// modified clicks and back/forward.
+export default function PortalTransition() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const numRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLElement>(null);
+  const pending = useRef<string | null>(null);
+  const busy = useRef(false);
+  const exitRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    const root = rootRef.current!;
+    const label = root.firstElementChild as HTMLElement;
+    let safety = 0;
+
+    const finish = () => {
+      root.removeAttribute("data-on");
+      for (const a of [...root.getAnimations(), ...label.getAnimations()]) a.cancel();
+      busy.current = false;
+      pending.current = null;
+    };
+
+    exitRef.current = () => {
+      clearTimeout(safety);
+      const d = Math.hypot(innerWidth, innerHeight) + 4;
+      label.animate([{ opacity: 1 }, { opacity: 0, transform: "scale(1.06)" }], { duration: 260, fill: "forwards", easing: "ease-in" });
+      // A full-screen layer minus a circle (mask exclude) whose size grows:
+      // the colour hollows into a ring that sweeps off the edges.
+      root
+        .animate([{ maskSize: "0px 0px, 100% 100%" }, { maskSize: `${d}px ${d}px, 100% 100%` }], {
+          duration: EXIT,
+          delay: 140,
+          easing: "cubic-bezier(0.65, 0, 0.2, 1)",
+          fill: "forwards",
+        })
+        .finished.then(finish, finish);
+    };
+
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="/multitudes/"]');
+      if (!a || (a.target && a.target !== "_self")) return;
+      const href = a.getAttribute("href")!.split(/[?#]/)[0];
+      const m = profile.multitudes.find((x) => href === `/multitudes/${x.slug}`);
+      if (!m || href === location.pathname) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      e.preventDefault();
+      if (busy.current) return;
+      busy.current = true;
+
+      // Grow from the click; keyboard "clicks" have no pointer, so use the link.
+      let x = e.clientX;
+      let y = e.clientY;
+      if (!e.detail) {
+        const r = a.getBoundingClientRect();
+        x = r.left + r.width / 2;
+        y = r.top + r.height / 2;
+      }
+      const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 2;
+
+      root.style.setProperty("--c", m.color);
+      numRef.current!.textContent = m.n;
+      titleRef.current!.textContent = m.title;
+      root.setAttribute("data-on", "");
+      root.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${reach}px at ${x}px ${y}px)` }], {
+        duration: ENTER,
+        easing: "cubic-bezier(0.7, 0, 0.25, 1)",
+        fill: "forwards",
+      });
+      label.animate([{ opacity: 0, transform: "translateY(1.5rem) scale(0.96)" }, { opacity: 1, transform: "none" }], {
+        duration: 480,
+        delay: ENTER * 0.45,
+        easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        fill: "both",
+      });
+      setTimeout(() => {
+        pending.current = href;
+        router.push(href);
+        // If the new page never shows up, don't leave the screen covered.
+        safety = window.setTimeout(() => exitRef.current(), 4000);
+      }, ENTER);
+    };
+
+    document.addEventListener("click", onClick, true);
+    return () => {
+      document.removeEventListener("click", onClick, true);
+      clearTimeout(safety);
+    };
+  }, [router]);
+
+  // The new page has rendered under the cover: open it up.
+  useEffect(() => {
+    if (!pending.current || pathname !== pending.current) return;
+    pending.current = null;
+    requestAnimationFrame(() => requestAnimationFrame(() => exitRef.current()));
+  }, [pathname]);
+
+  return (
+    <div ref={rootRef} className="portal-x" aria-hidden>
+      <p className="portal-x-label">
+        <b ref={numRef} />
+        <strong ref={titleRef} />
+      </p>
+    </div>
+  );
+}

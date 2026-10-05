@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
+import PortalTransition from "@/components/PortalTransition";
 import PrefsSync from "@/components/PrefsSync";
 import { profile } from "@/data/profile";
 import { DEFAULT_PREFS, prefsScript } from "@/lib/prefs";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full font-sans">
         <PrefsSync />
         {children}
+        <PortalTransition />
       </body>
     </html>
   );
