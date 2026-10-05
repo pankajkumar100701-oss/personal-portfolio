@@ -125,7 +125,7 @@ body {
 
 /* Phones: the logo sits over scrolling content, so fade the page out under it. */
 @media (max-width: 639px) {
-  .site-header { background: linear-gradient(var(--background) 45%, transparent); }
+  .site-header { padding-bottom: 1rem; background: linear-gradient(var(--background) 62%, transparent); }
 }
 @media (min-width: 1024px) {
   .section { padding-inline: 3rem; }
