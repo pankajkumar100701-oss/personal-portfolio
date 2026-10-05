@@ -362,7 +362,8 @@ export default function MultitudesHero() {
   const iAt = hero.accent.indexOf("i");
   // The websites I've built, shown under the title on phones and in the
   // bottom bar on desktop (where the cards leave no room under the title).
-  const sites = (
+  // Hidden until there are some in data/profile.ts.
+  const sites = profile.projects.length > 0 && (
     <>
       <span>Websites I&apos;ve built</span>
       <ul>
@@ -412,7 +413,7 @@ export default function MultitudesHero() {
                 </h1>
                 <p className="u-subline">{hero.subline}</p>
                 {/* Phones: the websites list sits under the title (desktop has it in the bottom bar). */}
-                <div className="u-sites u-sites-mobile">{sites}</div>
+                {sites && <div className="u-sites u-sites-mobile">{sites}</div>}
               </div>
 
               <ul className="u-nodes">
@@ -508,7 +509,7 @@ export default function MultitudesHero() {
           <span>
             <span className="u-wheel" aria-hidden>↕</span> Scroll to dive into the i
           </span>
-          <div className="u-sites">{sites}</div>
+          {sites && <div className="u-sites">{sites}</div>}
           <span ref={readoutRef} className="u-readout" aria-hidden>
             Zoom 1.00×
           </span>

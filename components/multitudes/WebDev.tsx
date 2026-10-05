@@ -47,21 +47,23 @@ export default function WebDev({ m }: { m: Multitude }) {
         </ol>
       </section>
 
-      <section>
-        <Heading n="03">Recent work</Heading>
-        <div className="grid gap-4 md:grid-cols-2">
-          {profile.projects.map((p) => (
-            <a key={p.title} href={p.href} className="m-card m-lift group flex items-center gap-5 rounded-2xl p-5">
-              <span className="h-14 w-14 shrink-0 rounded-xl" style={{ background: `linear-gradient(135deg, ${p.color}, transparent)` }} />
-              <span className="min-w-0">
-                <span className="block text-lg font-semibold">{p.title}</span>
-                <span className="block truncate text-sm text-muted">{p.tags.join(" · ")}</span>
-              </span>
-              <span className="ml-auto text-ink transition group-hover:translate-x-1" aria-hidden>→</span>
-            </a>
-          ))}
-        </div>
-      </section>
+      {profile.projects.length > 0 && (
+        <section>
+          <Heading n="03">Recent work</Heading>
+          <div className="grid gap-4 md:grid-cols-2">
+            {profile.projects.map((p) => (
+              <a key={p.title} href={p.href} className="m-card m-lift group flex items-center gap-5 rounded-2xl p-5">
+                <span className="h-14 w-14 shrink-0 rounded-xl" style={{ background: `linear-gradient(135deg, ${p.color}, transparent)` }} />
+                <span className="min-w-0">
+                  <span className="block text-lg font-semibold">{p.title}</span>
+                  <span className="block truncate text-sm text-muted">{p.tags.join(" · ")}</span>
+                </span>
+                <span className="ml-auto text-ink transition group-hover:translate-x-1" aria-hidden>→</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

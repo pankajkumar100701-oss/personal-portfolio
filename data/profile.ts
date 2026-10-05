@@ -17,6 +17,14 @@ export type Multitude = {
 // Used by the contact links below and the multitude pages' calls to action.
 const email = "hello@example.com";
 
+export type Project = {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+  color: string;
+};
+
 export const profile = {
   name: "Pankaj Kumar",
   role: "Web Developer & UI Designer",
@@ -109,36 +117,10 @@ export const profile = {
     { group: "Backend", items: ["Node.js", "REST APIs", "PostgreSQL", "MongoDB", "Prisma"] },
     { group: "Tools", items: ["Git", "Figma", "Vercel", "Docker", "Linux"] },
   ],
-  projects: [
-    {
-      title: "Jagori Rural",
-      description: "Website for a rural women's rights organisation — programme portfolio, journey timeline and community stories.",
-      tags: ["Next.js", "Tailwind", "Design"],
-      href: "#",
-      color: "#f472b6",
-    },
-    {
-      title: "Flappy Bird",
-      description: "A browser remake of the classic arcade game rendered on HTML canvas with smooth physics.",
-      tags: ["Canvas", "Game", "TypeScript"],
-      href: "#",
-      color: "#facc15",
-    },
-    {
-      title: "Photography Portfolio",
-      description: "A minimal, image-first gallery that lets the photographs do the talking.",
-      tags: ["Next.js", "Gallery", "UI"],
-      href: "#",
-      color: "#38bdf8",
-    },
-    {
-      title: "Be Unique Himwoollen",
-      description: "Storefront for handmade Himalayan woollens with a warm, crafted look.",
-      tags: ["E-commerce", "React", "Branding"],
-      href: "#",
-      color: "#a78bfa",
-    },
-  ],
+  // Websites you've built: shown in the hero ("Websites I've built") and on the
+  // Web Development page ("Recent work"); both hide while this is empty. e.g.
+  // { title: "My site", description: "…", tags: ["Next.js"], href: "https://…", color: "#38bdf8" }
+  projects: [] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
   contact: {
