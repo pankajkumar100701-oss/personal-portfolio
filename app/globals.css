@@ -947,6 +947,7 @@ body {
   background: var(--u-card);
   transition:
     transform 0.9s var(--u-spring),
+    scale 0.7s var(--u-spring),
     opacity 0.4s,
     background 0.3s,
     border-color 0.3s,
@@ -987,6 +988,7 @@ body {
 .u-node:focus-within > * {
   outline: none;
   transform: perspective(700px) translateZ(42px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  scale: 1.14;
   background: var(--u-card-hover);
   border-color: var(--c);
   box-shadow:
@@ -999,11 +1001,28 @@ body {
 .u-node:focus-within > *::before,
 .u-node:focus-within > *::after { opacity: 1; }
 .u-node:hover b,
-.u-node:focus-within b { letter-spacing: 0.3em; text-shadow: 0 0 12px var(--c); }
+.u-node:focus-within b { letter-spacing: 0.3em; color: var(--art-ink); }
+/* Hover: the card floods with its multitude's gradient (MultitudeArt) and
+   its icon draws itself in at the top right. */
+.u-node-flood {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(140% 140% at 15% 0%, var(--from), var(--to));
+  transition: opacity 0.45s;
+}
+.u-node-icon { position: absolute; top: 0.75rem; right: 0.75rem; z-index: 1; width: 1.375rem; height: 1.375rem; color: var(--art-ink); opacity: 0; transition: opacity 0.3s; }
+.u-node-icon svg { width: 100%; height: 100%; }
+.u-node-icon svg * { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.8s cubic-bezier(0.6, 0, 0.2, 1) 0.1s; }
+.u-node:is(:hover, :focus-within) .u-node-flood,
+.u-node:is(:hover, :focus-within) .u-node-icon { opacity: 1; }
+.u-node:is(:hover, :focus-within) .u-node-icon svg * { stroke-dashoffset: 0; }
+.u-node:is(:hover, :focus-within) :is(strong, small) { color: var(--art-ink); }
+.u-node:is(:hover, :focus-within) small { opacity: 0.8; }
 .u-node:hover strong,
 .u-node:focus-within strong { transform: translateX(4px); }
 .u-node:hover small,
-.u-node:focus-within small { transform: translateX(8px); color: var(--u-soft); }
+.u-node:focus-within small { transform: translateX(8px); }
 /* Spotlight the hovered card by softly receding the rest. */
 .u-nodes:has(.u-node:hover, .u-node:focus-within) .u-node:not(:hover, :focus-within) > * { opacity: 0.45; }
 
@@ -1316,7 +1335,7 @@ body {
   overflow: hidden;
   /* Each multitude's own two-tone gradient (components/MultitudeArt.tsx). */
   background: radial-gradient(130% 130% at 25% 15%, var(--from), var(--to));
-  color: var(--ink);
+  color: var(--art-ink);
   mask:
     radial-gradient(circle closest-side, #000 calc(100% - 1px), transparent) center / 0 0 no-repeat,
     linear-gradient(#000 0 0);
@@ -1349,9 +1368,9 @@ body {
   width: 5.5rem;
   height: 5.5rem;
   margin-bottom: 1.5rem;
-  border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--art-ink) 35%, transparent);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  background: color-mix(in srgb, var(--art-ink) 8%, transparent);
 }
 .portal-x-icon svg { width: 2.75rem; height: 2.75rem; }
 /* The icon draws itself in as the cover lands. */
@@ -1414,8 +1433,38 @@ body {
   rotate: calc(var(--d) * -5deg);
   scale: calc(1 - var(--a) * 0.12);
   opacity: calc(1 - var(--a) * 0.45);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  /* Hover growth rides on `transform`, separate from the per-frame `scale`. */
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1.15), border-color 0.3s, box-shadow 0.4s;
 }
+.u-card > :not(.u-card-flood, .u-card-mark) { position: relative; z-index: 1; }
+.u-card-flood { position: absolute; inset: 0; opacity: 0; background: radial-gradient(130% 120% at 20% 0%, var(--from), var(--to)); transition: opacity 0.5s; }
+.u-card-mark {
+  position: absolute;
+  right: -4rem;
+  bottom: -4rem;
+  width: 17rem;
+  height: 17rem;
+  stroke-width: 0.6;
+  color: var(--art-ink);
+  opacity: 0;
+  rotate: -25deg;
+  transition: opacity 0.6s, rotate 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-card-icon { display: grid; place-items: center; width: 3rem; height: 3rem; border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); border-radius: 50%; color: var(--ink); transition: border-color 0.4s, background 0.4s, color 0.4s; }
+.u-card-icon svg { width: 1.375rem; height: 1.375rem; }
+.u-card-icon svg * { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.u-card small { margin-top: 0.75rem; font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--u-muted); transition: color 0.4s; }
+.u-card :is(strong, p, .u-card-top b) { transition: color 0.4s; }
+/* Hovered (or snapped, on phones): grow, flood with the gradient, ink text,
+   redraw the icon and swing the watermark in. */
+.u-card:is(:hover, :focus-visible, [data-active]) { transform: scale(1.06); border-color: transparent; box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--to) 70%, transparent); }
+.u-card:is(:hover, :focus-visible, [data-active]) .u-card-flood { opacity: 1; }
+.u-card:is(:hover, :focus-visible, [data-active]) .u-card-mark { opacity: 0.18; rotate: 0deg; }
+.u-card:is(:hover, :focus-visible, [data-active]) :is(strong, .u-card-top b, small, .u-card-icon) { color: var(--art-ink); }
+.u-card:is(:hover, :focus-visible, [data-active]) p { color: color-mix(in srgb, var(--art-ink) 85%, transparent); }
+.u-card:is(:hover, :focus-visible, [data-active]) .u-card-icon { border-color: color-mix(in srgb, var(--art-ink) 40%, transparent); background: color-mix(in srgb, var(--art-ink) 10%, transparent); }
+.u-card:is(:hover, :focus-visible, [data-active]) .u-card-icon svg * { animation: px-draw 0.8s cubic-bezier(0.6, 0, 0.2, 1) both; stroke-dashoffset: 1; }
+.u-card:is(:hover, :focus-visible, [data-active]) .u-card-go { background: var(--art-ink); color: var(--to); }
 /* A big soft disk of the card's colour: the multitude's "dot". */
 .u-card::before {
   content: "";
@@ -1428,12 +1477,10 @@ body {
   background: radial-gradient(circle, color-mix(in srgb, var(--c) 45%, transparent), transparent 70%);
   transition: scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.u-card:hover { border-color: var(--c); box-shadow: 0 30px 70px -30px color-mix(in srgb, var(--c) 55%, transparent); }
 .u-card:hover::before { scale: 1.5; }
 .u-card:focus-visible { outline: 2px solid var(--c); outline-offset: 4px; }
-.u-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; font-family: var(--font-sans); }
+.u-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; font-family: var(--font-sans); }
 .u-card-top b { font-family: var(--font-display); font-size: 4.5rem; font-style: italic; font-weight: 400; line-height: 0.9; color: var(--ink); }
-.u-card-top small { font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; text-align: right; color: var(--u-muted); }
 .u-card strong { margin-top: auto; font-size: 2.5rem; font-style: italic; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
 .u-card p { position: relative; margin-top: 1rem; font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.6; color: var(--u-soft); }
 .u-card-go {
@@ -1470,7 +1517,7 @@ body {
 @media (max-width: 799px), (prefers-reduced-motion: reduce) {
   .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
   .u-track-stage { position: static; display: block; height: auto; overflow: visible; }
-  .u-track-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 0.5rem 16px 1rem; scrollbar-width: none; }
+  .u-track-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
   .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
   .u-track-intro h2 { font-size: 2.75rem; }
   .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }

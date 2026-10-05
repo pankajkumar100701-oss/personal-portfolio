@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
+import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -418,10 +419,15 @@ export default function MultitudesHero() {
 
               <ul className="u-nodes">
                 {multitudes.map((m, i) => {
-                  const style = { "--x": `${m.x}%`, "--y": `${m.y}%`, "--c": m.color, "--i": i } as CSSProperties;
+                  const style = { "--x": `${m.x}%`, "--y": `${m.y}%`, "--c": m.color, "--i": i, ...artVars(m.slug, m.color) } as CSSProperties;
                   return (
                     <li key={m.n} className="u-node" style={style}>
                       <Link href={`/multitudes/${m.slug}`}>
+                        {/* Hover floods the card with its gradient and draws its icon. */}
+                        <span className="u-node-flood" aria-hidden />
+                        <span className="u-node-icon" aria-hidden>
+                          <ArtIcon icon={artIcon(m.slug)} />
+                        </span>
                         <b>{m.n}</b>
                         <strong>{m.title}</strong>
                         <small>{m.sub}</small>

@@ -155,3 +155,12 @@ export function ArtIcon({ icon, className }: { icon: ReactNode; className?: stri
     </svg>
   );
 }
+
+// CSS custom properties (--from, --to, --art-ink) for an element styled with a
+// multitude's gradient; falls back to its plain colour.
+export function artVars(slug: string, color: string): Record<string, string> {
+  const art = MULTITUDE_ART[slug];
+  return { "--from": art?.from ?? color, "--to": art?.to ?? color, "--art-ink": (art ?? DEFAULT_ART).ink };
+}
+
+export const artIcon = (slug: string) => (MULTITUDE_ART[slug] ?? DEFAULT_ART).icon;

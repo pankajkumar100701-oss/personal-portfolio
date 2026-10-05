@@ -76,7 +76,7 @@ export default function PortalTransition() {
       const art = MULTITUDE_ART[m.slug];
       root.style.setProperty("--from", art?.from ?? m.color);
       root.style.setProperty("--to", art?.to ?? m.color);
-      root.style.setProperty("--ink", (art ?? DEFAULT_ART).ink);
+      root.style.setProperty("--art-ink", (art ?? DEFAULT_ART).ink);
       setSlug(m.slug);
       root.setAttribute("data-on", "");
       root.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${reach}px at ${x}px ${y}px)` }], {

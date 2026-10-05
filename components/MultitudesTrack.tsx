@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
+import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -108,6 +109,16 @@ export default function MultitudesTrack() {
       onScroll();
     };
 
+    // Without the pinned row (phones, reduced motion) there's no hover: the
+    // card snapped into view gets the hover look instead.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) (e.target as HTMLElement).toggleAttribute("data-active", !active() && e.intersectionRatio > 0.7);
+      },
+      { root: row, threshold: [0, 0.7, 1] },
+    );
+    cards.forEach((c) => io.observe(c));
+
     onResize();
     document.fonts?.ready.then(onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -116,6 +127,7 @@ export default function MultitudesTrack() {
     reduce.addEventListener("change", onResize);
     return () => {
       alive = false;
+      io.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
@@ -138,12 +150,18 @@ export default function MultitudesTrack() {
             <p className="u-track-hint">Scroll (or swipe) to meet each side of me. Pick any to dive in.</p>
           </div>
           {multitudes.map((m) => (
-            <Link key={m.slug} href={`/multitudes/${m.slug}`} className="u-card" style={{ "--c": m.color } as CSSProperties}>
+            <Link key={m.slug} href={`/multitudes/${m.slug}`} className="u-card" style={{ "--c": m.color, ...artVars(m.slug, m.color) } as CSSProperties}>
+              {/* Hover (or, on phones, the snapped card) floods it with its gradient. */}
+              <span className="u-card-flood" aria-hidden />
+              <ArtIcon icon={artIcon(m.slug)} className="u-card-mark" />
               <span className="u-card-top">
                 <b>{m.n}</b>
-                <small>{m.sub}</small>
+                <span className="u-card-icon">
+                  <ArtIcon icon={artIcon(m.slug)} />
+                </span>
               </span>
               <strong>{m.title}</strong>
+              <small>{m.sub}</small>
               <p>{m.intro}</p>
               <span className="u-card-go">
                 Open <span aria-hidden>→</span>
