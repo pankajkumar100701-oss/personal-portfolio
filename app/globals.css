@@ -170,15 +170,15 @@ body {
 }
 [data-effects="off"] .cosmos-glow { display: none; }
 
-/* Light theme's wallpaper: topographic contour lines (public/wallpapers/topo.svg,
-   generated from noise), washed out behind the centre so text stays crisp.
-   "Plain" background in the menu turns it off. */
+/* Light theme's wallpaper: a real crumpled-paper photo (public/wallpapers/paper.webp,
+   toned to cream; credit in the footer), washed lighter behind the centre so
+   text stays crisp. "Plain" background in the menu turns it off. */
 [data-theme="light"]:not([data-effects="off"]) :is(.cosmos-glow, .cosmos-grid) { display: none; }
 [data-theme="light"]:not([data-effects="off"]) .cosmos-root {
   background:
-    radial-gradient(ellipse at 50% 45%, rgb(250 248 244 / 0.85), transparent 60%),
-    url("/wallpapers/topo.svg") center / cover,
-    #f8f3ea;
+    radial-gradient(ellipse at 50% 45%, rgb(252 249 243 / 0.55), transparent 65%),
+    url("/wallpapers/paper.webp") center / cover,
+    #f5efe5;
 }
 /* Phones skip the dive and give the hero its own backdrop; let the
    wallpaper show through there too. */

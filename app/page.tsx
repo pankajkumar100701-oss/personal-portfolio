@@ -142,8 +142,16 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <p className="absolute bottom-6 left-0 right-0 text-xs text-fg/50">
+          <p className="absolute bottom-6 left-0 right-0 px-4 text-xs text-fg/50">
             © {new Date().getFullYear()} {profile.name} · {profile.location}
+            {/* Light theme's wallpaper photo is CC BY 2.0, which requires this credit. */}
+            <span className="hidden [[data-theme=light]_&]:inline">
+              {" · "}Paper photo by{" "}
+              <a href="https://commons.wikimedia.org/wiki/File:Free_crumpled_paper_texture_for_layers_(2978651767).jpg" target="_blank" rel="noopener noreferrer" className="underline decoration-fg/30 underline-offset-2 hover:text-fg">
+                Pink Sherbet Photography
+              </a>{" "}
+              (CC BY 2.0)
+            </span>
           </p>
         </section>
       </main>
