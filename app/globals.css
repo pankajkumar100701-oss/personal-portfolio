@@ -1214,6 +1214,14 @@ body {
 @keyframes m-fade { from { opacity: 0; } }
 /* The workshop's placeholder until websites are added. */
 .m-workshop-empty { border: 1px dashed color-mix(in srgb, var(--c) 45%, var(--u-line)); background: color-mix(in srgb, var(--c) 6%, var(--u-card)); }
+/* Planned slots: faint dashed tiles that breathe one after another. */
+.m-slot { position: relative; border: 1px dashed var(--u-line); background: color-mix(in srgb, var(--u-card) 70%, transparent); animation: m-breathe 3.2s ease-in-out calc(var(--k) * 0.25s) infinite; }
+.m-slot-soon { display: inline-block; margin-top: 0.875rem; padding: 0.125rem 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 14%, transparent); font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); }
+@keyframes m-breathe { 50% { border-color: color-mix(in srgb, var(--c) 45%, var(--u-line)); } }
+/* Website cards: screenshot (or a title on the project's colour), labels. */
+.m-shot { border-bottom: 1px solid var(--u-line); background: linear-gradient(135deg, color-mix(in srgb, var(--p) 55%, var(--u-bg)), var(--u-bg)); }
+.m-shot-blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); font-style: italic; text-align: center; color: var(--u-fg); opacity: 0.85; }
+.m-concept { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: rgb(0 0 0 / 0.6); font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; backdrop-filter: blur(6px); }
 
 /* Painting / art: CSS "canvases" stand in for photos of the work. */
 .m-frame { padding: 0.9rem; border: 1px solid var(--u-line); background: var(--u-card); transition: translate 0.4s, box-shadow 0.4s; }
@@ -1283,7 +1291,7 @@ body {
 .m-status[data-status="Building"] { background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
-  .m-rise, .m-type, .m-bar span, .m-eq i, .m-disc, .m-pop { animation: none; }
+  .m-rise, .m-type, .m-bar span, .m-eq i, .m-disc, .m-pop, .m-slot { animation: none; }
 }
 
 /* Narrow screens / reduced motion: no camera — a stacked, scrollable layout. */

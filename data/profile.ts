@@ -17,12 +17,18 @@ export type Multitude = {
 // Used by the contact links below and the multitude pages' calls to action.
 const email = "hello@example.com";
 
+export type ProjectCategory = "Business" | "E-commerce" | "Apps" | "Creative" | "Social";
+
 export type Project = {
   title: string;
-  description: string;
+  description: string; // one line: who it's for and what it does
   tags: string[];
-  href: string;
-  color: string;
+  href: string; // the live site
+  color: string; // accent, and the card's backdrop when there's no screenshot
+  category: ProjectCategory; // drives the workshop's filters
+  image?: string; // screenshot in public/, e.g. "/work/my-site.jpg"
+  year?: string;
+  concept?: boolean; // not for a real client: shows a "Concept" label
 };
 
 export const profile = {
@@ -124,7 +130,8 @@ export const profile = {
   ],
   // Websites you've built: shown in the hero ("Websites I've built") and on the
   // Web Development page ("Recent work"); both hide while this is empty. e.g.
-  // { title: "My site", description: "…", tags: ["Next.js"], href: "https://…", color: "#38bdf8" }
+  // { title: "My site", description: "…", tags: ["Next.js"], href: "https://…", color: "#38bdf8",
+  //   category: "Business", image: "/work/my-site.jpg", year: "2026" }
   projects: [] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
