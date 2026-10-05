@@ -482,7 +482,7 @@ export default function MultitudesHero() {
               })()}
             </p>
             <p className="u-arrive-sub">
-              <span>— Walt Whitman</span> and, honestly, me. Here are eleven of mine:
+              <span>— Walt Whitman</span> and, honestly, me. Here are twelve of mine:
             </p>
             <ul className="u-arrive-chips">
               {multitudes.map((m, i) => (

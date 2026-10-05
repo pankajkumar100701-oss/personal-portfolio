@@ -140,6 +140,19 @@ export const MULTITUDE_ART: Record<string, MultitudeArt> = {
       </>
     ),
   },
+  stay: {
+    from: "#c9b6f2",
+    to: "#22225e",
+    ink: "#fff",
+    icon: (
+      <>
+        {p("M2 4v16")}
+        {p("M2 8h18a2 2 0 0 1 2 2v10")}
+        {p("M2 17h20")}
+        {p("M6 8v9")}
+      </>
+    ),
+  },
 };
 
 // Fallback for a multitude added without its own art: a plain dot.

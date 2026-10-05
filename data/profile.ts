@@ -81,7 +81,7 @@ export const profile = {
       points: ["Everyday recipes I swear by", "Kitchen experiments, wins and failures", "Endless cups of chai"],
     },
     {
-      n: "09", slug: "rental", title: "Rental", sub: "Service / System / Ride", x: 76, y: 78, depth: 1.28, color: "var(--m-blue)",
+      n: "09", slug: "rental", title: "Rental", sub: "Service / System / Ride", x: 76, y: 84, depth: 1.28, color: "var(--m-blue)",
       intro: "A rental service built on simple systems — easy booking, reliable rides.",
       points: ["How the service works", "The systems behind bookings and fleet", "What's coming next"],
     },
@@ -95,6 +95,11 @@ export const profile = {
       n: "11", slug: "medical", title: "Medical", sub: "Health / Care / Science", x: 21, y: 6, depth: 1.02, color: "var(--m-coral)",
       intro: "Health, care and the science behind it — the side of me that's curious about how people heal.",
       points: ["What I'm learning about health and medicine", "Care, habits and staying well", "Where tech can help people get better care"],
+    },
+    {
+      n: "12", slug: "stay", title: "Stay", sub: "Rooms / Rest / Travel", x: 84, y: 65, depth: 1.08, color: "var(--m-blue)",
+      intro: "Good places to stay — the homestays, hotels and hideaways worth booking again.",
+      points: ["Stays I keep going back to", "What makes a place feel like home", "Tips for finding the right room on the road"],
     },
   ] as Multitude[],
   about: [
