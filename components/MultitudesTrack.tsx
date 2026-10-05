@@ -22,6 +22,11 @@ export default function MultitudesTrack() {
   useEffect(() => {
     const section = sectionRef.current!;
     const row = rowRef.current!;
+    // Grab the nodes now: refs go null on unmount a moment before this
+    // effect's cleanup runs, and a frame can land in between.
+    const count = countRef.current!;
+    const bar = barRef.current!;
+    let alive = true;
     const cards = [...row.querySelectorAll<HTMLElement>(".u-card")];
     const wide = window.matchMedia("(min-width: 800px)");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -58,9 +63,9 @@ export default function MultitudesTrack() {
       });
       if (nearest !== shownIndex) {
         shownIndex = nearest;
-        countRef.current!.textContent = multitudes[nearest].n;
+        count.textContent = multitudes[nearest].n;
       }
-      barRef.current!.style.scale = `${cur} 1`;
+      bar.style.scale = `${cur} 1`;
     };
 
     const reset = () => {
@@ -72,6 +77,7 @@ export default function MultitudesTrack() {
     };
 
     const tick = (now: number) => {
+      if (!alive) return;
       const dt = last ? Math.min(64, now - last) : 16.7;
       last = now;
       cur += (target - cur) * (1 - Math.exp(-dt / 120));
@@ -95,6 +101,7 @@ export default function MultitudesTrack() {
       if (!frame && target !== cur) frame = requestAnimationFrame(tick);
     };
     const onResize = () => {
+      if (!alive) return;
       if (!active()) return reset();
       measure();
       apply();
@@ -108,6 +115,7 @@ export default function MultitudesTrack() {
     wide.addEventListener("change", onResize);
     reduce.addEventListener("change", onResize);
     return () => {
+      alive = false;
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

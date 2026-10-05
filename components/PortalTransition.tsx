@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { ArtIcon, DEFAULT_ART, MULTITUDE_ART } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
 
 const ENTER = 720; // ms: the disk floods the screen
 const EXIT = 850; // ms: the new page opens out of its centre
 
 // The page-to-page version of the hero's dive. Clicking any link to a
-// multitude grows a disk in that multitude's colour out of the click (its
-// "dot"), names the page, navigates underneath, then hollows out from the
+// multitude grows a disk in that multitude's own gradient out of the click
+// (its "dot"), draws its icon and names the page, navigates underneath, then hollows out from the
 // centre into an ever-wider ring that opens onto the new page. Lives in the
 // root layout so it survives the navigation. Skipped for reduced motion,
 // modified clicks and back/forward.
@@ -17,15 +18,14 @@ export default function PortalTransition() {
   const router = useRouter();
   const pathname = usePathname();
   const rootRef = useRef<HTMLDivElement>(null);
-  const numRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLElement>(null);
+  const [slug, setSlug] = useState<string | null>(null);
   const pending = useRef<string | null>(null);
   const busy = useRef(false);
   const exitRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const root = rootRef.current!;
-    const label = root.firstElementChild as HTMLElement;
+    const label = root.querySelector<HTMLElement>(".portal-x-label")!;
     let safety = 0;
 
     const finish = () => {
@@ -73,9 +73,11 @@ export default function PortalTransition() {
       }
       const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 2;
 
-      root.style.setProperty("--c", m.color);
-      numRef.current!.textContent = m.n;
-      titleRef.current!.textContent = m.title;
+      const art = MULTITUDE_ART[m.slug];
+      root.style.setProperty("--from", art?.from ?? m.color);
+      root.style.setProperty("--to", art?.to ?? m.color);
+      root.style.setProperty("--ink", (art ?? DEFAULT_ART).ink);
+      setSlug(m.slug);
       root.setAttribute("data-on", "");
       root.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${reach}px at ${x}px ${y}px)` }], {
         duration: ENTER,
@@ -110,12 +112,22 @@ export default function PortalTransition() {
     requestAnimationFrame(() => requestAnimationFrame(() => exitRef.current()));
   }, [pathname]);
 
+  const m = profile.multitudes.find((x) => x.slug === slug);
+  const icon = slug ? (MULTITUDE_ART[slug] ?? DEFAULT_ART).icon : null;
   return (
     <div ref={rootRef} className="portal-x" aria-hidden>
-      <p className="portal-x-label">
-        <b ref={numRef} />
-        <strong ref={titleRef} />
-      </p>
+      {/* A huge, faint, slowly turning copy of the icon behind everything. */}
+      {icon && <ArtIcon key={`mark-${slug}`} icon={icon} className="portal-x-mark" />}
+      <div className="portal-x-label">
+        {icon && (
+          <span key={`icon-${slug}`} className="portal-x-icon">
+            <ArtIcon icon={icon} />
+          </span>
+        )}
+        <b>{m?.n}</b>
+        <strong>{m?.title}</strong>
+        <small>{m?.sub}</small>
+      </div>
     </div>
   );
 }

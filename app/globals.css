@@ -1313,15 +1313,61 @@ body {
   z-index: 9999;
   display: none;
   place-items: center;
-  background: var(--c);
-  color: var(--u-bg);
+  overflow: hidden;
+  /* Each multitude's own two-tone gradient (components/MultitudeArt.tsx). */
+  background: radial-gradient(130% 130% at 25% 15%, var(--from), var(--to));
+  color: var(--ink);
   mask:
     radial-gradient(circle closest-side, #000 calc(100% - 1px), transparent) center / 0 0 no-repeat,
     linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
 .portal-x[data-on] { display: grid; }
-.portal-x-label { padding: 0 1rem; text-align: center; font-family: var(--font-display); }
+/* Film grain over the gradient so it doesn't read as a flat fill. */
+.portal-x::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+}
+.portal-x-mark {
+  position: absolute;
+  right: -18vmax;
+  bottom: -24vmax;
+  width: 80vmax;
+  height: 80vmax;
+  stroke-width: 0.35;
+  opacity: 0.14;
+  animation: px-spin 40s linear infinite;
+}
+.portal-x-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.portal-x-icon svg { width: 2.75rem; height: 2.75rem; }
+/* The icon draws itself in as the cover lands. */
+.portal-x-icon svg * { stroke-dasharray: 1; stroke-dashoffset: 1; animation: px-draw 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.35s forwards; }
+.portal-x-label small {
+  display: block;
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+@keyframes px-draw { to { stroke-dashoffset: 0; } }
+@keyframes px-spin { to { rotate: 360deg; } }
+.portal-x-label { position: relative; padding: 0 1rem; text-align: center; font-family: var(--font-display); }
 .portal-x-label b {
   display: block;
   font-family: var(--font-mono);
