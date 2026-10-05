@@ -121,6 +121,10 @@ export default function MultitudesTrack() {
 
     onResize();
     document.fonts?.ready.then(onResize);
+    // Cards are sized in rem, so the "Large text" setting (or a late font)
+    // changes the row's length without a window resize: re-measure then too.
+    const ro = new ResizeObserver(onResize);
+    ro.observe(row);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     wide.addEventListener("change", onResize);
@@ -128,6 +132,7 @@ export default function MultitudesTrack() {
     return () => {
       alive = false;
       io.disconnect();
+      ro.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

@@ -295,6 +295,10 @@ export default function MultitudesHero() {
     // Web fonts can shift the glyphs after first paint; re-fit once settled,
     // and re-measure once the intro animations have moved the title into place.
     document.fonts?.ready.then(fit);
+    // The title is sized in rem: the "Large text" setting moves the dot
+    // without a window resize, so re-fit whenever the copy block changes size.
+    const ro = new ResizeObserver(fit);
+    ro.observe(world.querySelector(".u-copy")!);
     world.addEventListener("animationend", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
@@ -302,6 +306,7 @@ export default function MultitudesHero() {
     reduce.addEventListener("change", onModeChange);
     return () => {
       cancelAnimationFrame(frame);
+      ro.disconnect();
       world.removeEventListener("animationend", onResize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
