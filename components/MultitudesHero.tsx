@@ -416,10 +416,10 @@ export default function MultitudesHero() {
 
               {/* Phones skip the dive, so the arrival's call to action lives here. */}
               <div className="u-mobile-cta">
-                <a href="#projects" className="u-cta-primary">
+                <Link href="/multitudes/web-development" className="u-cta-primary">
                   See my work <span aria-hidden>→</span>
-                </a>
-                <a href="#contact" className="u-cta-ghost">
+                </Link>
+                <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
                   <i className="u-live" aria-hidden /> Open for projects
                 </a>
               </div>
@@ -471,10 +471,10 @@ export default function MultitudesHero() {
               ))}
             </ul>
             <div className="u-arrive-cta">
-              <a href="#projects" tabIndex={-1} className="u-cta-primary">
+              <Link href="/multitudes/web-development" tabIndex={-1} className="u-cta-primary">
                 See my work <span aria-hidden>→</span>
-              </a>
-              <a href="#contact" tabIndex={-1} className="u-cta-ghost">
+              </Link>
+              <a href={`mailto:${profile.contact.email}`} tabIndex={-1} className="u-cta-ghost">
                 <i className="u-live" aria-hidden /> Open for projects
               </a>
             </div>

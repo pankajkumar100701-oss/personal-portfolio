@@ -7,9 +7,6 @@ import { profile } from "@/data/profile";
 
 const nav = [
   { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#projects", label: "Projects" },
-  { href: "#contact", label: "Contact" },
 ];
 
 export default function Home() {
@@ -77,84 +74,21 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Skills */}
-        <section id="skills" className="section">
-          <div data-reveal>
-            <SectionLabel n="02" text="Skills" />
-            <h2 className="mt-3 text-3xl font-bold sm:text-5xl">My toolkit</h2>
-          </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {profile.skills.map((g, i) => (
-              <TiltCard key={g.group} className="glass rounded-2xl p-6" data-reveal style={{ "--d": `${i * 0.08}s` } as React.CSSProperties}>
-                <h3 className="font-mono text-sm uppercase tracking-widest text-accent">{g.group}</h3>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {g.items.map((s) => (
-                    <li key={s} className="chip">{s}</li>
-                  ))}
-                </ul>
-              </TiltCard>
-            ))}
-          </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="section">
-          <div data-reveal>
-            <SectionLabel n="03" text="Projects" />
-            <h2 className="mt-3 text-3xl font-bold sm:text-5xl">Things I&apos;ve built</h2>
-          </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {profile.projects.map((p, i) => (
-              <TiltCard key={p.title} className="glass group rounded-2xl p-6" data-reveal style={{ "--d": `${i * 0.08}s` } as React.CSSProperties}>
-                <a href={p.href} className="flex h-full flex-col" style={{ ["--accent" as string]: p.color }}>
-                  <div className="project-orb mb-5 h-12 w-12 rounded-xl" />
-                  <h3 className="text-xl font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-fg/70">{p.description}</p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <li key={t} className="chip text-xs">{t}</li>
-                    ))}
-                  </ul>
-                  <span className="mt-auto inline-block pt-5 text-sm text-fg/85 transition group-hover:translate-x-1">View project →</span>
-                </a>
-              </TiltCard>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact — the email and links come from data/profile.ts */}
-        <section id="contact" className="section items-center text-center">
-          <div className="glass mx-auto w-full max-w-3xl rounded-3xl px-5 py-10 sm:p-14" data-reveal>
-            <SectionLabel n="04" text="Contact" />
-            <h2 className="mt-3 text-[2rem] font-bold leading-tight sm:text-6xl">
-              Let&apos;s build something <span className="gradient-text">out of this world.</span>
-            </h2>
-            <p className="mt-5 text-fg/70">Have a project in mind or just want to say hi? My inbox is always open.</p>
-            <a href={`mailto:${profile.contact.email}`} className="btn-primary mt-8 inline-block max-w-full break-all">{profile.contact.email}</a>
-            <ul className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
-              {profile.contact.links.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href} target="_blank" rel="noopener noreferrer" className="chip inline-block transition hover:text-fg">
-                    {l.label} ↗
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p className="absolute bottom-6 left-0 right-0 px-4 text-xs text-fg/50">
-            © {new Date().getFullYear()} {profile.name} · {profile.location}
-            {/* Light theme's wallpaper photo is CC BY 2.0, which requires this credit. */}
-            <span className="hidden [[data-theme=light]_&]:inline">
-              {" · "}Paper photo by{" "}
-              <a href="https://commons.wikimedia.org/wiki/File:Free_crumpled_paper_texture_for_layers_(2978651767).jpg" target="_blank" rel="noopener noreferrer" className="underline decoration-fg/30 underline-offset-2 hover:text-fg">
-                Pink Sherbet Photography
-              </a>{" "}
-              (CC BY 2.0)
-            </span>
-          </p>
-        </section>
       </main>
+
+      <footer className="px-4 pb-8 text-center text-xs text-fg/50">
+        <p>
+          © {new Date().getFullYear()} {profile.name} · {profile.location}
+          {/* Light theme's wallpaper photo is CC BY 2.0, which requires this credit. */}
+          <span className="hidden [[data-theme=light]_&]:inline">
+            {" · "}Paper photo by{" "}
+            <a href="https://commons.wikimedia.org/wiki/File:Free_crumpled_paper_texture_for_layers_(2978651767).jpg" target="_blank" rel="noopener noreferrer" className="underline decoration-fg/30 underline-offset-2 hover:text-fg">
+              Pink Sherbet Photography
+            </a>{" "}
+            (CC BY 2.0)
+          </span>
+        </p>
+      </footer>
     </>
   );
 }

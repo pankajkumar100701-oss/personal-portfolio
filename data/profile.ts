@@ -14,6 +14,9 @@ export type Multitude = {
   link?: { label: string; href: string };
 };
 
+// Used by the contact links below and the multitude pages' calls to action.
+const email = "hello@example.com";
+
 export const profile = {
   name: "Pankaj Kumar",
   role: "Web Developer & UI Designer",
@@ -31,7 +34,7 @@ export const profile = {
       n: "01", slug: "web-development", title: "Web Development", sub: "Work / Build / Code", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
       intro: "Where most of my days go — turning ideas into fast, polished products with React, Next.js and TypeScript.",
       points: ["NGO websites, e-commerce storefronts and browser games", "Motion, performance and interfaces that feel good to use", "From first sketch to deployed product"],
-      link: { label: "See my projects", href: "/#projects" },
+      link: { label: "Start a project", href: `mailto:${email}` },
     },
     {
       n: "02", slug: "painting-art", title: "Painting / Art", sub: "Colour / Form / Vision", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
@@ -79,7 +82,7 @@ export const profile = {
       n: "10", slug: "business", title: "Business", sub: "Ideas / Products / Systems", x: 89, y: 27, depth: 0.88, color: "var(--m-lime)",
       intro: "Ideas that grow into products, and products that need good systems behind them.",
       points: ["Ventures I'm building and backing", "Product thinking beyond code", "Open to collaborations"],
-      link: { label: "Get in touch", href: "/#contact" },
+      link: { label: "Get in touch", href: `mailto:${email}` },
     },
   ] as Multitude[],
   about: [
@@ -132,10 +135,10 @@ export const profile = {
       color: "#a78bfa",
     },
   ],
-  // Swap in your real email and profile links here; the Contact section and
-  // the site menu both read from this.
+  // Swap in your real email (the `email` const above) and profile links here;
+  // the site menu and the hero's "Open for projects" read from this.
   contact: {
-    email: "hello@example.com",
+    email,
     links: [
       { label: "GitHub", href: "https://github.com/" },
       { label: "LinkedIn", href: "https://linkedin.com/" },

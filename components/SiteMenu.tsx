@@ -7,9 +7,6 @@ import { DEFAULT_PREFS, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
 const sections = [
   { href: "/#about", label: "About" },
-  { href: "/#skills", label: "Skills" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#contact", label: "Contact" },
 ];
 
 const settings: { key: keyof Prefs; label: string; options: { value: string; label: string }[] }[] = [
