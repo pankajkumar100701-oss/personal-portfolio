@@ -170,6 +170,20 @@ body {
 }
 [data-effects="off"] .cosmos-glow { display: none; }
 
+/* Light theme's wallpaper: topographic contour lines (public/wallpapers/topo.svg,
+   generated from noise), washed out behind the centre so text stays crisp.
+   "Plain" background in the menu turns it off. */
+[data-theme="light"]:not([data-effects="off"]) :is(.cosmos-glow, .cosmos-grid) { display: none; }
+[data-theme="light"]:not([data-effects="off"]) .cosmos-root {
+  background:
+    radial-gradient(ellipse at 50% 45%, rgb(250 248 244 / 0.85), transparent 60%),
+    url("/wallpapers/topo.svg") center / cover,
+    #f8f3ea;
+}
+/* Phones skip the dive and give the hero its own backdrop; let the
+   wallpaper show through there too. */
+[data-theme="light"]:not([data-effects="off"]) .u-section { background: transparent; }
+
 /* Scroll reveal (components/ScrollReveal.tsx). Only hides things once the
    script is running, so content never stays invisible without JS. */
 [data-reveal-ready] [data-reveal]:not([data-shown]) { opacity: 0; translate: 0 2rem; }
