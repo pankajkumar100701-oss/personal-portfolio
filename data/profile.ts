@@ -17,15 +17,13 @@ export type Multitude = {
 // Used by the contact links below and the multitude pages' calls to action.
 const email = "hello@example.com";
 
-export type ProjectCategory = "Business" | "E-commerce" | "Apps" | "Creative" | "Social";
-
 export type Project = {
   title: string;
   description: string; // one line: who it's for and what it does
   tags: string[];
   href: string; // the live site
   color: string; // accent, and the card's backdrop when there's no screenshot
-  category: ProjectCategory; // drives the workshop's filters
+  multitude: string; // slug of the option it belongs to, e.g. "rental"; it shows on that page
   image?: string; // screenshot in public/, e.g. "/work/my-site.jpg"
   year?: string;
   concept?: boolean; // not for a real client: shows a "Concept" label
@@ -45,10 +43,10 @@ export const profile = {
   // Floating nodes in the hero. x/y are % positions in the hero "world"; depth sets how fast each flies toward you on zoom.
   multitudes: [
     {
-      n: "01", slug: "web-development", title: "Web Development", sub: "Work / Build / Code", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
-      intro: "Where most of my days go — turning ideas into fast, polished products with React, Next.js and TypeScript.",
-      points: ["NGO websites, e-commerce storefronts and browser games", "Motion, performance and interfaces that feel good to use", "From first sketch to deployed product"],
-      link: { label: "Open the workshop", href: "#workshop" },
+      n: "01", slug: "store", title: "Store", sub: "Shop / Cart / Checkout", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
+      intro: "Online stores built to sell — easy to browse on a phone, quick to pay for and simple to run.",
+      points: ["Catalogues, carts and checkouts that convert", "UPI, card and cash-on-delivery payments", "Orders and stock that stay in sync"],
+      link: { label: "Browse the stores", href: "#websites" },
     },
     {
       n: "02", slug: "painting-art", title: "Painting / Art", sub: "Colour / Form / Vision", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
@@ -128,10 +126,11 @@ export const profile = {
     { group: "Backend", items: ["Node.js", "REST APIs", "PostgreSQL", "MongoDB", "Prisma"] },
     { group: "Tools", items: ["Git", "Figma", "Vercel", "Docker", "Linux"] },
   ],
-  // Websites you've built: shown in the hero ("Websites I've built") and on the
-  // Web Development page ("Recent work"); both hide while this is empty. e.g.
+  // Websites you've built: each shows in the "Websites" section of its
+  // multitude's page, and all of them in the hero ("Websites I've built",
+  // hidden while this is empty). e.g.
   // { title: "My site", description: "…", tags: ["Next.js"], href: "https://…", color: "#38bdf8",
-  //   category: "Business", image: "/work/my-site.jpg", year: "2026" }
+  //   multitude: "rental", image: "/work/my-site.jpg", year: "2026" }
   projects: [] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.

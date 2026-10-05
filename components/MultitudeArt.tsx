@@ -8,15 +8,15 @@ export type MultitudeArt = { from: string; to: string; ink: string; icon: ReactN
 const p = (d: string) => <path d={d} pathLength={1} />;
 
 export const MULTITUDE_ART: Record<string, MultitudeArt> = {
-  "web-development": {
+  store: {
     from: "#d7ff3f",
     to: "#14a37f",
     ink: "#07120c",
     icon: (
       <>
-        {p("m16 18 6-6-6-6")}
-        {p("m8 6-6 6 6 6")}
-        {p("m14.5 4-5 16")}
+        {p("M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z")}
+        {p("M3 6h18")}
+        {p("M16 10a4 4 0 0 1-8 0")}
       </>
     ),
   },

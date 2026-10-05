@@ -5,29 +5,30 @@
 // Everything below is starter content. Swap in your real projects, places,
 // recipes and links as they come.
 
-export const webDev = {
-  // The hero terminal: commands ("cmd"), their output ("out") and a final "ok".
+export const store = {
+  // The hero terminal, as a shopper's session: commands ("cmd"), their
+  // output ("out") and a final "ok".
   terminal: [
-    { kind: "cmd", text: "whoami" },
-    { kind: "out", text: "pankaj — web developer & ui designer" },
-    { kind: "cmd", text: "cat stack.txt" },
-    { kind: "out", text: "react · next.js · typescript · tailwind · three.js" },
-    { kind: "cmd", text: "ls ./i-build" },
-    { kind: "out", text: "websites  e-commerce  landing-pages  web-apps" },
-    { kind: "cmd", text: "npm run ship" },
-    { kind: "ok", text: "✓ shipped — fast, polished and built with care" },
+    { kind: "cmd", text: "open store" },
+    { kind: "out", text: "248 products · 6 categories · search ready" },
+    { kind: "cmd", text: "cart add handmade-mug --qty 2" },
+    { kind: "out", text: "added to cart · ₹1,198" },
+    { kind: "cmd", text: "checkout --pay upi" },
+    { kind: "out", text: "razorpay · payment confirmed" },
+    { kind: "cmd", text: "order track" },
+    { kind: "ok", text: "✓ packed and shipped — arriving thursday" },
   ] as { kind: "cmd" | "out" | "ok"; text: string }[],
-  services: [
-    { title: "Websites", text: "Fast, responsive sites for brands, NGOs and creators." },
-    { title: "E-commerce", text: "Storefronts that are easy to browse and easy to buy from." },
-    { title: "Landing pages", text: "One page, one goal — built to convert." },
-    { title: "Web apps", text: "Dashboards, tools and interactive experiences." },
+  features: [
+    { title: "Catalogue", text: "Products, categories and search that feel quick on a phone." },
+    { title: "Cart & checkout", text: "Fewer steps between liking something and buying it." },
+    { title: "Payments", text: "UPI, cards and cash on delivery through Razorpay." },
+    { title: "Orders", text: "Updates on WhatsApp and email, and a simple admin to run it." },
   ],
   process: [
-    { step: "Discover", text: "What you need, who it's for, what success looks like." },
-    { step: "Design", text: "Layouts and a look that fit your brand." },
-    { step: "Build", text: "Clean, fast code with React and Next.js." },
-    { step: "Launch", text: "Deploy, test, and keep improving." },
+    { step: "Plan", text: "Your products, prices and how you ship." },
+    { step: "Design", text: "A storefront that looks like your brand." },
+    { step: "Build", text: "Fast pages, real payments, stock that stays in sync." },
+    { step: "Launch", text: "Go live, track orders and keep growing." },
   ],
 };
 

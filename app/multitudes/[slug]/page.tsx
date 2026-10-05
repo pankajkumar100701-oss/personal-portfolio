@@ -9,9 +9,10 @@ import Education from "@/components/multitudes/Education";
 import Parties from "@/components/multitudes/Parties";
 import Recipes from "@/components/multitudes/Recipes";
 import Rental from "@/components/multitudes/Rental";
+import Store from "@/components/multitudes/Store";
 import Restaurants from "@/components/multitudes/Restaurants";
 import Twitter from "@/components/multitudes/Twitter";
-import WebDev from "@/components/multitudes/WebDev";
+import Websites from "@/components/multitudes/Websites";
 import SiteMenu from "@/components/SiteMenu";
 import { profile, type Multitude } from "@/data/profile";
 
@@ -20,7 +21,7 @@ const { multitudes } = profile;
 // Each multitude gets its own layout. A new multitude without one here falls
 // back to the simple Generic page below.
 const layouts: Record<string, ComponentType<{ m: Multitude }>> = {
-  "web-development": WebDev,
+  store: Store,
   "painting-art": Art,
   twitter: Twitter,
   education: Education,
@@ -73,6 +74,7 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
 
       <article className="u-detail-main">
         <Layout m={m} />
+        <Websites m={m} />
       </article>
 
       <nav className="u-detail-pager" aria-label="Other multitudes">

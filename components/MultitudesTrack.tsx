@@ -137,7 +137,7 @@ export default function MultitudesTrack() {
   }, [multitudes]);
 
   return (
-    <section ref={sectionRef} className="u-track" aria-label="The multitudes">
+    <section ref={sectionRef} id="multitudes" className="u-track" aria-label="The multitudes">
       <div className="u-track-stage">
         <div ref={rowRef} className="u-track-row">
           <div className="u-track-intro">
