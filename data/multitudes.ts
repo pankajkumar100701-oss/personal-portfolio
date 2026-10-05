@@ -32,18 +32,6 @@ export const store = {
   ],
 };
 
-export const art = {
-  statement: "I paint to slow down. Colour first, then form, then whatever the canvas wants to become.",
-  works: [
-    { title: "Monsoon", medium: "Acrylic on canvas", year: "2025", art: "a", tall: true },
-    { title: "Saffron Hours", medium: "Watercolour", year: "2025", art: "b" },
-    { title: "City at 2am", medium: "Digital", year: "2024", art: "c" },
-    { title: "Hills", medium: "Oil pastel", year: "2024", art: "d", tall: true },
-    { title: "Static", medium: "Mixed media", year: "2024", art: "e" },
-    { title: "Bloom", medium: "Acrylic", year: "2023", art: "f" },
-  ],
-};
-
 export const twitter = {
   handle: "@pankaj",
   bio: "Web developer. Building in public. Chai > coffee.",

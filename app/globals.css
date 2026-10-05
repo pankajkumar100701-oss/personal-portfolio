@@ -1143,7 +1143,6 @@ body {
 
 @media (max-width: 639px) {
   .u-detail-main { padding: 2.5rem 0 4rem; }
-  .m-frame { padding: 0.5rem; }
 }
 
 /* ---------- Multitude layouts (components/multitudes) ---------- */
@@ -1223,16 +1222,6 @@ body {
 .m-shot-blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); font-style: italic; text-align: center; color: var(--u-fg); opacity: 0.85; }
 .m-concept { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: rgb(0 0 0 / 0.6); font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; backdrop-filter: blur(6px); }
 
-/* Painting / art: CSS "canvases" stand in for photos of the work. */
-.m-frame { padding: 0.9rem; border: 1px solid var(--u-line); background: var(--u-card); transition: translate 0.4s, box-shadow 0.4s; }
-.m-frame:hover { translate: 0 -6px; box-shadow: 0 30px 50px -30px rgb(0 0 0 / 0.6); }
-.m-canvas { width: 100%; }
-.m-canvas-a { background: radial-gradient(circle at 30% 30%, #6e8cff, transparent 50%), radial-gradient(circle at 70% 70%, #22d3ee, transparent 55%), linear-gradient(160deg, #0f172a, #1e3a8a); }
-.m-canvas-b { background: radial-gradient(circle at 50% 110%, #ff6338 0 35%, transparent 36%), linear-gradient(#ffd27a, #ff9e5e); }
-.m-canvas-c { background: repeating-linear-gradient(90deg, #111 0 14%, #facc15 14% 15%, #111 15% 24%, #f472b6 24% 25%), #111; }
-.m-canvas-d { background: linear-gradient(170deg, transparent 60%, #14532d 60%), linear-gradient(190deg, transparent 50%, #166534 50%), linear-gradient(#bae6fd, #fef3c7); }
-.m-canvas-e { background: conic-gradient(from 45deg, #ff6338, #d7ff3f, #6e8cff, #ff6338); filter: saturate(0.8); }
-.m-canvas-f { background: radial-gradient(circle at 50% 50%, #f9a8d4 0 15%, #be185d 16% 30%, transparent 31%), #fdf2f8; }
 
 /* Twitter */
 .m-avatar { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 50%; background: linear-gradient(135deg, var(--c), #a78bfa); color: #fff; font-family: var(--font-display); font-size: 1.5rem; font-style: italic; }
