@@ -6,7 +6,17 @@
 // recipes and links as they come.
 
 export const webDev = {
-  terminal: ["npx create-next-app pankaj", "cd pankaj && npm run dev", "✓ Ready on http://localhost:3000"],
+  // The hero terminal: commands ("cmd"), their output ("out") and a final "ok".
+  terminal: [
+    { kind: "cmd", text: "whoami" },
+    { kind: "out", text: "pankaj — web developer & ui designer" },
+    { kind: "cmd", text: "cat stack.txt" },
+    { kind: "out", text: "react · next.js · typescript · tailwind · three.js" },
+    { kind: "cmd", text: "ls ./i-build" },
+    { kind: "out", text: "websites  e-commerce  landing-pages  web-apps" },
+    { kind: "cmd", text: "npm run ship" },
+    { kind: "ok", text: "✓ shipped — fast, polished and built with care" },
+  ] as { kind: "cmd" | "out" | "ok"; text: string }[],
   services: [
     { title: "Websites", text: "Fast, responsive sites for brands, NGOs and creators." },
     { title: "E-commerce", text: "Storefronts that are easy to browse and easy to buy from." },

@@ -2,7 +2,8 @@ import { webDev } from "@/data/multitudes";
 import { profile, type Multitude } from "@/data/profile";
 import { Card, Cta, Heading, Hero } from "./ui";
 
-// Web Development: a terminal hero, services, process and live projects.
+// Web Development: a terminal hero, services, process and the workshop
+// (the websites I've built; a placeholder until there are some).
 export default function WebDev({ m }: { m: Multitude }) {
   return (
     <div className="space-y-24">
@@ -12,10 +13,12 @@ export default function WebDev({ m }: { m: Multitude }) {
         </Hero>
         <div className="m-terminal m-rise" style={{ animationDelay: "0.15s" }}>
           <div className="m-terminal-bar"><i /><i /><i /><span>zsh — pankaj</span></div>
-          <div className="space-y-2 p-5 font-mono text-sm">
+          <div className="space-y-1.5 p-5 font-mono text-sm">
             {webDev.terminal.map((line, i) => (
-              <p key={line} className="m-type" style={{ animationDelay: `${0.5 + i * 0.7}s` }}>
-                {line.startsWith("✓") ? <span className="text-ink">{line}</span> : <><span className="text-ink">❯</span> {line}</>}
+              <p key={line.text} className={`m-type ${line.kind === "cmd" && i > 0 ? "pt-2" : ""}`} style={{ animationDelay: `${0.5 + i * 0.45}s` }}>
+                {line.kind === "cmd" && <><span className="text-ink">❯</span> {line.text}</>}
+                {line.kind === "out" && <span className="text-[#8b93a7]">{line.text}</span>}
+                {line.kind === "ok" && <span className="text-ink">{line.text}</span>}
               </p>
             ))}
           </div>
@@ -47,9 +50,9 @@ export default function WebDev({ m }: { m: Multitude }) {
         </ol>
       </section>
 
-      {profile.projects.length > 0 && (
-        <section>
-          <Heading n="03">Recent work</Heading>
+      <section id="workshop" className="scroll-mt-10">
+        <Heading n="03">The workshop</Heading>
+        {profile.projects.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-2">
             {profile.projects.map((p) => (
               <a key={p.title} href={p.href} className="m-card m-lift group flex items-center gap-5 rounded-2xl p-5">
@@ -62,8 +65,17 @@ export default function WebDev({ m }: { m: Multitude }) {
               </a>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          // Until websites are added to data/profile.ts.
+          <div className="m-workshop-empty rounded-2xl p-8 sm:p-12">
+            <p className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-ink">
+              <i className="u-live" aria-hidden /> On the workbench
+            </p>
+            <p className="mt-4 max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Fresh websites are being set up in here.</p>
+            <p className="mt-3 text-muted">New builds land soon — check back, or say hi in the meantime.</p>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

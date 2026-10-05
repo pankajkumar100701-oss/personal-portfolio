@@ -42,7 +42,7 @@ export const profile = {
       n: "01", slug: "web-development", title: "Web Development", sub: "Work / Build / Code", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
       intro: "Where most of my days go — turning ideas into fast, polished products with React, Next.js and TypeScript.",
       points: ["NGO websites, e-commerce storefronts and browser games", "Motion, performance and interfaces that feel good to use", "From first sketch to deployed product"],
-      link: { label: "Start a project", href: `mailto:${email}` },
+      link: { label: "Open the workshop", href: "#workshop" },
     },
     {
       n: "02", slug: "painting-art", title: "Painting / Art", sub: "Colour / Form / Vision", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
