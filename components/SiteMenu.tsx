@@ -5,10 +5,6 @@ import Link from "next/link";
 import { profile } from "@/data/profile";
 import { DEFAULT_PREFS, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
-const sections = [
-  { href: "/#about", label: "About" },
-];
-
 const settings: { key: keyof Prefs; label: string; options: { value: string; label: string }[] }[] = [
   {
     key: "theme",
@@ -83,8 +79,6 @@ export default function SiteMenu() {
     } catch {}
   };
 
-  const close = () => setOpen(false);
-
   return (
     <div ref={rootRef} className="relative">
       <button
@@ -103,18 +97,6 @@ export default function SiteMenu() {
       </button>
 
       <div id={panelId} className="menu-panel" data-open={open || undefined} inert={!open}>
-        <MenuGroup title="Navigate">
-          <ul className="grid grid-cols-2 gap-1">
-            {sections.map((s, i) => (
-              <li key={s.href}>
-                <a href={s.href} onClick={close} className="menu-link">
-                  <span className="font-mono text-[0.65rem] text-fg/45">0{i + 1}</span> {s.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </MenuGroup>
-
         <MenuGroup title="Multitudes">
           <ul className="flex flex-wrap gap-1.5">
             {profile.multitudes.map((m) => (

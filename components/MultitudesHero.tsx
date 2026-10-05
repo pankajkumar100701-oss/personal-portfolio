@@ -501,9 +501,6 @@ export default function MultitudesHero() {
                 </li>
               ))}
             </ul>
-            <span className="u-arrive-cue">
-              keep scrolling <span className="u-wheel">↓</span>
-            </span>
           </div>
         </div>
 

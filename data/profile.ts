@@ -51,7 +51,6 @@ export const profile = {
       n: "04", slug: "education", title: "Education", sub: "Learn / Unlearn / Grow", x: 12, y: 63, depth: 0.82, color: "var(--m-lime)",
       intro: "Learning never really stopped after the classroom. I keep picking up new tools, ideas and ways of seeing.",
       points: ["Formal education and the foundations it gave me", "Self-taught everything else, one project at a time", "Unlearning habits that no longer serve"],
-      link: { label: "More about me", href: "/#about" },
     },
     {
       n: "05", slug: "clubbing", title: "Clubbing", sub: "Music / Night / Energy", x: 42, y: 7, depth: 1.25, color: "var(--m-coral)",
