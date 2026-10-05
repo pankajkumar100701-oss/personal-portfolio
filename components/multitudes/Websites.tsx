@@ -31,9 +31,9 @@ export default function Websites({ m }: { m: Multitude }) {
           </ul>
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-6">
           {sites.map((p, i) => (
-            <article key={p.title} className="m-show m-rise group flex flex-col overflow-hidden rounded-2xl" style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
+            <article key={p.title} className="m-show m-rise group grid overflow-hidden rounded-2xl md:grid-cols-[1.3fr_1fr]" style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
               {/* The site in a little browser window that tilts toward you on hover. */}
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-show-stage" aria-label={`Open ${p.title}`}>
                 <span className="m-browser">
@@ -45,7 +45,7 @@ export default function Websites({ m }: { m: Multitude }) {
                   </span>
                   <span className="m-shot relative block aspect-[16/10] overflow-hidden">
                     {p.image ? (
-                      <Image src={p.image} alt={`${p.title} — home page`} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover object-top transition duration-[1.2s] group-hover:scale-[1.03]" />
+                      <Image src={p.image} alt={`${p.title} — home page`} fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover object-top transition duration-[1.2s] group-hover:scale-[1.03]" />
                     ) : (
                       <span className="m-shot-blank" aria-hidden>
                         {p.title}
@@ -55,12 +55,12 @@ export default function Websites({ m }: { m: Multitude }) {
                   </span>
                 </span>
               </a>
-              <div className="flex flex-1 flex-col p-5 sm:p-7">
+              <div className="flex flex-col justify-center p-5 sm:p-8 lg:px-12">
                 <p className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
                   <span>{String(i + 1).padStart(2, "0")} — Live</span>
                   {p.year && <span className="text-muted">{p.year}</span>}
                 </p>
-                <h3 className="mt-3 font-display text-3xl italic leading-[1.05]">{p.title}</h3>
+                <h3 className="mt-3 font-display text-3xl italic leading-[1.05] lg:text-4xl">{p.title}</h3>
                 {p.client && <p className="mt-1.5 text-sm text-muted">for {p.client}</p>}
                 <p className="mt-3 text-sm leading-relaxed text-soft">{p.description}</p>
                 {p.highlights && (
