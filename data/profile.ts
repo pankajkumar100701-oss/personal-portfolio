@@ -27,6 +27,8 @@ export type Project = {
   image?: string; // screenshot in public/, e.g. "/work/my-site.jpg"
   year?: string;
   concept?: boolean; // not for a real client: shows a "Concept" label
+  client?: string; // who it was built for
+  highlights?: string[]; // what's inside, a few words each
 };
 
 export const profile = {
@@ -49,9 +51,9 @@ export const profile = {
       link: { label: "Browse the stores", href: "#websites" },
     },
     {
-      n: "02", slug: "painting-art", title: "Painting / Art", sub: "Colour / Form / Vision", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
-      intro: "Painting keeps my eye honest. Colour, composition and texture all feed back into the way I design for the screen.",
-      points: ["Experiments with colour and form", "Sketchbooks full of half-finished ideas", "Art as a way of slowing down"],
+      n: "02", slug: "painting-art", title: "Painting / Art", sub: "Galleries / Studios / Artists", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
+      intro: "Websites for painters and artists — quiet galleries that let the work breathe, and a simple way for people to buy it.",
+      points: ["Online galleries and portfolios", "Shops for originals and prints", "Studio stories, letters and news"],
     },
     {
       n: "03", slug: "twitter", title: "Twitter / X", sub: "Thoughts / Signals", x: 79, y: 47, depth: 1.18, color: "var(--m-blue)",
@@ -131,7 +133,20 @@ export const profile = {
   // hidden while this is empty). e.g.
   // { title: "My site", description: "…", tags: ["Next.js"], href: "https://…", color: "#38bdf8",
   //   multitude: "rental", image: "/work/my-site.jpg", year: "2026" }
-  projects: [] as Project[],
+  projects: [
+    {
+      title: "Art by the Passenger",
+      description: "A slow, warm online home for Himalayan painter Bao Han — her paintings, her story and a hand-written letter every month.",
+      tags: ["Next.js", "Gallery", "Shop", "Theming"],
+      href: "https://artbythrpassenger.vercel.app/",
+      color: "#b45309",
+      multitude: "painting-art",
+      image: "/work/art-by-the-passenger.webp",
+      year: "2026",
+      client: "Bao Han · artist, Himalayas",
+      highlights: ["Gallery · 13 works", "Prices & availability", "Story page", "Monthly letters", "Theme switcher"],
+    },
+  ] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
   contact: {
