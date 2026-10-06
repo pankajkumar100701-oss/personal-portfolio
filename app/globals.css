@@ -104,41 +104,10 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.section {
-  position: relative;
-  display: flex;
-  min-height: 100svh;
-  flex-direction: column;
-  justify-content: center;
-  margin-inline: auto;
-  width: 100%;
-  max-width: 96rem;
-  padding: 6rem 1rem;
-}
-@media (max-width: 639px) {
-  .section { min-height: 0; padding-block: 5rem; }
-  .section:first-of-type { padding-top: 6rem; }
-}
-@media (min-width: 640px) {
-  .section { padding-inline: 2rem; }
-}
-
 /* Phones: the logo sits over scrolling content, so fade the page out under it. */
 @media (max-width: 639px) {
   .site-header { padding-bottom: 1rem; background: linear-gradient(var(--background) 62%, transparent); }
 }
-@media (min-width: 1024px) {
-  .section { padding-inline: 3rem; }
-}
-
-/* A near-opaque card. No backdrop blur: blurring the page behind every card
-   re-samples on each scroll frame, which was a big part of the scroll jank. */
-.glass {
-  background: var(--glass-bg);
-  border: 1px solid color-mix(in srgb, var(--foreground) 11%, transparent);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent) inset, 0 20px 50px -30px rgb(0 0 0 / 0.5);
-}
-[data-theme="light"] .glass { box-shadow: 0 18px 40px -28px rgb(30 25 10 / 0.35); }
 
 /* ---------- Backdrop (components/Cosmos.tsx) ---------- */
 .cosmos-root {
@@ -184,18 +153,7 @@ body {
    wallpaper show through there too. */
 [data-theme="light"]:not([data-effects="off"]) .u-section { background: transparent; }
 
-/* Scroll reveal (components/ScrollReveal.tsx). Only hides things once the
-   script is running, so content never stays invisible without JS. */
-[data-reveal-ready] [data-reveal]:not([data-shown]) { opacity: 0; translate: 0 2rem; }
-[data-reveal] {
-  transition:
-    opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s),
-    translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s),
-    transform 0.25s ease-out;
-}
-
 /* Live "available" dot. */
-.live-dot,
 .u-live {
   display: inline-block;
   width: 0.5rem;
@@ -206,156 +164,13 @@ body {
   animation: live 2s ease-out infinite;
 }
 @keyframes live { 70%, 100% { box-shadow: 0 0 0 0.5rem rgb(34 197 94 / 0); } }
-
-/* About: the editor-window card. */
-.code-card {
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--foreground) 11%, transparent);
-  background: #0d1017;
-  color: #d6d9e0;
-  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
-}
-[data-theme="light"] .code-card { background: #fbfaf7; color: #24262c; box-shadow: 0 24px 50px -30px rgb(30 25 10 / 0.4); }
-.code-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-}
-.code-bar i { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: #ff5f57; }
-.code-bar i:nth-child(2) { background: #febc2e; }
-.code-bar i:nth-child(3) { background: #28c840; }
-.code-bar span { margin-left: auto; font-family: var(--font-mono); font-size: 0.75rem; opacity: 0.6; }
-.code-body {
-  overflow-x: auto;
-  padding: 1.25rem 1.5rem 1.5rem;
-  -webkit-overflow-scrolling: touch;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.8;
-}
-.code-kw { color: #c792ea; }
-.code-var { color: #82aaff; }
-.code-key { color: #89ddff; }
-.code-str { color: #c3e88d; }
-.code-bool { color: #f78c6c; }
-.code-comment { color: #6b7280; font-style: italic; }
-[data-theme="light"] .code-kw { color: #7c3aed; }
-[data-theme="light"] .code-var { color: #1d4ed8; }
-[data-theme="light"] .code-key { color: #0e7490; }
-[data-theme="light"] .code-str { color: #3f6212; }
-[data-theme="light"] .code-bool { color: #c2410c; }
-.code-cursor {
-  display: inline-block;
-  width: 0.55em;
-  height: 1.1em;
-  margin-left: 0.2em;
-  vertical-align: -0.2em;
-  background: currentColor;
-  animation: blink 1.1s steps(1) infinite;
-}
-@keyframes blink { 50% { opacity: 0; } }
-
-@media (prefers-reduced-motion: reduce) {
-  .live-dot, .u-live, .code-cursor { animation: none; }
-  [data-reveal-ready] [data-reveal]:not([data-shown]) { opacity: 1; translate: none; }
-}
-
-.gradient-text {
-  background: linear-gradient(100deg, #22d3ee, #a78bfa 45%, #f472b6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.btn-primary {
-  border-radius: 9999px;
-  padding: 0.85rem 1.6rem;
-  font-weight: 600;
-  color: #05030f;
-  background: linear-gradient(100deg, #22d3ee, #a78bfa);
-  box-shadow: 0 10px 40px -10px #8b5cf6;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 50px -10px #8b5cf6;
-}
-
-.btn-ghost {
-  border-radius: 9999px;
-  padding: 0.85rem 1.6rem;
-  font-weight: 600;
-  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
-  backdrop-filter: blur(8px);
-  transition: background 0.2s;
-}
-.btn-ghost:hover {
-  background: color-mix(in srgb, var(--foreground) 8%, transparent);
-}
-
-.chip {
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
-  background: color-mix(in srgb, var(--foreground) 5%, transparent);
-  padding: 0.3rem 0.8rem;
-  font-size: 0.85rem;
-  color: color-mix(in srgb, var(--foreground) 85%, transparent);
-}
-
-.tilt-card {
-  position: relative;
-  transition: transform 0.25s ease-out;
-}
-.tilt-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s;
-  background: radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgb(167 139 250 / 0.18), transparent 60%);
-}
-.tilt-card:hover::after {
-  opacity: 1;
-}
-
-.project-orb {
-  background: radial-gradient(circle at 30% 30%, #fff8, var(--accent) 45%, #0000 120%);
-  box-shadow: 0 0 30px -4px var(--accent);
-  transform: rotate(12deg);
-  transition: transform 0.4s;
-}
-.group:hover .project-orb {
-  transform: rotate(-8deg) scale(1.1);
-}
-
-.reveal {
-  animation: reveal 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-.reveal:nth-child(2) { animation-delay: 0.1s; }
-.reveal:nth-child(3) { animation-delay: 0.2s; }
-.reveal:nth-child(4) { animation-delay: 0.3s; }
-.reveal:nth-child(5) { animation-delay: 0.4s; }
-
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: none; }
-}
-
-.scroll-hint {
-  display: inline-block;
-  animation: bob 2s ease-in-out infinite;
-}
 @keyframes bob {
   50% { transform: translateY(6px); opacity: 0.5; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal, .scroll-hint { animation: none; }
+  .u-live { animation: none; }
 }
 
 /* ---------- Site menu (the logo) ---------- */
@@ -887,14 +702,6 @@ body {
 }
 .u-arrive-facts b { margin-right: 0.3rem; font-family: var(--u-serif); font-size: 1.25rem; font-style: italic; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--u-fg); }
 
-.u-arrive-cue {
-  margin-top: 2.25rem;
-  font-size: 0.5625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--u-dim);
-  opacity: clamp(0, calc((var(--inside, 0) - 0.85) * 6.6), 1);
-}
 .u-copy > * { animation: u-rise 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
 .u-copy > :nth-child(2) { animation-delay: 0.12s; }
 .u-copy > :nth-child(3) { animation-delay: 0.24s; }
@@ -1354,6 +1161,20 @@ body {
   .u-node, .u-node > *, .u-copy > *, .u-copy h1 em, .u-orb, .u-halo, .u-wheel { animation: none; }
   .u-node > *, .u-node b, .u-node strong, .u-node small { transition-duration: 0.01s; }
 }
+/* Phones: a lighter page. Same layout, minus the effects a phone pays for on
+   every frame without much to show for it: the noise grain (an SVG filter
+   rastered across the whole page), the endlessly drifting / breathing glows
+   and title sheen (constant repaints that drain battery and make scrolling
+   stutter on mid-range phones), cursor-only spotlights (no cursor), the
+   dive's arrival (phones never dive), and backdrop blurs behind panels
+   that are already near-opaque. The page-to-page portal keeps its colour
+   flood but drops its grain (an overlay-blended SVG filter, full screen). */
+@media (max-width: 799px) {
+  .u-grain, .portal-x::after, .u-portal, .u-arrive, .u-stage::before, .u-node > *::before, .u-node > *::after { display: none; }
+  .u-orb, .u-halo, .u-copy h1 em { animation: none; will-change: auto; }
+  .menu-panel, .m-concept { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .m-concept { background: rgb(0 0 0 / 0.75); }
+}
 @media (min-width: 800px) and (prefers-reduced-motion: reduce) {
   .u-section { height: 100svh; }
   .u-readout { display: none; }
@@ -1555,7 +1376,7 @@ body {
 @media (max-width: 799px), (prefers-reduced-motion: reduce) {
   .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
   .u-track-stage { position: static; display: block; height: auto; overflow: visible; }
-  .u-track-row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
+  .u-track-row { will-change: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
   .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
   .u-track-intro h2 { font-size: 2.75rem; }
   .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
