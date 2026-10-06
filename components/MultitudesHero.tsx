@@ -506,13 +506,6 @@ export default function MultitudesHero() {
                 <i className="u-live" aria-hidden /> Open for projects
               </a>
             </div>
-            <ul className="u-arrive-facts">
-              {profile.stats.map((s) => (
-                <li key={s.label}>
-                  <b>{s.value}</b> {s.label}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 

@@ -120,11 +120,6 @@ export const profile = {
     { title: "Portfolios", text: "For artists, creators and professionals who want to stand out." },
     { title: "Landing pages", text: "One sharp page for a launch, an event or an offer." },
   ],
-  stats: [
-    { value: "10+", label: "Projects shipped" },
-    { value: "1 yr", label: "Experience" },
-    { value: "∞", label: "Cups of chai" },
-  ],
   // The "now" list in the About section.
   now: [
     { label: "Building", value: "this portfolio, one multitude at a time" },

@@ -89,6 +89,20 @@ export default function SiteMenu() {
       </button>
 
       <div id={panelId} className="menu-panel" data-open={open || undefined} inert={!open}>
+        <MenuGroup title="Pages">
+          <ul className="flex flex-wrap gap-1.5">
+            <li>
+              <Link href="/#top" className="menu-chip">Home</Link>
+            </li>
+            <li>
+              <Link href="/#about" className="menu-chip">About</Link>
+            </li>
+            <li>
+              <Link href="/#contact" className="menu-chip">Contact</Link>
+            </li>
+          </ul>
+        </MenuGroup>
+
         <MenuGroup title="Multitudes">
           <ul className="flex flex-wrap gap-1.5">
             {profile.multitudes.map((m) => (
