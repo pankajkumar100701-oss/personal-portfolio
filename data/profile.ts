@@ -153,10 +153,7 @@ export const profile = {
   contact: {
     email,
     whatsapp: `https://wa.me/${whatsapp}?text=${encodeURIComponent("Hi Pankaj, I'd like a website.")}`,
-    links: [
-      { label: "GitHub", href: "https://github.com/" },
-      { label: "LinkedIn", href: "https://linkedin.com/" },
-      { label: "Twitter / X", href: "https://x.com/" },
-    ],
+    // Profile links shown in the menu, e.g. { label: "LinkedIn", href: "https://…" }.
+    links: [] as { label: string; href: string }[],
   },
 };
