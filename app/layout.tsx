@@ -35,7 +35,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-theme={DEFAULT_PREFS.theme}
       data-text={DEFAULT_PREFS.text}
-      data-effects={DEFAULT_PREFS.effects}
       className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} h-full antialiased`}
       suppressHydrationWarning
     >

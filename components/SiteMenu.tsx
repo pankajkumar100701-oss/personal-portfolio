@@ -23,14 +23,6 @@ const settings: { key: keyof Prefs; label: string; options: { value: string; lab
       { value: "large", label: "Large" },
     ],
   },
-  {
-    key: "effects",
-    label: "Background",
-    options: [
-      { value: "auto", label: "Glow" },
-      { value: "off", label: "Plain" },
-    ],
-  },
 ];
 
 // The logo doubles as the site menu: navigation, the multitudes, viewer

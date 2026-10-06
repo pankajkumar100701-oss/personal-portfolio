@@ -137,13 +137,12 @@ body {
   background-size: 1.75rem 1.75rem;
   mask: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 75%);
 }
-[data-effects="off"] .cosmos-glow { display: none; }
 
 /* Light theme's wallpaper: a real crumpled-paper photo (public/wallpapers/paper.webp,
    toned to cream; credit in the footer), washed lighter behind the centre so
-   text stays crisp. "Plain" background in the menu turns it off. */
-[data-theme="light"]:not([data-effects="off"]) :is(.cosmos-glow, .cosmos-grid) { display: none; }
-[data-theme="light"]:not([data-effects="off"]) .cosmos-root {
+   text stays crisp. */
+[data-theme="light"] :is(.cosmos-glow, .cosmos-grid) { display: none; }
+[data-theme="light"] .cosmos-root {
   background:
     radial-gradient(ellipse at 50% 45%, rgb(252 249 243 / 0.55), transparent 65%),
     url("/wallpapers/paper.webp") center / cover,
@@ -151,7 +150,7 @@ body {
 }
 /* Phones skip the dive and give the hero its own backdrop; let the
    wallpaper show through there too. */
-[data-theme="light"]:not([data-effects="off"]) .u-section { background: transparent; }
+[data-theme="light"] .u-section { background: transparent; }
 
 /* Live "available" dot. */
 .u-live {
