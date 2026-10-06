@@ -56,10 +56,9 @@ export const profile = {
       points: ["Online galleries and portfolios", "Shops for originals and prints", "Studio stories, letters and news"],
     },
     {
-      n: "03", slug: "twitter", title: "Twitter / X", sub: "Thoughts / Signals", x: 79, y: 47, depth: 1.18, color: "var(--m-blue)",
-      intro: "Where I think out loud — notes on building, design, tech and whatever caught my attention this week.",
-      points: ["Build-in-public updates", "Threads on web, design and tools", "Signals worth sharing"],
-      link: { label: "Follow on X", href: "https://x.com/" },
+      n: "03", slug: "fitness", title: "Gym / Fitness", sub: "Gyms / Yoga / Trainers", x: 79, y: 47, depth: 1.18, color: "var(--m-blue)",
+      intro: "Websites for gyms, yoga studios and personal trainers — plans, timings and trainers at a glance, and a quick way to book a free trial.",
+      points: ["Membership plans that are easy to compare", "Class timetables and trainer profiles", "Free-trial and enquiry buttons that reach you directly"],
     },
     {
       n: "04", slug: "education", title: "Education", sub: "Learn / Unlearn / Grow", x: 12, y: 63, depth: 0.82, color: "var(--m-lime)",

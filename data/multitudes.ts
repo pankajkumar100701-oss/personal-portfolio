@@ -32,15 +32,31 @@ export const store = {
   ],
 };
 
-export const twitter = {
-  handle: "@pankaj",
-  bio: "Web developer. Building in public. Chai > coffee.",
-  posts: [
-    { text: "Shipped a portfolio where you dive into the dot of an i. Scroll-driven, no WebGL, smooth on old laptops.", likes: 128, replies: 14, pinned: true },
-    { text: "Hot take: most websites don't need a framework. Most portfolios do need personality.", likes: 64, replies: 22 },
-    { text: "Today I learned: backdrop-filter over a moving background re-blurs every frame. My scroll jank is gone.", likes: 91, replies: 9 },
-    { text: "Design tip — if it looks off, it's usually spacing. Then it's colour. It's almost never the font.", likes: 47, replies: 5 },
+export const fitness = {
+  headline: "Stronger every week.",
+  sub: "Modern equipment, expert trainers, flexible plans.",
+  // price is per month; longer plans cost less per month.
+  plans: [
+    { name: "Monthly", months: 1, price: 1500, perks: ["Full gym access", "1 personal training session"] },
+    { name: "Quarterly", months: 3, price: 1200, perks: ["Full gym access", "4 personal training sessions", "Diet plan"] },
+    { name: "Yearly", months: 12, price: 900, perks: ["Full gym access", "Unlimited group classes", "Diet plan", "Free locker"] },
   ],
+  days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  classes: [
+    { time: "06:00", name: "Morning Yoga", trainer: "Asha", days: ["Mon", "Wed", "Fri"] },
+    { time: "07:00", name: "Strength Basics", trainer: "Rohit", days: ["Mon", "Tue", "Thu", "Sat"] },
+    { time: "08:00", name: "HIIT Burn", trainer: "Karan", days: ["Tue", "Thu", "Sat"] },
+    { time: "18:00", name: "Zumba", trainer: "Neha", days: ["Mon", "Wed", "Fri"] },
+    { time: "19:00", name: "Power Lifting", trainer: "Rohit", days: ["Tue", "Wed", "Fri"] },
+    { time: "19:30", name: "Stretch & Mobility", trainer: "Asha", days: ["Thu", "Sat"] },
+  ],
+  trainers: [
+    { name: "Rohit", role: "Strength & conditioning", years: 8 },
+    { name: "Asha", role: "Yoga & mobility", years: 6 },
+    { name: "Karan", role: "HIIT & fat loss", years: 5 },
+    { name: "Neha", role: "Dance fitness", years: 4 },
+  ],
+  steps: ["Book a free trial", "Meet your trainer", "Pick a plan & start"],
 };
 
 export const education = {

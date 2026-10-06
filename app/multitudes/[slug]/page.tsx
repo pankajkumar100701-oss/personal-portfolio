@@ -6,12 +6,12 @@ import Art from "@/components/multitudes/Art";
 import Business from "@/components/multitudes/Business";
 import Clubbing from "@/components/multitudes/Clubbing";
 import Education from "@/components/multitudes/Education";
+import Fitness from "@/components/multitudes/Fitness";
 import Parties from "@/components/multitudes/Parties";
 import Recipes from "@/components/multitudes/Recipes";
 import Rental from "@/components/multitudes/Rental";
 import Store from "@/components/multitudes/Store";
 import Restaurants from "@/components/multitudes/Restaurants";
-import Twitter from "@/components/multitudes/Twitter";
 import Websites from "@/components/multitudes/Websites";
 import SiteMenu from "@/components/SiteMenu";
 import { profile, type Multitude } from "@/data/profile";
@@ -23,7 +23,7 @@ const { multitudes } = profile;
 const layouts: Record<string, ComponentType<{ m: Multitude }>> = {
   store: Store,
   "painting-art": Art,
-  twitter: Twitter,
+  fitness: Fitness,
   education: Education,
   clubbing: Clubbing,
   parties: Parties,
