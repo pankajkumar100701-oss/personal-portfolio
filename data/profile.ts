@@ -15,7 +15,7 @@ export type Multitude = {
 };
 
 // Used by the contact links below and the multitude pages' calls to action.
-const email = "hello@example.com";
+const email = "pankajmultitude@gmail.com";
 
 export type Project = {
   title: string;
