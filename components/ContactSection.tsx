@@ -1,6 +1,6 @@
 import { profile } from "@/data/profile";
 
-// Below About: WhatsApp and email, reached from About's "Get in touch" and the menu.
+// Below About: WhatsApp and email, also reached from the menu.
 export default function ContactSection() {
   const { contact } = profile;
   return (

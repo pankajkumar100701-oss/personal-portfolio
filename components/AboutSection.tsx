@@ -1,6 +1,6 @@
 import { profile } from "@/data/profile";
 
-// Below the multitudes: who I am and what I build, with a way down to Contact.
+// Below the multitudes: who I am and what I build. Contact follows right after.
 export default function AboutSection() {
   return (
     <section id="about" className="h-sec" aria-labelledby="about-title">
@@ -32,11 +32,6 @@ export default function AboutSection() {
               </li>
             ))}
           </ul>
-          <div className="h-cta">
-            <a href="#contact" className="u-cta-primary">
-              Get in touch <span aria-hidden>→</span>
-            </a>
-          </div>
         </div>
       </div>
     </section>
