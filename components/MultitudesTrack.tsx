@@ -6,6 +6,10 @@ import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+// Pixels the row slides sideways per pixel scrolled down. Lower is slower.
+const SPEED = 0.85;
+// Share of the pinned scroll spent holding still at each end.
+const HOLD = 0.06;
 const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
 
 // After the arrival: the multitudes as a row of big cards that slides
@@ -40,6 +44,9 @@ export default function MultitudesTrack() {
       vw = row.parentElement!.clientWidth;
       travel = Math.max(0, row.scrollWidth - vw);
       centres = cards.map((c) => c.offsetLeft + c.offsetWidth / 2);
+      // Size the pinned scroll from the row's length, so the pace stays the
+      // same however many cards there are or however wide the screen is.
+      section.style.height = `${window.innerHeight + travel / SPEED / (1 - 2 * HOLD)}px`;
     };
 
     let cur = 0;
@@ -71,6 +78,7 @@ export default function MultitudesTrack() {
 
     const reset = () => {
       row.style.transform = "";
+      section.style.removeProperty("height");
       for (const c of cards) {
         c.style.removeProperty("--d");
         c.style.removeProperty("--a");
@@ -81,7 +89,7 @@ export default function MultitudesTrack() {
       if (!alive) return;
       const dt = last ? Math.min(64, now - last) : 16.7;
       last = now;
-      cur += (target - cur) * (1 - Math.exp(-dt / 120));
+      cur += (target - cur) * (1 - Math.exp(-dt / 160));
       if (Math.abs(target - cur) < 0.0002) cur = target;
       apply();
       if (cur === target) {
@@ -98,7 +106,7 @@ export default function MultitudesTrack() {
       const rect = section.getBoundingClientRect();
       const span = rect.height - window.innerHeight;
       // A short hold at each end so the first and last cards get a beat.
-      target = span > 0 ? clamp01((-rect.top / span - 0.06) / 0.88) : 0;
+      target = span > 0 ? clamp01((-rect.top / span - HOLD) / (1 - 2 * HOLD)) : 0;
       if (!frame && target !== cur) frame = requestAnimationFrame(tick);
     };
     const onResize = () => {
