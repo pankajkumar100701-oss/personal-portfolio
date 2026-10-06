@@ -110,8 +110,15 @@ export const profile = {
     },
   ] as Multitude[],
   about: [
-    "Hi, I'm Pankaj — a web developer. Over the past year I've worked on all kinds of websites: NGO sites, e-commerce storefronts, portfolios, landing pages and even browser games.",
-    "I work mostly with React, Next.js and TypeScript, and I care about the details — motion, performance and interfaces that feel good to use.",
+    "I'm a web developer from India. I design and build websites for shops, artists, gyms, restaurants, schools — anyone with something worth putting online.",
+    "No templates: every site is made for you, loads fast and looks great on a phone. Tell me what you need, and I'll take care of everything from the first sketch to the day it goes live.",
+  ],
+  // The "What I build" list in the About section.
+  services: [
+    { title: "Business websites", text: "A professional home for your shop, clinic, salon or studio." },
+    { title: "Online stores", text: "Products, cart and checkout — ready to start selling." },
+    { title: "Portfolios", text: "For artists, creators and professionals who want to stand out." },
+    { title: "Landing pages", text: "One sharp page for a launch, an event or an offer." },
   ],
   stats: [
     { value: "10+", label: "Projects shipped" },

@@ -1399,3 +1399,28 @@ body {
 }
 .wa-fab:hover { transform: scale(1.08); box-shadow: 0 10px 30px rgb(37 211 102 / 0.4); }
 .wa-fab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* ---------- About + Contact below the track (components/HomeSections.tsx) ---------- */
+.h-sec { position: relative; padding: clamp(4rem, 12vh, 8rem) 0; color: var(--u-fg); }
+.h-wrap { width: min(72rem, 100% - 2rem); margin-inline: auto; }
+.h-kicker { font-size: 0.6875rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--u-acid); }
+.h-title { margin-top: 1rem; font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 400; line-height: 1.02; letter-spacing: -0.03em; }
+.h-title em { color: var(--u-acid); }
+.h-title-big { font-size: clamp(2.75rem, 7vw, 5.5rem); }
+.h-text { margin-top: 1.25rem; max-width: 34rem; font-size: 1.0625rem; line-height: 1.7; color: var(--u-muted); }
+.h-about { display: grid; gap: 3rem; }
+@media (min-width: 900px) { .h-about { grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: start; } }
+.h-stats { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 2.25rem; }
+.h-stats b { display: block; font-family: var(--font-display); font-size: 2.75rem; font-weight: 400; line-height: 1; }
+.h-stats span { display: block; margin-top: 0.4rem; font-size: 0.8125rem; color: var(--u-dim); }
+.h-services { display: grid; gap: 0.75rem; margin-top: 1.25rem; }
+.h-services li { display: flex; gap: 1.25rem; padding: 1.25rem 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); box-shadow: 0 10px 30px -18px var(--u-shade); }
+.h-services b { font-family: var(--font-display); font-size: 1.75rem; font-style: italic; font-weight: 400; line-height: 1; color: var(--u-acid); }
+.h-services strong { font-size: 1.0625rem; font-weight: 600; }
+.h-services p { margin-top: 0.25rem; font-size: 0.9375rem; line-height: 1.55; color: var(--u-muted); }
+.h-contact { padding-bottom: clamp(6rem, 16vh, 10rem); text-align: center; border-top: 1px solid var(--u-line); }
+.h-contact .h-text { margin-inline: auto; }
+.h-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2.25rem; }
+.h-cta a { display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%; padding: 0.85rem 1.5rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 600; overflow-wrap: anywhere; transition: translate 0.25s, box-shadow 0.25s, background 0.25s; }
+.h-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 1.75rem; font-size: 0.875rem; color: var(--u-muted); }
+.h-links a:hover { color: var(--u-fg); }
