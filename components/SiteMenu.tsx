@@ -134,6 +134,11 @@ export default function SiteMenu() {
             </button>
           </div>
           <ul className="mt-2 flex flex-wrap gap-1.5">
+            <li>
+              <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="menu-chip">
+                WhatsApp ↗
+              </a>
+            </li>
             {profile.contact.links.map((l) => (
               <li key={l.label}>
                 <a href={l.href} target="_blank" rel="noopener noreferrer" className="menu-chip">

@@ -16,6 +16,8 @@ export type Multitude = {
 
 // Used by the contact links below and the multitude pages' calls to action.
 const email = "pankajmultitude@gmail.com";
+// WhatsApp: country code + number, digits only. Powers the floating chat button.
+const whatsapp = "917833085612";
 
 export type Project = {
   title: string;
@@ -150,6 +152,7 @@ export const profile = {
   // the site menu and the hero's "Open for projects" read from this.
   contact: {
     email,
+    whatsapp: `https://wa.me/${whatsapp}?text=${encodeURIComponent("Hi Pankaj, I'd like a website.")}`,
     links: [
       { label: "GitHub", href: "https://github.com/" },
       { label: "LinkedIn", href: "https://linkedin.com/" },
