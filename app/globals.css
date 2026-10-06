@@ -1375,6 +1375,8 @@ body {
 .h-title-big { font-size: clamp(2.75rem, 7vw, 5.5rem); }
 .h-text { margin-top: 1.25rem; max-width: 34rem; font-size: 1.0625rem; line-height: 1.7; color: var(--u-muted); }
 .h-about { display: grid; gap: 3rem; }
+/* Let the columns shrink below the code window's longest line (it scrolls instead), or it widens the page on phones. */
+.h-about > * { min-width: 0; }
 @media (min-width: 900px) { .h-about { grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: start; } }
 .h-services { display: grid; gap: 0.75rem; margin-top: 1.25rem; }
 .h-services li { display: flex; gap: 1.25rem; padding: 1.25rem 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); box-shadow: 0 10px 30px -18px var(--u-shade); }
