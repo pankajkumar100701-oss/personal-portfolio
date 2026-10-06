@@ -4,6 +4,7 @@ import PortalTransition from "@/components/PortalTransition";
 import PrefsSync from "@/components/PrefsSync";
 import { profile } from "@/data/profile";
 import { DEFAULT_PREFS, prefsScript } from "@/lib/prefs";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,8 +26,16 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: `${profile.name} — ${profile.role}`,
   description: profile.tagline,
+  openGraph: {
+    type: "website",
+    siteName: profile.name,
+    title: `${profile.name} — ${profile.role}`,
+    description: profile.tagline,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
