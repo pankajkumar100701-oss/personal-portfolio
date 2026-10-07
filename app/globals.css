@@ -118,7 +118,11 @@ body {
   transition: background-color 0.3s;
 }
 .cosmos { position: absolute; inset: 0; overflow: hidden; }
+/* Each glow / the grid is its own layer: the dive clips #cosmos to a growing
+   circle every frame, and without layers that re-rastered all the big
+   gradients each frame (the late-dive jank). Now only the clip mask changes. */
 .cosmos-glow {
+  will-change: transform;
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(circle, var(--g) 0%, transparent 65%);
@@ -131,6 +135,7 @@ body {
 [data-theme="light"] .cosmos-glow-b { --g: #ffc4ae; }
 [data-theme="light"] .cosmos-glow-c { --g: #ffe6c7; --o: 0.25; }
 .cosmos-grid {
+  will-change: transform;
   position: absolute;
   inset: 0;
   background-image: radial-gradient(var(--grid-dot) 1px, transparent 1.5px);
@@ -470,6 +475,7 @@ body {
 /* The dot, taken over: a disk with the same colour/centre/radius that hollows
    out from the middle into a thin ring (the hole clipped into the cosmos layer matches its inner edge). */
 .u-portal {
+  will-change: transform;
   position: absolute;
   left: 0;
   top: 0;
@@ -483,6 +489,7 @@ body {
 /* The arrival, inside the dot. Every piece is revealed by --inside (scroll), so
    it assembles as you finish the dive and comes apart if you scroll back. */
 .u-arrive {
+  will-change: opacity;
   position: absolute;
   inset: 0;
   z-index: 26;
@@ -502,6 +509,7 @@ body {
 }
 .u-portal-copy::before {
   content: "";
+  will-change: transform;
   position: absolute;
   z-index: -1;
   inset: -30% -20%;
@@ -571,6 +579,7 @@ body {
 .u-arrive-title span span {
   --p: clamp(0, calc(var(--inside, 0) * 2.4 - var(--k) * 0.045), 1);
   display: inline-block;
+  will-change: opacity, translate;
   opacity: var(--p);
   translate: 0 calc((1 - var(--p)) * 0.35em);
 }
@@ -598,6 +607,7 @@ body {
 }
 .u-arrive-chips li {
   --q: clamp(0, calc((var(--inside, 0) - 0.45) * 4 - var(--k) * 0.08), 1);
+  will-change: opacity, translate, scale;
   opacity: var(--q);
   translate: 0 calc((1 - var(--q)) * 0.875rem);
   scale: calc(0.85 + var(--q) * 0.15);
@@ -659,6 +669,7 @@ body {
   gap: 0.75rem;
   margin-top: 2rem;
   font-family: var(--font-sans);
+  will-change: opacity, translate;
   opacity: clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1);
   translate: 0 calc((1 - clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1)) * 1rem);
 }
