@@ -23,6 +23,14 @@ const settings: { key: keyof Prefs; label: string; options: { value: string; lab
       { value: "large", label: "Large" },
     ],
   },
+  {
+    key: "motion",
+    label: "Motion",
+    options: [
+      { value: "full", label: "Full" },
+      { value: "reduce", label: "Reduced" },
+    ],
+  },
 ];
 
 // The logo doubles as the site menu: navigation, the multitudes, viewer

@@ -167,10 +167,8 @@ body {
   50% { transform: translateY(6px); opacity: 0.5; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .u-live { animation: none; }
-}
+  html[data-motion="reduce"] { scroll-behavior: auto; }
+  :root[data-motion="reduce"] .u-live { animation: none; }
 
 /* ---------- Site menu (the logo) ---------- */
 .menu-trigger {
@@ -288,9 +286,7 @@ body {
 .menu-segment button:focus-visible,
 .menu-link:focus-visible,
 .menu-chip:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) {
-  .menu-panel, .menu-panel[data-open], .menu-caret::before, .menu-caret::after { transition: none; }
-}
+  :root[data-motion="reduce"] .menu-panel, :root[data-motion="reduce"] .menu-panel[data-open], :root[data-motion="reduce"] .menu-caret::before, :root[data-motion="reduce"] .menu-caret::after { transition: none; }
 
 /* ---------- Multitudes hero ---------- */
 .u-section {
@@ -320,8 +316,8 @@ body {
   position: absolute;
   inset: 0;
 }
-@media (min-width: 800px) and (prefers-reduced-motion: no-preference) {
-  .u-section { background: transparent; }
+@media (min-width: 800px) {
+  :root:not([data-motion="reduce"]) .u-section { background: transparent; }
 }
 .u-stage::after {
   content: "";
@@ -1102,9 +1098,7 @@ body {
 .m-status[data-status="Live"] { background: rgb(34 197 94 / 0.15); color: #16a34a; }
 .m-status[data-status="Building"] { background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); }
 
-@media (prefers-reduced-motion: reduce) {
-  .m-rise, .m-type, .m-bar span, .m-eq i, .m-disc, .m-pop, .m-slot { animation: none; }
-}
+  :root[data-motion="reduce"] .m-rise, :root[data-motion="reduce"] .m-type, :root[data-motion="reduce"] .m-bar span, :root[data-motion="reduce"] .m-eq i, :root[data-motion="reduce"] .m-disc, :root[data-motion="reduce"] .m-pop, :root[data-motion="reduce"] .m-slot { animation: none; }
 
 /* Narrow screens / reduced motion: no camera — a stacked, scrollable layout. */
 @media (max-width: 799px) {
@@ -1140,10 +1134,8 @@ body {
   .u-nodes { gap: 8px; }
   .u-node strong { font-size: 0.9375rem; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .u-node, .u-node > *, .u-copy > *, .u-copy h1 em, .u-orb, .u-halo, .u-wheel { animation: none; }
-  .u-node > *, .u-node b, .u-node strong, .u-node small { transition-duration: 0.01s; }
-}
+  :root[data-motion="reduce"] .u-node, :root[data-motion="reduce"] .u-node > *, :root[data-motion="reduce"] .u-copy > *, :root[data-motion="reduce"] .u-copy h1 em, :root[data-motion="reduce"] .u-orb, :root[data-motion="reduce"] .u-halo, :root[data-motion="reduce"] .u-wheel { animation: none; }
+  :root[data-motion="reduce"] .u-node > *, :root[data-motion="reduce"] .u-node b, :root[data-motion="reduce"] .u-node strong, :root[data-motion="reduce"] .u-node small { transition-duration: 0.01s; }
 /* Phones: a lighter page. Same layout, minus the effects a phone pays for on
    every frame without much to show for it: the noise grain (an SVG filter
    rastered across the whole page), the endlessly drifting / breathing glows
@@ -1158,10 +1150,10 @@ body {
   .menu-panel, .m-concept { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .m-concept { background: rgb(0 0 0 / 0.75); }
 }
-@media (min-width: 800px) and (prefers-reduced-motion: reduce) {
-  .u-section { height: 100svh; }
-  .u-readout { display: none; }
-  .u-bottom > span:first-child { visibility: hidden; }
+@media (min-width: 800px) {
+  :root[data-motion="reduce"] .u-section { height: 100svh; }
+  :root[data-motion="reduce"] .u-readout { display: none; }
+  :root[data-motion="reduce"] .u-bottom > span:first-child { visibility: hidden; }
 }
 
 /* ---------- Page-to-page portal (components/PortalTransition.tsx) ---------- */
@@ -1356,7 +1348,7 @@ body {
 .u-track-meter i { width: 8rem; height: 2px; margin-left: 0.75rem; overflow: hidden; border-radius: 2px; background: var(--u-line); }
 .u-track-meter b { display: block; height: 100%; background: var(--u-acid); scale: 0 1; transform-origin: left; }
 /* Phones and reduced motion: a plain swipeable row. */
-@media (max-width: 799px), (prefers-reduced-motion: reduce) {
+@media (max-width: 799px) {
   .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
   .u-track-stage { position: static; display: block; height: auto; overflow: visible; }
   .u-track-row { will-change: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
@@ -1365,6 +1357,13 @@ body {
   .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
   .u-track-meter { display: none; }
 }
+  :root[data-motion="reduce"] .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
+  :root[data-motion="reduce"] .u-track-stage { position: static; display: block; height: auto; overflow: visible; }
+  :root[data-motion="reduce"] .u-track-row { will-change: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
+  :root[data-motion="reduce"] .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
+  :root[data-motion="reduce"] .u-track-intro h2 { font-size: 2.75rem; }
+  :root[data-motion="reduce"] .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
+  :root[data-motion="reduce"] .u-track-meter { display: none; }
 
 /* ---------- About + Contact below the track (components/AboutSection.tsx, ContactSection.tsx) ---------- */
 .h-sec { position: relative; padding: clamp(4rem, 12vh, 8rem) 0; color: var(--u-fg); }
@@ -1403,4 +1402,4 @@ body {
 .c-cmt { color: var(--u-dim); font-style: italic; }
 .h-code-caret { display: inline-block; width: 0.5rem; height: 1rem; margin-left: 0.25rem; vertical-align: -0.15rem; background: var(--u-acid); animation: h-blink 1s steps(1) infinite; }
 @keyframes h-blink { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .h-code-caret { animation: none; } }
+:root[data-motion="reduce"] .h-code-caret { animation: none; }

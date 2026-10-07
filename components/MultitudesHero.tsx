@@ -4,6 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
+import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => v * v * (3 - 2 * v);
@@ -112,8 +113,7 @@ export default function MultitudesHero() {
     };
 
     const wide = window.matchMedia("(min-width: 800px)");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-
+    
     // Dot geometry. Measured when a glide starts and on resize / font load —
     // not every frame, since forcing layout per frame is what made the dive
     // stutter on slower machines. The world's transform is cleared for the
@@ -256,7 +256,7 @@ export default function MultitudesHero() {
     };
 
     const onScroll = () => {
-      if (!wide.matches || reduce.matches) return;
+      if (!wide.matches || motionReduced()) return;
       // Dive over most of the scroll; the last stretch rests inside the dot.
       target = clamp01((progress() - 0.03) / 0.85);
       if (!frame && target !== cur) {
@@ -266,7 +266,7 @@ export default function MultitudesHero() {
     };
 
     const onResize = () => {
-      if (!wide.matches || reduce.matches) return;
+      if (!wide.matches || motionReduced()) return;
       measure();
       apply();
       onScroll();
@@ -277,7 +277,7 @@ export default function MultitudesHero() {
       frame = 0;
       last = 0;
       cur = target = 0;
-      if (wide.matches && !reduce.matches) {
+      if (wide.matches && !motionReduced()) {
         measure();
         apply();
         onScroll();
@@ -303,7 +303,7 @@ export default function MultitudesHero() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     wide.addEventListener("change", onModeChange);
-    reduce.addEventListener("change", onModeChange);
+    window.addEventListener(PREFS_EVENT, onModeChange);
     return () => {
       cancelAnimationFrame(frame);
       ro.disconnect();
@@ -311,7 +311,7 @@ export default function MultitudesHero() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       wide.removeEventListener("change", onModeChange);
-      reduce.removeEventListener("change", onModeChange);
+      window.removeEventListener(PREFS_EVENT, onModeChange);
       clipCosmos("");
     };
   }, []);
@@ -322,8 +322,7 @@ export default function MultitudesHero() {
     const stage = stageRef.current!;
     const cards = [...stage.querySelectorAll<HTMLElement>(".u-node > *")];
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-
+    
     const onStageMove = (e: PointerEvent) => {
       if (!fine.matches) return;
       const r = stage.getBoundingClientRect();
@@ -338,7 +337,7 @@ export default function MultitudesHero() {
       const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
       card.style.setProperty("--mx", `${x * 100}%`);
       card.style.setProperty("--my", `${y * 100}%`);
-      if (reduce.matches) return;
+      if (motionReduced()) return;
       card.style.setProperty("--rx", `${(0.5 - y) * 16}deg`);
       card.style.setProperty("--ry", `${(x - 0.5) * 14}deg`);
     };

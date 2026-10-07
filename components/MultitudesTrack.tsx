@@ -4,6 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
+import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 // Pixels the row slides sideways per pixel scrolled down. Lower is slower.
@@ -34,8 +35,7 @@ export default function MultitudesTrack() {
     let alive = true;
     const cards = [...row.querySelectorAll<HTMLElement>(".u-card")];
     const wide = window.matchMedia("(min-width: 800px)");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-
+    
     // Card centres along the row, measured untransformed.
     let travel = 0;
     let centres: number[] = [];
@@ -100,7 +100,7 @@ export default function MultitudesTrack() {
       }
     };
 
-    const active = () => wide.matches && !reduce.matches;
+    const active = () => wide.matches && !motionReduced();
     const onScroll = () => {
       if (!active()) return;
       const rect = section.getBoundingClientRect();
@@ -136,7 +136,7 @@ export default function MultitudesTrack() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     wide.addEventListener("change", onResize);
-    reduce.addEventListener("change", onResize);
+    window.addEventListener(PREFS_EVENT, onResize);
     return () => {
       alive = false;
       io.disconnect();
@@ -145,7 +145,7 @@ export default function MultitudesTrack() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       wide.removeEventListener("change", onResize);
-      reduce.removeEventListener("change", onResize);
+      window.removeEventListener(PREFS_EVENT, onResize);
     };
   }, [multitudes]);
 

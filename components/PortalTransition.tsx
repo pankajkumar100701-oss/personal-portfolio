@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArtIcon, DEFAULT_ART, MULTITUDE_ART } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
+import { motionReduced } from "@/lib/prefs";
 
 const ENTER = 720; // ms: the disk floods the screen
 const EXIT = 850; // ms: the new page opens out of its centre
@@ -58,7 +59,7 @@ export default function PortalTransition() {
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
       const m = profile.multitudes.find((x) => href === `/multitudes/${x.slug}`);
       if (!m || href === location.pathname) return;
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (motionReduced()) return;
       e.preventDefault();
       if (busy.current) return;
       busy.current = true;
