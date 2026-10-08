@@ -162,6 +162,18 @@ export const profile = {
       client: "a fictional restaurant in Bengaluru",
       highlights: ["Menu · 4 sections", "Veg-only filter", "Table booking", "Experiences", "Review slider"],
     },
+    {
+      title: "Him Woollen",
+      description: "A warm, handcrafted shop front for woollens made by hand in Himachal — yarn, shawls, caps and knitwear.",
+      tags: ["Next.js", "Shop", "Brand", "Storytelling"],
+      href: "https://himwoollen.vercel.app/",
+      color: "#a8322c",
+      multitude: "business",
+      image: "/work/him-woollen.webp",
+      year: "2026",
+      client: "Him Woollen · Himachal Pradesh",
+      highlights: ["Shop", "About the craft", "Contact", "Handmade story"],
+    },
   ] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
