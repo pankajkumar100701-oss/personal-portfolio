@@ -10,6 +10,7 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => v * v * (3 - 2 * v);
 
 const DOT_DROP = 0.045; // em
+const PORTAL_STEP = Math.log(1.08); // the dive's ring is re-drawn every 8% of growth
 
 // Places the dot exactly where the rendered font draws its tittle. The serif
 // (or its fallback, while it loads) can vary, so its "i" is drawn to a canvas
@@ -179,14 +180,23 @@ export default function MultitudesHero() {
       const y = ry + py;
       const r = r0 * zoom;
       const hollow = smooth(clamp01((zoom - 5) / 30));
-      const inner = Math.max(0, Math.min(r * hollow, r - 1.5));
       const handedOff = zoom > 3;
       portal.style.opacity = handedOff ? "1" : "0";
       dot.style.visibility = handedOff ? "hidden" : "";
-      // A bordered circle, not a full-screen gradient: only the ring repaints.
-      portal.style.width = portal.style.height = `${2 * r}px`;
-      portal.style.borderWidth = `${r - inner}px`;
-      portal.style.transform = `translate(${x - r}px, ${y - r}px)`;
+      // A bordered circle, drawn at a size that only steps every ~8% and scaled
+      // to the exact radius on the compositor. Resizing it every frame meant
+      // re-rastering a ring up to ~1800px across each frame (the late-dive lag);
+      // now it's re-drawn a couple of dozen times over the whole dive.
+      const size = Math.exp(Math.round(Math.log(Math.max(r, 1)) / PORTAL_STEP) * PORTAL_STEP);
+      const s = r / size;
+      const border = Math.round(((r - Math.max(0, Math.min(r * hollow, r - 1.5))) / s) * 4) / 4;
+      // The hole matches the ring's drawn inner edge, not the ideal one.
+      const inner = Math.max(0, r - border * s);
+      const w = `${2 * size}px`;
+      if (portal.style.width !== w) portal.style.width = portal.style.height = w;
+      const bw = `${border}px`;
+      if (portal.style.borderWidth !== bw) portal.style.borderWidth = bw;
+      portal.style.transform = `translate(${x - r}px, ${y - r}px) scale(${s})`;
       // Past ~10x the title and orbits are only giant fragments sliding off
       // screen, yet rastering them at that size every frame stalled the dive
       // for 100-250ms. Fade the world out as it rushes past (like the cards;

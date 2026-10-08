@@ -479,6 +479,7 @@ body {
   position: absolute;
   left: 0;
   top: 0;
+  transform-origin: 0 0;
   z-index: 25;
   box-sizing: border-box;
   border: 0 solid var(--u-paper);
