@@ -12,6 +12,8 @@ export type Prefs = {
 export const DEFAULT_PREFS: Prefs = { theme: "dark", text: "default", motion: "full" };
 
 const KEY = "prefs";
+// Set by PerfGuard once this browser is seen dropping frames (see there).
+export const LITE_KEY = "perf-lite";
 export const PREFS_EVENT = "prefs-change";
 
 export function readPrefs(): Prefs {
@@ -48,4 +50,4 @@ export function savePrefs(p: Prefs) {
 
 // Same as readPrefs + applyPrefs, inlined in <head> so the page paints in the
 // right theme before React loads.
-export const prefsScript = `(function(){try{var p=JSON.parse(localStorage.getItem("${KEY}")||"{}"),h=document.documentElement,t=p.theme||"${DEFAULT_PREFS.theme}";if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";h.dataset.theme=t;h.dataset.text=p.text||"${DEFAULT_PREFS.text}";h.dataset.motion=p.motion||"${DEFAULT_PREFS.motion}"}catch(e){}})()`;
+export const prefsScript = `(function(){try{var p=JSON.parse(localStorage.getItem("${KEY}")||"{}"),h=document.documentElement,t=p.theme||"${DEFAULT_PREFS.theme}";if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";h.dataset.theme=t;h.dataset.text=p.text||"${DEFAULT_PREFS.text}";h.dataset.motion=p.motion||"${DEFAULT_PREFS.motion}";if(sessionStorage.getItem("${LITE_KEY}"))h.dataset.lite=""}catch(e){}})()`;

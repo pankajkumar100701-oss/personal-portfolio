@@ -54,6 +54,8 @@ export default function MultitudesTrack() {
     let frame = 0;
     let last = 0;
     let shownIndex = -1;
+    // Last lean written per card, so cards parked at the edges aren't touched.
+    let shownD: string[] = [];
 
     const apply = () => {
       const x = -travel * cur;
@@ -62,8 +64,17 @@ export default function MultitudesTrack() {
       let best = Infinity;
       cards.forEach((c, i) => {
         const d = Math.max(-1, Math.min(1, (centres[i] + x - vw / 2) / vw));
-        c.style.setProperty("--d", d.toFixed(3));
-        c.style.setProperty("--a", Math.abs(d).toFixed(3));
+        // Written straight to rotate / scale / opacity (composited, see the
+        // CSS), not as custom properties: those inherit, so setting them
+        // restyled and repainted every card's whole subtree each frame.
+        const key = d.toFixed(3);
+        if (shownD[i] !== key) {
+          shownD[i] = key;
+          const a = Math.abs(d);
+          c.style.rotate = `${(d * -5).toFixed(2)}deg`;
+          c.style.scale = (1 - a * 0.12).toFixed(4);
+          c.style.opacity = (1 - a * 0.45).toFixed(3);
+        }
         if (Math.abs(d) < best) {
           best = Math.abs(d);
           nearest = i;
@@ -79,10 +90,8 @@ export default function MultitudesTrack() {
     const reset = () => {
       row.style.transform = "";
       section.style.removeProperty("height");
-      for (const c of cards) {
-        c.style.removeProperty("--d");
-        c.style.removeProperty("--a");
-      }
+      shownD = [];
+      for (const c of cards) for (const v of ["rotate", "scale", "opacity"]) c.style.removeProperty(v);
     };
 
     const tick = (now: number) => {

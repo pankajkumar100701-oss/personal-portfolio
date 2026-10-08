@@ -260,7 +260,9 @@ export default function MultitudesHero() {
       apply();
       // Backdrop blur re-samples every frame under a moving transform; drop it
       // mid-dive (it's invisible over the dark stage anyway).
-      section.toggleAttribute("data-zooming", cur > 0.001);
+      // (Only on change: re-setting it every frame re-matched its selectors.)
+      const zooming = cur > 0.001;
+      if (zooming !== section.hasAttribute("data-zooming")) section.toggleAttribute("data-zooming", zooming);
       if (cur === target) {
         frame = 0;
         last = 0;

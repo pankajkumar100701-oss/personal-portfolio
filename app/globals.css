@@ -1200,6 +1200,12 @@ body {
   :root[data-motion="reduce"] .u-bottom > span:first-child { visibility: hidden; }
 }
 
+/* Slow machines (components/PerfGuard.tsx): drop the idle decoration that
+   costs every frame but carries no content, so the dive and the card row stay
+   smooth. Nothing moves in the layout; the glows just hold still. */
+:root[data-lite] :is(.u-orb, .u-halo, .u-node, .portal-x-mark) { animation: none; will-change: auto; }
+:root[data-lite] :is(.u-grain, .u-spot, .portal-x::after) { display: none; }
+
 /* ---------- Page-to-page portal (components/PortalTransition.tsx) ---------- */
 /* A multitude-coloured cover that floods out of the clicked link, then opens
    onto the next page through a growing hole: a full layer minus a circle
@@ -1297,8 +1303,6 @@ body {
 .u-track-intro em { color: var(--u-acid); }
 .u-track-hint { margin-top: 1.5rem; max-width: 20rem; font-family: var(--font-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--u-muted); }
 .u-card {
-  --d: 0;
-  --a: 0;
   position: relative;
   flex: none;
   display: flex;
@@ -1311,10 +1315,10 @@ body {
   border-radius: 1.5rem;
   background: linear-gradient(165deg, color-mix(in srgb, var(--c) 16%, var(--u-card)), var(--u-card) 55%);
   box-shadow: 0 30px 60px -40px var(--u-shade);
-  /* Set per frame from the card's distance to the centre (-1..1, and |d|). */
-  rotate: calc(var(--d) * -5deg);
-  scale: calc(1 - var(--a) * 0.12);
-  opacity: calc(1 - var(--a) * 0.45);
+  /* rotate / scale / opacity are set per frame from the card's distance to
+     the centre (MultitudesTrack). Own layer, so that's a compositor move
+     instead of re-painting its big shadow and gradients every frame. */
+  will-change: transform, opacity;
   /* Hover growth rides on `transform`, separate from the per-frame `scale`. */
   transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1.15), border-color 0.3s, box-shadow 0.4s;
 }
@@ -1402,7 +1406,7 @@ body {
   .u-track-row { will-change: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
   .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
   .u-track-intro h2 { font-size: 2.75rem; }
-  .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
+  .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; will-change: auto; }
   .u-track-meter { display: none; }
 }
   :root[data-motion="reduce"] .u-track { height: auto; padding: 2.5rem 0 4.5rem; }
@@ -1410,7 +1414,7 @@ body {
   :root[data-motion="reduce"] .u-track-row { will-change: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; gap: 0.875rem; padding: 1.5rem 16px 2rem; scrollbar-width: none; }
   :root[data-motion="reduce"] .u-track-intro { width: min(78vw, 22rem); margin-right: 0.5rem; scroll-snap-align: start; }
   :root[data-motion="reduce"] .u-track-intro h2 { font-size: 2.75rem; }
-  :root[data-motion="reduce"] .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; }
+  :root[data-motion="reduce"] .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; will-change: auto; }
   :root[data-motion="reduce"] .u-track-meter { display: none; }
 
 /* ---------- About + Contact below the track (components/AboutSection.tsx, ContactSection.tsx) ---------- */
