@@ -4,12 +4,15 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { allTypes, findType, profile, whatsappLink } from "@/data/profile";
-import { toggleInBasket, useBasket, writeBasket } from "@/lib/basket";
+import { addToBasket, toggleInBasket, useBasket, writeBasket } from "@/lib/basket";
 
 // Ideas that fit any kind of site, offered next to the chosen types' own.
 const EXTRAS = ["WhatsApp chat button", "Google Maps & SEO", "Hindi + English", "Reviews section", "Blog / updates", "Admin panel to edit content", "Domain & hosting setup"];
 const BUDGETS = ["Not sure yet", "Under ₹10k", "₹10k – ₹25k", "₹25k – ₹50k", "₹50k+"];
 const TIMELINES = ["Flexible", "ASAP", "2–4 weeks", "1–2 months"];
+// Ideas shown before "Show more" (chosen ones always show).
+const IDEAS_SHOWN = 8;
+const trending = new Set(profile.multitudes.map((m) => m.slug));
 
 // The Contact page: the visitor builds their own message — who they are,
 // the kinds of site they want, sites of mine they like, the ideas they want
@@ -29,13 +32,16 @@ export default function ContactBuilder() {
   // Their own edits to the written-out message; null while it's generated.
   const [edited, setEdited] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // The long lists start short (the trending types, the first ideas): on a
+  // phone the whole lot is several screens of chips.
+  const [allTypesShown, setAllTypesShown] = useState(false);
+  const [allIdeasShown, setAllIdeasShown] = useState(false);
 
   // /contact?type=salon (e.g. from a type's page) adds that type to the message.
   useEffect(() => {
+    // Adds, never toggles (dev mode runs effects twice).
     const slug = new URLSearchParams(location.search).get("type");
-    if (slug && findType(slug) && !basket.types.includes(slug)) toggleInBasket("types", slug);
-    // Only on arrival.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (slug && findType(slug)) addToBasket("types", slug);
   }, []);
 
   const types = basket.types.map(findType).filter((t) => t !== undefined);
@@ -66,6 +72,16 @@ export default function ContactBuilder() {
   const ready = name.trim() !== "" && (phone.trim() !== "" || email.trim() !== "");
   const subject = `Website enquiry — ${name || "from your portfolio"}${business ? ` (${business})` : ""}`;
 
+  const shownTypes = allTypes.filter((t) => allTypesShown || trending.has(t.slug) || basket.types.includes(t.slug));
+  const shownIdeas = ideaOptions.filter((f, i) => allIdeasShown || i < IDEAS_SHOWN || ideas.includes(f));
+  const waHref = whatsappLink(message);
+  // Phones: the bar's "Send" before the form is filled takes them to the name.
+  const toDetails = () => {
+    const el = document.getElementById("c-name");
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    el?.focus({ preventScroll: true });
+  };
+
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(message);
@@ -79,7 +95,7 @@ export default function ContactBuilder() {
       <div className="space-y-6">
         <Step n="01" title="About you">
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Your name *" value={name} onChange={setName} autoComplete="name" />
+            <Field id="c-name" label="Your name *" value={name} onChange={setName} autoComplete="name" />
             <Field label="Business / brand" value={business} onChange={setBusiness} autoComplete="organization" />
             <Field label="Phone / WhatsApp" value={phone} onChange={setPhone} type="tel" autoComplete="tel" placeholder="+91 …" />
             <Field label="Email" value={email} onChange={setEmail} type="email" autoComplete="email" />
@@ -90,7 +106,7 @@ export default function ContactBuilder() {
 
         <Step n="02" title="What kind of website?">
           <ul className="flex flex-wrap gap-2">
-            {allTypes.map((t) => (
+            {shownTypes.map((t) => (
               <li key={t.slug} style={{ "--c": t.color, ...artVars(t.slug, t.color) } as CSSProperties}>
                 <button type="button" className="c-type" aria-pressed={basket.types.includes(t.slug)} onClick={() => toggleInBasket("types", t.slug)}>
                   <ArtIcon icon={artIcon(t.slug)} />
@@ -99,6 +115,11 @@ export default function ContactBuilder() {
               </li>
             ))}
           </ul>
+          {allTypes.length > trending.size && (
+            <button type="button" className="c-more" onClick={() => setAllTypesShown((v) => !v)}>
+              {allTypesShown ? "Show trending only" : `+ ${allTypes.length - shownTypes.length} more types`}
+            </button>
+          )}
           <p className="mt-3 text-xs text-muted">
             Not sure? <Link href="/explore" className="underline underline-offset-2">Explore every type</Link> with examples.
           </p>
@@ -121,7 +142,7 @@ export default function ContactBuilder() {
 
         <Step n="04" title="Ideas to include">
           <ul className="flex flex-wrap gap-2">
-            {ideaOptions.map((f) => (
+            {shownIdeas.map((f) => (
               <li key={f}>
                 <button type="button" className="m-pill" aria-pressed={ideas.includes(f)} onClick={() => toggleIdea(f)}>
                   {f}
@@ -129,6 +150,11 @@ export default function ContactBuilder() {
               </li>
             ))}
           </ul>
+          {ideaOptions.length > IDEAS_SHOWN && (
+            <button type="button" className="c-more" onClick={() => setAllIdeasShown((v) => !v)}>
+              {allIdeasShown ? "Show fewer" : `+ ${ideaOptions.length - shownIdeas.length} more ideas`}
+            </button>
+          )}
           {types.length === 0 && <p className="mt-3 text-xs text-muted">Pick a type above for ideas made for it.</p>}
         </Step>
 
@@ -150,7 +176,7 @@ export default function ContactBuilder() {
         </Step>
       </div>
 
-      <aside className="c-preview">
+      <aside id="your-message" className="c-preview scroll-mt-4">
         <div className="m-card rounded-2xl p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink">Your message</p>
@@ -166,7 +192,7 @@ export default function ContactBuilder() {
           {!ready && <p className="c-need">Add your name and a phone or email to send.</p>}
           <div className="mt-4 grid gap-2">
             <a
-              href={ready ? whatsappLink(message) : undefined}
+              href={ready ? waHref : undefined}
               aria-disabled={!ready}
               target="_blank"
               rel="noopener noreferrer"
@@ -195,6 +221,22 @@ export default function ContactBuilder() {
           </p>
         </div>
       </aside>
+
+      {/* Phones: the form is long, so seeing the message and sending it stay one tap away. */}
+      <div className="c-bar">
+        <a href="#your-message" className="c-bar-peek">
+          Your message <span aria-hidden>↓</span>
+        </a>
+        {ready ? (
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className="u-cta-primary x-btn justify-center">
+            Send on WhatsApp <span aria-hidden>→</span>
+          </a>
+        ) : (
+          <button type="button" onClick={toDetails} className="u-cta-primary x-btn justify-center">
+            Add your name &amp; phone
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -210,7 +252,7 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
-function Field({ label, value, onChange, ...rest }: { label: string; value: string; onChange: (v: string) => void; type?: string; autoComplete?: string; placeholder?: string }) {
+function Field({ label, value, onChange, ...rest }: { label: string; value: string; onChange: (v: string) => void; id?: string; type?: string; autoComplete?: string; placeholder?: string }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-xs text-muted">{label}</span>

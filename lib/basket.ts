@@ -44,6 +44,11 @@ export function toggleInBasket(kind: keyof Basket, id: string) {
   writeBasket({ ...b, [kind]: list });
 }
 
+export function addToBasket(kind: keyof Basket, id: string) {
+  const b = read();
+  if (!b[kind].includes(id)) writeBasket({ ...b, [kind]: [...b[kind], id] });
+}
+
 function subscribe(cb: () => void) {
   window.addEventListener(EVENT, cb);
   // Another tab changed it.
