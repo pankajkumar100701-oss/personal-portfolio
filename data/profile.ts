@@ -149,6 +149,19 @@ export const profile = {
       client: "Bao Han · artist, Himalayas",
       highlights: ["Gallery · 13 works", "Prices & availability", "Story page", "Monthly letters", "Theme switcher"],
     },
+    {
+      title: "Saffron Hearth",
+      description: "A warm, editorial site for a modern Indian restaurant — signature dishes, a filterable menu and table bookings.",
+      tags: ["Next.js", "Menu", "Reservations", "Animations"],
+      href: "https://restaurant-rouge-pi.vercel.app/",
+      color: "#e6a03a",
+      multitude: "restaurants",
+      image: "/work/saffron-hearth.webp",
+      year: "2026",
+      concept: true,
+      client: "a fictional restaurant in Bengaluru",
+      highlights: ["Menu · 4 sections", "Veg-only filter", "Table booking", "Experiences", "Review slider"],
+    },
   ] as Project[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
