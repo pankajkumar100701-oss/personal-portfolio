@@ -324,8 +324,7 @@ body {
 @media (min-width: 800px) {
   :root:not([data-motion="reduce"]) .u-section { background: transparent; }
 }
-.u-stage::after {
-  content: "";
+.u-vignette {
   will-change: opacity;
   position: absolute;
   inset: 0;
@@ -1139,7 +1138,7 @@ body {
   .u-sites-mobile { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.125rem; }
   /* The edge vignette is sized for a one-screen stage; on the tall stacked
      layout it just dims the bottom cards and buttons. */
-  .u-stage::after { display: none; }
+  .u-vignette { display: none; }
 }
 @media (max-width: 380px) {
   .u-stage { padding-inline: 12px; }

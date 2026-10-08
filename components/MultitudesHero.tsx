@@ -101,6 +101,7 @@ export default function MultitudesHero() {
     const portal = portalRef.current!;
     const readout = readoutRef.current!;
     const nodes = world.querySelector<HTMLElement>(".u-nodes")!;
+    const insideEls = stage.querySelectorAll<HTMLElement>(".u-arrive, .u-vignette, .u-bottom");
     // Everything that clears out early (cards, glow, orbits, micro labels):
     // once invisible it's hidden too, so it isn't re-rastered at huge scale.
     const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro")];
@@ -212,11 +213,13 @@ export default function MultitudesHero() {
       const covered = inner > Math.hypot(sw, sh) / 2 + 2;
       scene.style.visibility = covered ? "hidden" : "";
       clipCosmos(covered ? "" : `circle(${inner.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`);
-      // --inside is read across the whole stage, so only write it when it moves
-      // (it sits at 0 for most of the dive) to spare a full style recalc.
+      // --inside is written only on the few elements that read it (and only
+      // when it moves): set on the stage it restyled the whole hero each frame,
+      // ~13ms a frame right as the dive lands (the stutter around 90×).
       const inside = smooth(clamp01((cur - 0.86) / 0.12));
       if (inside !== shownInside) {
-        stage.style.setProperty("--inside", String((shownInside = inside)));
+        const v = String((shownInside = inside));
+        for (const el of insideEls) el.style.setProperty("--inside", v);
         // Gates the arrival's idle loops and makes its chips clickable.
         stage.toggleAttribute("data-arrived", inside > 0.6);
       }
@@ -239,7 +242,7 @@ export default function MultitudesHero() {
       scene.style.visibility = "";
       for (const v of ["width", "height", "border-width", "transform"]) portal.style.removeProperty(v);
       clipCosmos("");
-      stage.style.removeProperty("--inside");
+      for (const el of insideEls) el.style.removeProperty("--inside");
       stage.removeAttribute("data-arrived");
       shownInside = -1;
       section.removeAttribute("data-zooming");
@@ -527,6 +530,7 @@ export default function MultitudesHero() {
             Zoom 1.00×
           </span>
         </div>
+        <div className="u-vignette" aria-hidden />
       </div>
     </section>
   );
