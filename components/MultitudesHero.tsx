@@ -102,7 +102,22 @@ export default function MultitudesHero() {
     const portal = portalRef.current!;
     const readout = readoutRef.current!;
     const nodes = world.querySelector<HTMLElement>(".u-nodes")!;
-    const insideEls = stage.querySelectorAll<HTMLElement>(".u-arrive, .u-vignette, .u-bottom");
+    const arrive = stage.querySelector<HTMLElement>(".u-arrive")!;
+    const outsideEls = stage.querySelectorAll<HTMLElement>(".u-vignette, .u-bottom");
+    // The arrival's pieces, each with the point of the landing (0..1) where it
+    // comes in. Crossing it flips data-in and a CSS transition plays it in (or
+    // back out): scrubbing ~60 letters/chips from scroll every frame re-styled
+    // and re-painted all of them at once, right as the hole filled the screen.
+    const kOf = (el: HTMLElement) => Number(el.style.getPropertyValue("--k")) || 0;
+    const reveals: [HTMLElement, number][] = [
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-portal-copy")].map((el) => [el, 0.1] as [HTMLElement, number]),
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-arrive-rings, .u-arrive-kicker")].map((el) => [el, 0.2] as [HTMLElement, number]),
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-arrive-line > span > span")].map((el) => [el, (0.5 + kOf(el) * 0.045) / 2.4] as [HTMLElement, number]),
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-arrive-sub")].map((el) => [el, 0.57] as [HTMLElement, number]),
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-arrive-chips li")].map((el) => [el, 0.45 + (0.5 + kOf(el) * 0.08) / 4] as [HTMLElement, number]),
+      ...[...arrive.querySelectorAll<HTMLElement>(".u-arrive-cta")].map((el) => [el, 0.725] as [HTMLElement, number]),
+    ];
+    const shownIn = reveals.map(() => false);
     // Everything that clears out early (cards, glow, orbits, micro labels):
     // once invisible it's hidden too, so it isn't re-rastered at huge scale.
     const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro")];
@@ -162,6 +177,8 @@ export default function MultitudesHero() {
     let shownReadout = "";
     let shownFade = 1;
     let shownInside = -1;
+    let shownClear = -1;
+    let shownHandedOff: boolean | null = null;
     const apply = () => {
       const zoom = Math.pow(maxZoom, cur);
       // Glide the dot to the centre of the frame early in the dive.
@@ -171,9 +188,12 @@ export default function MultitudesHero() {
       world.style.transform = `translate(${px}px, ${py}px) scale(${zoom}) rotate(${cur * -7}deg)`;
       // The cards rush past and clear out of the way first.
       const clear = clamp01(1 - (zoom - 1) / 1.6);
-      for (const el of early) {
-        el.style.opacity = clear < 1 ? String(clear) : "";
-        el.style.visibility = clear > 0 ? "" : "hidden";
+      if (clear !== shownClear) {
+        shownClear = clear;
+        for (const el of early) {
+          el.style.opacity = clear < 1 ? String(clear) : "";
+          el.style.visibility = clear > 0 ? "" : "hidden";
+        }
       }
       // The portal is the dot (same colour, centre and radius), so the hand-off
       // is invisible. As it grows it hollows out from the centre into a thin
@@ -183,8 +203,11 @@ export default function MultitudesHero() {
       const r = r0 * zoom;
       const hollow = smooth(clamp01((zoom - 5) / 30));
       const handedOff = zoom > 3;
-      portal.style.opacity = handedOff ? "1" : "0";
-      dot.style.visibility = handedOff ? "hidden" : "";
+      if (handedOff !== shownHandedOff) {
+        shownHandedOff = handedOff;
+        portal.style.opacity = handedOff ? "1" : "0";
+        dot.style.visibility = handedOff ? "hidden" : "";
+      }
       // A bordered circle, drawn at a size that only steps every ~8% and scaled
       // to the exact radius on the compositor. Resizing it every frame meant
       // re-rastering a ring up to ~1800px across each frame (the late-dive lag);
@@ -212,15 +235,20 @@ export default function MultitudesHero() {
       // Once the hole covers the frame there's nothing left to paint (and no
       // reason to keep rastering glyphs at 100×+).
       const covered = inner > Math.hypot(sw, sh) / 2 + 2;
-      scene.style.visibility = covered ? "hidden" : "";
+      if (covered !== (scene.style.visibility === "hidden")) scene.style.visibility = covered ? "hidden" : "";
       clipCosmos(covered ? "" : `circle(${inner.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`);
-      // --inside is written only on the few elements that read it (and only
-      // when it moves): set on the stage it restyled the whole hero each frame,
-      // ~13ms a frame right as the dive lands (the stutter around 90×).
+      // The landing fades are written as plain opacity on the few layers that
+      // use it (and only when it moves): an inherited custom property here
+      // re-styled every element under them each frame (the stutter around 90×).
       const inside = smooth(clamp01((cur - 0.86) / 0.12));
       if (inside !== shownInside) {
-        const v = String((shownInside = inside));
-        for (const el of insideEls) el.style.setProperty("--inside", v);
+        shownInside = inside;
+        arrive.style.opacity = inside.toFixed(3);
+        for (const el of outsideEls) el.style.opacity = (1 - inside).toFixed(3);
+        reveals.forEach(([el, at], i) => {
+          const on = inside >= at;
+          if (on !== shownIn[i]) el.toggleAttribute("data-in", (shownIn[i] = on));
+        });
         // Gates the arrival's idle loops and makes its chips clickable.
         stage.toggleAttribute("data-arrived", inside > 0.6);
       }
@@ -238,12 +266,19 @@ export default function MultitudesHero() {
       world.style.opacity = "";
       world.style.visibility = "";
       shownFade = 1;
+      shownClear = -1;
+      shownHandedOff = null;
       dot.style.visibility = "";
       portal.style.opacity = "";
       scene.style.visibility = "";
       for (const v of ["width", "height", "border-width", "transform"]) portal.style.removeProperty(v);
       clipCosmos("");
-      for (const el of insideEls) el.style.removeProperty("--inside");
+      arrive.style.removeProperty("opacity");
+      for (const el of outsideEls) el.style.removeProperty("opacity");
+      reveals.forEach(([el], i) => {
+        el.removeAttribute("data-in");
+        shownIn[i] = false;
+      });
       stage.removeAttribute("data-arrived");
       shownInside = -1;
       section.removeAttribute("data-zooming");

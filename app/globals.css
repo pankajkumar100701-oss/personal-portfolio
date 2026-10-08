@@ -340,7 +340,6 @@ body {
   z-index: 20;
   pointer-events: none;
   background: radial-gradient(circle at center, transparent 25%, var(--u-shade) 100%);
-  opacity: calc(1 - var(--inside, 0));
 }
 .u-grain {
   position: absolute;
@@ -513,8 +512,13 @@ body {
   opacity: 0;
   pointer-events: none;
 }
-/* The arrival, inside the dot. Every piece is revealed by --inside (scroll), so
-   it assembles as you finish the dive and comes apart if you scroll back. */
+/* The arrival, inside the dot. Its layer fades with the scroll (opacity set
+   from MultitudesHero); each piece plays in by transition once the landing
+   passes its point (data-in), so it assembles as you finish the dive and comes
+   apart if you scroll back, without re-painting every piece every frame. */
+:is(.u-portal-copy, .u-arrive-kicker, .u-arrive-sub, .u-arrive-line > span > span, .u-arrive-chips li, .u-arrive-cta) {
+  transition: opacity 0.5s ease-out, translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
 .u-arrive {
   will-change: opacity;
   position: absolute;
@@ -523,7 +527,7 @@ body {
   display: grid;
   place-items: center;
   pointer-events: none;
-  opacity: var(--inside, 0);
+  opacity: 0;
 }
 .u-portal-copy {
   position: relative;
@@ -532,8 +536,9 @@ body {
   align-items: center;
   max-width: min(47.5rem, 90vw);
   text-align: center;
-  opacity: min(1, calc(var(--inside, 0) * 3));
+  opacity: 0;
 }
+.u-portal-copy[data-in] { opacity: 1; }
 .u-portal-copy::before {
   content: "";
   will-change: transform;
@@ -558,9 +563,11 @@ body {
   margin: -16.25rem;
   border: 1px dashed color-mix(in srgb, var(--u-acid) 18%, transparent);
   border-radius: 50%;
-  scale: calc(0.6 + var(--inside, 0) * 0.4);
+  scale: 0.6;
+  transition: scale 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   animation: u-spin 60s linear infinite paused;
 }
+.u-arrive-rings[data-in]::before { scale: 1; }
 .u-arrive-rings i {
   position: absolute;
   width: 22.5rem;
@@ -587,8 +594,9 @@ body {
   font-size: 0.9375rem;
   letter-spacing: 0.01em;
   color: var(--u-muted);
-  opacity: clamp(0, calc(var(--inside, 0) * 2.5), 1);
+  opacity: 0;
 }
+.u-arrive-kicker[data-in] { opacity: 1; }
 .u-arrive-title {
   margin-top: 0.75rem;
   font-family: var(--u-serif);
@@ -605,12 +613,13 @@ body {
 /* Letters drop in one after another as the dive settles. No will-change on
    these (or the chips / CTA): ~45 extra GPU layers cost the dive's landing
    more than repainting this small block does. */
-.u-arrive-title span span {
-  --p: clamp(0, calc(var(--inside, 0) * 2.4 - var(--k) * 0.045), 1);
+.u-arrive-line > span > span {
   display: inline-block;
-  opacity: var(--p);
-  translate: 0 calc((1 - var(--p)) * 0.35em);
+  opacity: 0;
+  translate: 0 0.35em;
 }
+/* A small stagger too, so a fast scroll still drops them one after another. */
+.u-arrive-line > span > span[data-in] { opacity: 1; translate: 0 0; transition-delay: calc(var(--k) * 12ms); }
 .u-arrive-accent span {
   color: var(--u-acid);
   text-shadow: 0 0 0.35em color-mix(in srgb, var(--u-acid) 35%, transparent);
@@ -622,8 +631,9 @@ body {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--u-muted);
-  opacity: clamp(0, calc((var(--inside, 0) - 0.4) * 3), 1);
+  opacity: 0;
 }
+.u-arrive-sub[data-in] { opacity: 1; }
 .u-arrive-sub span { color: var(--u-acid); margin-right: 4px; }
 .u-arrive-chips {
   display: flex;
@@ -634,11 +644,11 @@ body {
   list-style: none;
 }
 .u-arrive-chips li {
-  --q: clamp(0, calc((var(--inside, 0) - 0.45) * 4 - var(--k) * 0.08), 1);
-  opacity: var(--q);
-  translate: 0 calc((1 - var(--q)) * 0.875rem);
-  scale: calc(0.85 + var(--q) * 0.15);
+  opacity: 0;
+  translate: 0 0.875rem;
+  scale: 0.85;
 }
+.u-arrive-chips li[data-in] { opacity: 1; translate: 0 0; scale: 1; transition-delay: calc(var(--k) * 25ms); }
 .u-arrive-chips a {
   display: inline-flex;
   align-items: center;
@@ -696,9 +706,10 @@ body {
   gap: 0.75rem;
   margin-top: 2rem;
   font-family: var(--font-sans);
-  opacity: clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1);
-  translate: 0 calc((1 - clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1)) * 1rem);
+  opacity: 0;
+  translate: 0 1rem;
 }
+.u-arrive-cta[data-in] { opacity: 1; translate: 0 0; }
 .u-mobile-cta { display: none; }
 .u-arrive-cta a,
 .u-mobile-cta a {
@@ -897,7 +908,6 @@ body {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--u-dim);
-  opacity: calc(1 - var(--inside, 0));
 }
 .u-wheel { display: inline-block; margin-right: 0.4375rem; font-size: 0.8125rem; color: var(--u-muted); animation: bob 2s ease-in-out infinite; }
 .u-readout { color: var(--u-muted); }
