@@ -163,17 +163,26 @@ body {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
+  position: relative;
   background: #22c55e;
-  box-shadow: 0 0 0 0 rgb(34 197 94 / 0.6);
+}
+/* The ping is a scaled/faded copy of the dot, not an animated box-shadow:
+   box-shadow can't run on the compositor, so it kept the main thread ticking. */
+.u-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgb(34 197 94 / 0.6);
   animation: live 2s ease-out infinite;
 }
-@keyframes live { 70%, 100% { box-shadow: 0 0 0 0.5rem rgb(34 197 94 / 0); } }
+@keyframes live { 70%, 100% { scale: 3; opacity: 0; } }
 @keyframes bob {
   50% { transform: translateY(6px); opacity: 0.5; }
 }
 
   html[data-motion="reduce"] { scroll-behavior: auto; }
-  :root[data-motion="reduce"] .u-live { animation: none; }
+  :root[data-motion="reduce"] .u-live::after { animation: none; opacity: 0; }
 
 /* ---------- Site menu (the logo) ---------- */
 .menu-trigger {
@@ -340,21 +349,31 @@ body {
   will-change: transform;
   pointer-events: none;
   opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  /* Pre-rendered tile of the old SVG fractal noise: an feTurbulence filter
+     sized to the screen was re-rastered whenever its layer changed, which
+     stalled the dive's late frames. Same look, a 16 KB image. */
+  background-image: url("/textures/grain.png");
+  background-size: 67.5rem;
 }
-/* Soft light that follows the cursor across the stage. */
-.u-stage::before {
-  content: "";
-  will-change: opacity;
+/* Soft light that follows the cursor across the stage. Moved with translate
+   from JS, so the cursor only moves a layer: writing its position as custom
+   properties on the stage restyled the whole hero on every mouse move. */
+.u-spot {
+  will-change: translate, opacity;
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 0;
+  width: 65rem;
+  height: 65rem;
+  margin: -32.5rem;
+  translate: 50vw 50svh;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.6s;
-  background: radial-gradient(32.5rem circle at var(--px, 50%) var(--py, 50%), rgb(215 255 63 / 0.06), transparent 70%);
+  background: radial-gradient(circle closest-side, rgb(215 255 63 / 0.06), transparent 70%);
 }
-.u-stage:hover::before { opacity: 1; }
-[data-theme="light"] .u-stage::before { background: radial-gradient(32.5rem circle at var(--px, 50%) var(--py, 50%), rgb(194 70 28 / 0.05), transparent 70%); }
+.u-stage:hover .u-spot { opacity: 1; }
+[data-theme="light"] .u-spot { background: radial-gradient(circle closest-side, rgb(194 70 28 / 0.05), transparent 70%); }
 /* Soft glows drawn as radial gradients (a blur() filter this size is very
    expensive to animate). */
 .u-orb { will-change: translate; position: absolute; border-radius: 50%; opacity: 0.16; pointer-events: none; background: radial-gradient(circle, var(--o) 0%, transparent 70%); animation: u-drift 22s ease-in-out infinite; }
@@ -428,11 +447,10 @@ body {
   font-family: var(--u-serif);
   font-weight: 400;
   font-style: italic;
-  background: linear-gradient(100deg, var(--u-fg) 42%, var(--u-acid) 50%, var(--u-fg) 58%) 0 0 / 250% 100%;
+  background: linear-gradient(100deg, var(--u-fg) 42%, var(--u-acid) 50%, var(--u-fg) 58%) 120% 0 / 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: u-sheen 7s ease-in-out 1.6s infinite;
   /* background-clip: text only paints inside the box, and the tight line-height +
      italic overhang push the "i" dots and trailing "s" outside it. Pad the box so
      the whole glyph gets painted, and pull the padding back out of the layout. */
@@ -457,20 +475,29 @@ body {
   height: 0.105em;
   border-radius: 50%;
   background: var(--u-paper);
-  /* A faint pulse: the one thing on the page asking to be dived into. */
+}
+/* A faint pulse: the one thing on the page asking to be dived into. A static
+   glow whose opacity breathes, so it runs on the compositor. */
+.u-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.05em rgb(215 255 63 / 0.35), 0 0 0.35em rgb(215 255 63 / 0.45);
+  opacity: 0;
   animation: u-beckon 2.8s ease-in-out 2s infinite;
 }
-.u-section[data-zooming] .u-dot { animation: none; }
+.u-section[data-zooming] .u-dot::after { animation: none; }
 /* Idle loops repaint the title / cards every frame; freeze them during the
-   dive so the zoom gets the whole frame budget. */
+   dive so the zoom gets the whole frame budget, and while the hero is out of
+   view (scrolled past) so the rest of the page doesn't pay for them. */
+.u-section[data-offscreen] *,
+.u-section[data-offscreen] *::before,
+.u-section[data-offscreen] *::after { animation-play-state: paused !important; }
 .u-section[data-zooming] :is(.u-copy h1 em, .u-halo, .u-node, .u-orb) { animation-play-state: paused; }
-[data-theme="light"] .u-dot { animation-name: u-beckon-light; }
-@keyframes u-beckon-light {
-  50% { box-shadow: 0 0 0 0.05em rgb(194 70 28 / 0.3), 0 0 0.35em rgb(194 70 28 / 0.35); }
-}
-@keyframes u-beckon {
-  50% { box-shadow: 0 0 0 0.05em rgb(215 255 63 / 0.35), 0 0 0.35em rgb(215 255 63 / 0.45); }
-}
+[data-theme="light"] .u-dot::after { box-shadow: 0 0 0 0.05em rgb(194 70 28 / 0.3), 0 0 0.35em rgb(194 70 28 / 0.35); }
+@keyframes u-beckon { 50% { opacity: 1; } }
+
 /* The dot, taken over: a disk with the same colour/centre/radius that hollows
    out from the middle into a thin ring (the hole clipped into the cosmos layer matches its inner edge). */
 .u-portal {
@@ -575,11 +602,12 @@ body {
 .u-arrive-line { display: block; }
 .u-arrive-line > span:not(:last-child) { margin-right: 0.24em; }
 .u-arrive-line:first-child { font-size: 0.55em; color: var(--u-soft); }
-/* Letters drop in one after another as the dive settles. */
+/* Letters drop in one after another as the dive settles. No will-change on
+   these (or the chips / CTA): ~45 extra GPU layers cost the dive's landing
+   more than repainting this small block does. */
 .u-arrive-title span span {
   --p: clamp(0, calc(var(--inside, 0) * 2.4 - var(--k) * 0.045), 1);
   display: inline-block;
-  will-change: opacity, translate;
   opacity: var(--p);
   translate: 0 calc((1 - var(--p)) * 0.35em);
 }
@@ -607,7 +635,6 @@ body {
 }
 .u-arrive-chips li {
   --q: clamp(0, calc((var(--inside, 0) - 0.45) * 4 - var(--k) * 0.08), 1);
-  will-change: opacity, translate, scale;
   opacity: var(--q);
   translate: 0 calc((1 - var(--q)) * 0.875rem);
   scale: calc(0.85 + var(--q) * 0.15);
@@ -669,7 +696,6 @@ body {
   gap: 0.75rem;
   margin-top: 2rem;
   font-family: var(--font-sans);
-  will-change: opacity, translate;
   opacity: clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1);
   translate: 0 calc((1 - clamp(0, calc((var(--inside, 0) - 0.6) * 4), 1)) * 1rem);
 }
@@ -834,9 +860,13 @@ body {
 @keyframes u-rise {
   from { opacity: 0; translate: 0 22px; }
 }
+/* One sweep, re-triggered every few seconds from JS: an infinite loop here
+   (background-position can't run on the compositor) kept the main thread
+   restyling the hero every frame, even during its long pause. */
+.u-copy h1 em[data-sheen] { animation: u-sheen 3.15s ease-in-out; }
 @keyframes u-sheen {
-  0%, 55% { background-position: 120% 0; }
-  100% { background-position: -20% 0; }
+  from { background-position: 120% 0; }
+  to { background-position: -20% 0; }
 }
 @keyframes u-drift {
   0%, 100% { translate: 0 0; }
@@ -1012,9 +1042,12 @@ body {
 /* The workshop's placeholder until websites are added. */
 .m-workshop-empty { border: 1px dashed color-mix(in srgb, var(--c) 45%, var(--u-line)); background: color-mix(in srgb, var(--c) 6%, var(--u-card)); }
 /* Planned slots: faint dashed tiles that breathe one after another. */
-.m-slot { position: relative; border: 1px dashed var(--u-line); background: color-mix(in srgb, var(--u-card) 70%, transparent); animation: m-breathe 3.2s ease-in-out calc(var(--k) * 0.25s) infinite; }
+/* The breathing border is a tinted copy fading in and out (opacity runs on the
+   compositor; animating border-color restyled the tiles every frame). */
+.m-slot { position: relative; border: 1px dashed var(--u-line); background: color-mix(in srgb, var(--u-card) 70%, transparent); }
+.m-slot::after { content: ""; position: absolute; inset: -1px; border: 1px dashed color-mix(in srgb, var(--c) 45%, var(--u-line)); border-radius: inherit; opacity: 0; pointer-events: none; animation: m-breathe 3.2s ease-in-out calc(var(--k) * 0.25s) infinite; }
 .m-slot-soon { display: inline-block; margin-top: 0.875rem; padding: 0.125rem 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 14%, transparent); font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); }
-@keyframes m-breathe { 50% { border-color: color-mix(in srgb, var(--c) 45%, var(--u-line)); } }
+@keyframes m-breathe { 50% { opacity: 1; } }
 /* Website cards: screenshot (or a title on the project's colour), labels. */
 .m-shot { border-bottom: 1px solid var(--u-line); background: linear-gradient(135deg, color-mix(in srgb, var(--p) 55%, var(--u-bg)), var(--u-bg)); }
 .m-shot-blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); font-style: italic; text-align: center; color: var(--u-fg); opacity: 0.85; }
@@ -1109,7 +1142,7 @@ body {
 .m-status[data-status="Live"] { background: rgb(34 197 94 / 0.15); color: #16a34a; }
 .m-status[data-status="Building"] { background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); }
 
-  :root[data-motion="reduce"] .m-rise, :root[data-motion="reduce"] .m-type, :root[data-motion="reduce"] .m-bar span, :root[data-motion="reduce"] .m-eq i, :root[data-motion="reduce"] .m-disc, :root[data-motion="reduce"] .m-pop, :root[data-motion="reduce"] .m-slot { animation: none; }
+  :root[data-motion="reduce"] .m-rise, :root[data-motion="reduce"] .m-type, :root[data-motion="reduce"] .m-bar span, :root[data-motion="reduce"] .m-eq i, :root[data-motion="reduce"] .m-disc, :root[data-motion="reduce"] .m-pop, :root[data-motion="reduce"] .m-slot::after { animation: none; }
 
 /* Narrow screens / reduced motion: no camera — a stacked, scrollable layout. */
 @media (max-width: 799px) {
@@ -1156,7 +1189,7 @@ body {
    that are already near-opaque. The page-to-page portal keeps its colour
    flood but drops its grain (an overlay-blended SVG filter, full screen). */
 @media (max-width: 799px) {
-  .u-grain, .portal-x::after, .u-portal, .u-arrive, .u-stage::before, .u-node > *::before, .u-node > *::after { display: none; }
+  .u-grain, .portal-x::after, .u-portal, .u-arrive, .u-spot, .u-node > *::before, .u-node > *::after { display: none; }
   .u-orb, .u-halo, .u-copy h1 em { animation: none; will-change: auto; }
   .menu-panel, .m-concept { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .m-concept { background: rgb(0 0 0 / 0.75); }
@@ -1195,7 +1228,11 @@ body {
   opacity: 0.16;
   mix-blend-mode: overlay;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  /* Pre-rendered tile of the old SVG fractal noise: an feTurbulence filter
+     sized to the screen was re-rastered whenever its layer changed, which
+     stalled the dive's late frames. Same look, a 16 KB image. */
+  background-image: url("/textures/grain.png");
+  background-size: 67.5rem;
 }
 .portal-x-mark {
   position: absolute;

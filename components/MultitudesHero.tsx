@@ -91,6 +91,7 @@ export default function MultitudesHero() {
   const dotRef = useRef<HTMLElement>(null);
   const portalRef = useRef<HTMLDivElement>(null);
   const readoutRef = useRef<HTMLSpanElement>(null);
+  const spotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current!;
@@ -312,7 +313,11 @@ export default function MultitudesHero() {
     // without a window resize, so re-fit whenever the copy block changes size.
     const ro = new ResizeObserver(fit);
     ro.observe(world.querySelector(".u-copy")!);
-    world.addEventListener("animationend", onResize);
+    // (The title's periodic sheen ends here too; it doesn't move anything.)
+    const onAnimEnd = (e: AnimationEvent) => {
+      if (e.animationName !== "u-sheen") onResize();
+    };
+    world.addEventListener("animationend", onAnimEnd);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     wide.addEventListener("change", onModeChange);
@@ -320,7 +325,7 @@ export default function MultitudesHero() {
     return () => {
       cancelAnimationFrame(frame);
       ro.disconnect();
-      world.removeEventListener("animationend", onResize);
+      world.removeEventListener("animationend", onAnimEnd);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       wide.removeEventListener("change", onModeChange);
@@ -333,14 +338,14 @@ export default function MultitudesHero() {
   // glow position and a spring tilt toward the cursor.
   useEffect(() => {
     const stage = stageRef.current!;
+    const spot = spotRef.current!;
     const cards = [...stage.querySelectorAll<HTMLElement>(".u-node > *")];
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
     
     const onStageMove = (e: PointerEvent) => {
       if (!fine.matches) return;
       const r = stage.getBoundingClientRect();
-      stage.style.setProperty("--px", `${e.clientX - r.left}px`);
-      stage.style.setProperty("--py", `${e.clientY - r.top}px`);
+      spot.style.translate = `${e.clientX - r.left}px ${e.clientY - r.top}px`;
     };
     const onCardMove = (e: PointerEvent) => {
       if (!fine.matches) return;
@@ -374,6 +379,39 @@ export default function MultitudesHero() {
     };
   }, []);
 
+  // Idle upkeep: pause the hero's loops while it's scrolled out of view, and
+  // run the title's sheen as one sweep every few seconds rather than an
+  // endless animation (see the CSS for why).
+  useEffect(() => {
+    const section = sectionRef.current!;
+    const em = section.querySelector<HTMLElement>(".u-copy h1 em");
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      section.toggleAttribute("data-offscreen", !visible);
+    });
+    io.observe(section);
+    const sweep = () => {
+      if (!em || !visible || motionReduced() || section.hasAttribute("data-zooming")) return;
+      em.setAttribute("data-sheen", "");
+    };
+    const onEnd = (e: AnimationEvent) => {
+      if (e.animationName === "u-sheen") em?.removeAttribute("data-sheen");
+    };
+    em?.addEventListener("animationend", onEnd);
+    let timer = 0;
+    const first = window.setTimeout(() => {
+      sweep();
+      timer = window.setInterval(sweep, 7000);
+    }, 5450);
+    return () => {
+      io.disconnect();
+      em?.removeEventListener("animationend", onEnd);
+      clearTimeout(first);
+      clearInterval(timer);
+    };
+  }, []);
+
   const { hero, multitudes } = profile;
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
@@ -397,6 +435,7 @@ export default function MultitudesHero() {
   return (
     <section ref={sectionRef} className="u-section" aria-label="Introduction">
       <div ref={stageRef} className="u-stage">
+        <div ref={spotRef} className="u-spot" aria-hidden />
         <div ref={sceneRef} className="u-scene">
           <div className="u-grain" aria-hidden />
           <div className="u-orb u-orb-a" aria-hidden />
