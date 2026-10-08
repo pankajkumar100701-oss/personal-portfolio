@@ -1,10 +1,10 @@
 import { education } from "@/data/multitudes";
 import type { CSSProperties } from "react";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Card, Cta, Heading, Hero } from "./ui";
 
 // Education: a timeline of milestones and what I'm learning right now.
-export default function Education({ m }: { m: Multitude }) {
+export default function Education({ m }: { m: WebsiteType }) {
   return (
     <div className="space-y-20">
       <Hero m={m} />

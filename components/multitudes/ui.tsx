@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 
 // Building blocks shared by the multitude layouts.
 
-export function Hero({ m, children, className = "" }: { m: Multitude; children?: ReactNode; className?: string }) {
+export function Hero({ m, children, className = "" }: { m: WebsiteType; children?: ReactNode; className?: string }) {
   return (
     <header className={`m-rise ${className}`}>
       <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">{m.sub}</p>
@@ -26,7 +26,7 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
   return <div className={`m-card rounded-2xl p-6 ${className}`}>{children}</div>;
 }
 
-export function Cta({ m }: { m: Multitude }) {
+export function Cta({ m }: { m: WebsiteType }) {
   if (!m.link) return null;
   const external = m.link.href.startsWith("http");
   return (

@@ -1,13 +1,14 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
-import { profile, type Multitude, type Project } from "@/data/profile";
+import { profile, type WebsiteType, type Project } from "@/data/profile";
+import { AddToMessage } from "@/components/MessageActions";
 import { Heading } from "./ui";
 
 // Closes every multitude's page: the websites built for it (projects in
 // data/profile.ts whose `multitude` is this slug), each as a showcase — the
 // site in a browser frame beside who it's for, what's inside, tags and a
 // live link. Until there are some, a few "coming soon" slots.
-export default function Websites({ m }: { m: Multitude }) {
+export default function Websites({ m }: { m: WebsiteType }) {
   const sites = profile.projects.filter((p) => p.multitude === m.slug);
 
   return (
@@ -42,7 +43,8 @@ export default function Websites({ m }: { m: Multitude }) {
 }
 
 // One website as a showcase: the site in a browser frame beside who it's for,
-// what's inside, tags and a live link. Also used by the /work page, where
+// what's inside, tags, a live link and "I want one like this" (adds it to the
+// visitor's message). Also used by the /work page, where
 // `kicker` names the multitude it belongs to.
 export function ProjectShowcase({ p, i, kicker }: { p: Project; i: number; kicker?: ReactNode }) {
   return (
@@ -92,9 +94,12 @@ export function ProjectShowcase({ p, i, kicker }: { p: Project; i: number; kicke
             </span>
           ))}
         </div>
-        <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm mt-5 self-start">
-          Visit the site <span aria-hidden>↗</span>
-        </a>
+        <div className="mt-5 flex flex-wrap items-center gap-2">
+          <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm">
+            Visit the site <span aria-hidden>↗</span>
+          </a>
+          <AddToMessage kind="sites" id={p.title} label="I want one like this" />
+        </div>
       </div>
     </article>
   );

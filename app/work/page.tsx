@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ProjectShowcase } from "@/components/multitudes/Websites";
 import SiteMenu from "@/components/SiteMenu";
+import WorkList from "@/components/WorkList";
 import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 // Every project from data/profile.ts on one page (the multitude pages each
-// show only their own). Reached from the hero's "Explore my work" link.
+// show only their own), sortable. Reached from the menu ("My work").
 export default function WorkPage() {
-  const { projects, multitudes, contact } = profile;
+  const { projects } = profile;
   return (
     <main className="u-detail" data-page="work" style={{ "--c": "var(--m-lime)" } as CSSProperties}>
       <div className="u-grain" aria-hidden />
@@ -34,22 +34,12 @@ export default function WorkPage() {
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">My work</p>
           <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">Every site, one place.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
-            All the websites I&apos;ve built, live and clickable. Open any one to look around, or tell me about yours.
+            All the websites I&apos;ve built, live and clickable. Sort them your way, and tap “I want one like this” on any you like.
           </p>
         </header>
 
-        <div className="mt-16 space-y-6">
-          {projects.map((p, i) => {
-            const m = multitudes.find((x) => x.slug === p.multitude);
-            return (
-              <ProjectShowcase
-                key={p.title}
-                p={p}
-                i={i}
-                kicker={m ? <Link href={`/multitudes/${m.slug}`} className="hover:underline">{m.title}</Link> : "Live"}
-              />
-            );
-          })}
+        <div className="mt-12">
+          <WorkList />
         </div>
 
         <section className="m-card mt-20 rounded-2xl p-6 sm:p-10">
@@ -57,10 +47,10 @@ export default function WorkPage() {
           <p className="mt-4 max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Want a website like these?</p>
           <p className="mt-3 text-muted">Tell me what you do — I&apos;ll reply with a plan and a price.</p>
           <div className="h-cta" style={{ justifyContent: "flex-start" }}>
-            <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="u-cta-primary">
-              Chat on WhatsApp <span aria-hidden>→</span>
-            </a>
-            <Link href="/#multitudes" className="u-cta-ghost">
+            <Link href="/contact" className="u-cta-primary">
+              Customise your website <span aria-hidden>→</span>
+            </Link>
+            <Link href="/explore" className="u-cta-ghost">
               Explore your type
             </Link>
           </div>

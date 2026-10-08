@@ -1,9 +1,9 @@
 import { business } from "@/data/multitudes";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Cta, Heading, Hero } from "./ui";
 
 // Business: ventures as a status board, plus the principles behind them.
-export default function Business({ m }: { m: Multitude }) {
+export default function Business({ m }: { m: WebsiteType }) {
   return (
     <div className="space-y-20">
       <Hero m={m}>

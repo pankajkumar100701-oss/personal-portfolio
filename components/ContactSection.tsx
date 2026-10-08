@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { profile } from "@/data/profile";
 
-// Below About: WhatsApp and email, also reached from the menu.
+// The home page's last screen: the way to the Contact page (where visitors
+// write their message), plus WhatsApp and email.
 export default function ContactSection() {
   const { contact } = profile;
   return (
@@ -16,7 +18,10 @@ export default function ContactSection() {
           Tell me about your business or idea — even a rough one is fine. I&apos;ll reply with a plan and a price, no strings attached.
         </p>
         <div className="h-cta">
-          <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="u-cta-primary">
+          <Link href="/contact" className="u-cta-primary">
+            Customise your website <span aria-hidden>→</span>
+          </Link>
+          <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
             Chat on WhatsApp <span aria-hidden>→</span>
           </a>
           <a href={`mailto:${contact.email}`} className="u-cta-ghost">

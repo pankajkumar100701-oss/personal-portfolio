@@ -1,10 +1,10 @@
 import { clubbing } from "@/data/multitudes";
 import type { CSSProperties } from "react";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Heading } from "./ui";
 
 // Clubbing: a night-poster. Always dark, whatever the site theme — it's a club.
-export default function Clubbing({ m }: { m: Multitude }) {
+export default function Clubbing({ m }: { m: WebsiteType }) {
   return (
     <div className="m-club space-y-16 rounded-3xl px-5 py-12 sm:px-12 sm:py-14 lg:px-16">
       <header className="m-rise">

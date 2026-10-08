@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { restaurants } from "@/data/multitudes";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Heading, Hero } from "./ui";
 
 // Restaurants: a little food guide with cuisine filters.
-export default function Restaurants({ m }: { m: Multitude }) {
+export default function Restaurants({ m }: { m: WebsiteType }) {
   const cuisines = ["All", ...new Set(restaurants.places.map((p) => p.cuisine))];
   const [filter, setFilter] = useState("All");
   const shown = restaurants.places.filter((p) => filter === "All" || p.cuisine === filter);

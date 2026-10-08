@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { rental } from "@/data/multitudes";
-import { profile, type Multitude } from "@/data/profile";
+import { profile, type WebsiteType } from "@/data/profile";
 import { Heading } from "./ui";
 
 // Rental: a service landing page with fleet, steps and a quote calculator.
 // "Request booking" opens an email for now — wire it to a real backend later.
-export default function Rental({ m }: { m: Multitude }) {
+export default function Rental({ m }: { m: WebsiteType }) {
   const [pick, setPick] = useState(rental.fleet[0].name);
   const [days, setDays] = useState(2);
   const vehicle = rental.fleet.find((f) => f.name === pick)!;

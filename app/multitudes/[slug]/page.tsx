@@ -13,20 +13,22 @@ import Rental from "@/components/multitudes/Rental";
 import Store from "@/components/multitudes/Store";
 import Restaurants from "@/components/multitudes/Restaurants";
 import Websites from "@/components/multitudes/Websites";
+import TypeBrief from "@/components/TypeBrief";
 import SiteMenu from "@/components/SiteMenu";
-import { profile, type Multitude } from "@/data/profile";
+import { allTypes, profile, type WebsiteType } from "@/data/profile";
 
-const { multitudes } = profile;
+// Every website type has a page: the 12 trending ones, then the rest.
+const multitudes = allTypes;
 
 // Each multitude gets its own layout. A new multitude without one here falls
 // back to the simple Generic page below.
-const layouts: Record<string, ComponentType<{ m: Multitude }>> = {
+const layouts: Record<string, ComponentType<{ m: WebsiteType }>> = {
   store: Store,
   "painting-art": Art,
   fitness: Fitness,
   education: Education,
   clubbing: Clubbing,
-  parties: Parties,
+  events: Parties,
   restaurants: Restaurants,
   recipes: Recipes,
   rental: Rental,
@@ -63,8 +65,8 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
       <nav className="u-detail-top relative z-30">
         <SiteMenu />
         <span className="flex items-center gap-5">
-          <Link href="/#top" className="whitespace-nowrap">
-            ← <span className="hidden min-[400px]:inline">All </span>multitudes
+          <Link href="/explore" className="whitespace-nowrap">
+            ← <span className="hidden min-[400px]:inline">All </span>types
           </Link>
           <span className="hidden sm:inline">
             {m.n} / {String(multitudes.length).padStart(2, "0")}
@@ -74,10 +76,11 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
 
       <article className="u-detail-main">
         <Layout m={m} />
+        <TypeBrief t={m} />
         <Websites m={m} />
       </article>
 
-      <nav className="u-detail-pager" aria-label="Other multitudes">
+      <nav className="u-detail-pager" aria-label="Other website types">
         <Link href={`/multitudes/${prev.slug}`}>
           <small>← Previous</small>
           {prev.title}
@@ -91,7 +94,7 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
   );
 }
 
-function Generic({ m }: { m: Multitude }) {
+function Generic({ m }: { m: WebsiteType }) {
   return (
     <div>
       <h1 className="font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95]">{m.title}</h1>

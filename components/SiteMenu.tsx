@@ -33,8 +33,8 @@ const settings: { key: keyof Prefs; label: string; options: { value: string; lab
   },
 ];
 
-// The logo doubles as the site menu: navigation, the multitudes, viewer
-// settings and contact details in one panel.
+// The logo doubles as the site menu: navigation, the trending website types,
+// viewer settings and contact details in one panel.
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
@@ -103,18 +103,26 @@ export default function SiteMenu() {
               <Link href="/#top" className="menu-chip">Home</Link>
             </li>
             <li>
+              <Link href="/explore" className="menu-chip">Explore types</Link>
+            </li>
+            <li>
               <Link href="/work" className="menu-chip">My work</Link>
             </li>
             <li>
               <Link href="/#about" className="menu-chip">About</Link>
             </li>
-            <li>
-              <Link href="/#contact" className="menu-chip">Contact</Link>
-            </li>
           </ul>
+          {/* Contact is its own page, where visitors write their message to me. */}
+          <Link href="/contact" className="menu-contact">
+            <span>
+              <b>Contact</b>
+              <small>Customise your website &amp; send</small>
+            </span>
+            <span aria-hidden>→</span>
+          </Link>
         </MenuGroup>
 
-        <MenuGroup title="Multitudes">
+        <MenuGroup title="Trending websites">
           <ul className="flex flex-wrap gap-1.5">
             {profile.multitudes.map((m) => (
               <li key={m.slug}>
@@ -123,6 +131,11 @@ export default function SiteMenu() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/explore" className="menu-chip">
+                All types →
+              </Link>
+            </li>
           </ul>
         </MenuGroup>
 

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { recipes } from "@/data/multitudes";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Card, Heading, Hero } from "./ui";
 
 // Recipes: a featured recipe you can tick through while cooking, plus more.
-export default function Recipes({ m }: { m: Multitude }) {
+export default function Recipes({ m }: { m: WebsiteType }) {
   const r = recipes.featured;
   const [done, setDone] = useState<Set<string>>(new Set());
   const toggle = (item: string) =>

@@ -453,14 +453,30 @@ export default function MultitudesHero() {
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");
-  // One way into all the websites I've built (the /work page): under the title
-  // on phones, in the bottom bar on desktop (where the cards leave no room
-  // under the title). Hidden until there are some in data/profile.ts. (It used
-  // to list every site here, which read as clutter, mostly on phones.)
-  const sites = profile.projects.length > 0 && (
-    <Link href="/work" style={{ "--c": "var(--u-acid)" } as CSSProperties}>
-      Explore my work · {profile.projects.length} sites <span aria-hidden>→</span>
-    </Link>
+  // The websites I've built, then the way into every website type
+  // (/explore): under the title on phones (so it's on the first screen), in
+  // the bottom bar on desktop (where the cards leave no room under the title).
+  // The list hides until there are projects in data/profile.ts.
+  const sites = (
+    <>
+      {profile.projects.length > 0 && (
+        <>
+          <span>Websites I&apos;ve built</span>
+          <ul>
+            {profile.projects.map((p) => (
+              <li key={p.title} style={{ "--c": p.color } as CSSProperties}>
+                <a href={p.href} target="_blank" rel="noopener noreferrer">
+                  {p.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <Link href="/explore" className="u-sites-explore">
+        Explore your type <span aria-hidden>→</span>
+      </Link>
+    </>
   );
 
   return (
@@ -500,8 +516,8 @@ export default function MultitudesHero() {
                   </em>
                 </h1>
                 <p className="u-subline">{hero.subline}</p>
-                {/* Phones: the link to my work sits under the title (desktop has it in the bottom bar). */}
-                {sites && <div className="u-sites u-sites-mobile">{sites}</div>}
+                {/* Phones: my websites and "Explore your type" sit under the title (desktop has them in the bottom bar). */}
+                <div className="u-sites u-sites-mobile">{sites}</div>
               </div>
 
               <ul className="u-nodes">
@@ -524,11 +540,12 @@ export default function MultitudesHero() {
                 })}
               </ul>
 
-              {/* Phones skip the dive, so the arrival's call to action lives here. */}
+              {/* Phones skip the dive, so the arrival's call to action lives here
+                  ("Explore your type" is already under the title). */}
               <div className="u-mobile-cta">
-                <a href="#multitudes" className="u-cta-primary">
-                  Explore your type <span aria-hidden>→</span>
-                </a>
+                <Link href="/contact" className="u-cta-primary">
+                  Customise your website <span aria-hidden>→</span>
+                </Link>
                 <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
                   <i className="u-live" aria-hidden /> Open for projects
                 </a>
@@ -581,9 +598,9 @@ export default function MultitudesHero() {
               ))}
             </ul>
             <div className="u-arrive-cta">
-              <a href="#multitudes" tabIndex={-1} className="u-cta-primary">
+              <Link href="/explore" tabIndex={-1} className="u-cta-primary">
                 Explore your type <span aria-hidden>→</span>
-              </a>
+              </Link>
               <a href={`mailto:${profile.contact.email}`} tabIndex={-1} className="u-cta-ghost">
                 <i className="u-live" aria-hidden /> Open for projects
               </a>
@@ -595,7 +612,7 @@ export default function MultitudesHero() {
           <span>
             <span className="u-wheel" aria-hidden>↕</span> Scroll to dive into the i
           </span>
-          {sites && <div className="u-sites">{sites}</div>}
+          <div className="u-sites">{sites}</div>
           <span ref={readoutRef} className="u-readout" aria-hidden>
             Zoom 1.00×
           </span>

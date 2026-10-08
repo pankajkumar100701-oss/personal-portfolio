@@ -1486,3 +1486,170 @@ body {
 .h-code-caret { display: inline-block; width: 0.5rem; height: 1rem; margin-left: 0.25rem; vertical-align: -0.15rem; background: var(--u-acid); animation: h-blink 1s steps(1) infinite; }
 @keyframes h-blink { 50% { opacity: 0; } }
 :root[data-motion="reduce"] .h-code-caret { animation: none; }
+
+/* ---------- Explore, Contact, Reviews, "Add to message" ---------- */
+/* The menu's way to the Contact page: a full-width row, not a chip. */
+.menu-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.875rem;
+  background: var(--u-acid);
+  color: var(--u-bg);
+  font-weight: 600;
+  transition: translate 0.2s, box-shadow 0.2s;
+}
+[data-theme="light"] .menu-contact { color: #fff; }
+.menu-contact b { display: block; font-size: 0.9375rem; }
+.menu-contact small { display: block; font-size: 0.6875rem; font-weight: 500; opacity: 0.8; }
+.menu-contact:hover { translate: 0 -1px; box-shadow: 0 10px 24px -12px var(--u-acid); }
+.menu-contact:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+
+/* Hero: "Explore your type" after the websites I've built. */
+.u-sites .u-sites-explore { border-color: transparent; background: var(--u-acid); color: var(--u-bg); font-weight: 600; }
+[data-theme="light"] .u-sites .u-sites-explore { color: #fff; }
+.u-sites .u-sites-explore::before { display: none; }
+.u-sites .u-sites-explore:hover { border-color: transparent; color: var(--u-bg); box-shadow: 0 8px 22px -10px var(--u-acid); }
+[data-theme="light"] .u-sites .u-sites-explore:hover { color: #fff; }
+@media (max-width: 799px) {
+  .u-sites-mobile .u-sites-explore { align-self: stretch; justify-content: center; margin-top: 0.5rem; padding: 0.7rem 1.3rem; font-size: 0.875rem; }
+}
+
+/* Buttons shared by the cards and pages. */
+.x-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.4rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 600; transition: translate 0.25s, box-shadow 0.25s, background 0.25s, opacity 0.25s; }
+.x-btn[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+.x-add:not(.u-card-msg),
+.x-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--u-line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--u-fg) 4%, transparent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--u-fg);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.x-share svg { width: 0.9rem; height: 0.9rem; }
+.x-add:not(.u-card-msg):hover,
+.x-share:hover { border-color: var(--c, var(--u-acid)); }
+.x-add:not(.u-card-msg)[aria-pressed="true"] { border-color: var(--ink, var(--u-acid)); background: var(--ink, var(--u-acid)); color: var(--u-bg); }
+.u-card-msg { background: none; cursor: pointer; }
+.u-card .u-card-msg[aria-pressed="true"] { background: var(--art-ink); border-color: var(--art-ink); color: var(--to); }
+.x-add:focus-visible, .x-share:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+
+/* Floating "N in your message" pill. */
+.x-pill {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  max-width: calc(100vw - 2rem);
+  border-radius: 999px;
+  background: var(--u-acid);
+  color: var(--u-bg);
+  box-shadow: 0 16px 40px -14px rgb(0 0 0 / 0.6);
+  font-size: 0.875rem;
+  font-weight: 600;
+  animation: u-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+[data-theme="light"] .x-pill { color: #fff; }
+.x-pill a { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 0.4rem 0.7rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.x-pill b { display: grid; place-items: center; min-width: 1.5rem; height: 1.5rem; border-radius: 999px; background: var(--u-bg); color: var(--u-acid); font-size: 0.75rem; }
+.x-pill button { padding: 0.7rem 1rem 0.7rem 0.6rem; font-size: 1.125rem; line-height: 1; cursor: pointer; opacity: 0.7; }
+.x-pill button:hover { opacity: 1; }
+
+/* Explore / Work: search, filters and sort. */
+.x-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.x-search { display: flex; align-items: center; gap: 0.5rem; flex: 1 1 18rem; padding: 0.65rem 1rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); }
+.x-search svg { width: 1.05rem; height: 1.05rem; flex: none; color: var(--u-muted); }
+.x-search input { width: 100%; min-width: 0; background: none; outline: none; font-size: 0.9375rem; color: var(--u-fg); }
+.x-search:focus-within { border-color: var(--c); }
+.x-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.x-sort { display: inline-flex; align-items: center; gap: 0.5rem; margin-left: auto; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--u-muted); }
+.x-sort select { padding: 0.5rem 0.9rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); color: var(--u-fg); font-size: 0.875rem; letter-spacing: normal; text-transform: none; cursor: pointer; }
+.x-sort select option { background: var(--u-bg); }
+@media (max-width: 639px) {
+  .x-sort { margin-left: 0; }
+}
+
+/* Explore: one card per website type. */
+.x-grid { display: grid; gap: 1rem; margin-top: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); }
+.x-type {
+  --ink: var(--c);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  scroll-margin-top: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--u-line);
+  border-radius: 1.25rem;
+  background: var(--u-card);
+  transition: border-color 0.3s, translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s;
+}
+[data-theme="light"] .x-type { --ink: color-mix(in oklab, var(--c) 80%, #000); }
+.x-type::before { content: ""; position: absolute; inset: 0 0 auto; height: 0.25rem; background: linear-gradient(90deg, var(--from), var(--to)); }
+.x-type:hover { translate: 0 -3px; border-color: color-mix(in srgb, var(--to) 60%, transparent); box-shadow: 0 24px 50px -30px var(--to); }
+.x-type:target { border-color: var(--from); box-shadow: 0 0 0 2px var(--from); }
+.x-type-top { display: flex; align-items: center; gap: 0.75rem; }
+.x-type-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 0.875rem; background: linear-gradient(135deg, var(--from), var(--to)); color: var(--art-ink); }
+.x-type-icon svg { width: 1.4rem; height: 1.4rem; }
+.x-badge { margin-left: auto; padding: 0.2rem 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--u-acid) 16%, transparent); font-size: 0.625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--u-acid); }
+.x-type-live { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin-top: auto; padding-top: 1.25rem; font-size: 0.8125rem; }
+.x-type-live a { color: var(--ink); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent); text-underline-offset: 2px; }
+.x-type-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+.x-open { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 999px; background: var(--ink); color: var(--u-bg); font-size: 0.8125rem; font-weight: 600; transition: translate 0.2s; }
+.x-open:hover { translate: 0 -1px; }
+
+/* Contact: the form beside its live message. */
+.c-layout { display: grid; gap: 1.5rem; }
+@media (min-width: 1024px) {
+  .c-layout { grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem); align-items: start; }
+  .c-preview { position: sticky; top: 1.5rem; }
+}
+.c-input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--u-line); border-radius: 0.75rem; background: color-mix(in srgb, var(--u-fg) 4%, transparent); font-size: 0.9375rem; color: var(--u-fg); outline: none; transition: border-color 0.2s; }
+.c-input:focus { border-color: var(--c); }
+.c-input::placeholder { color: var(--u-dim); }
+textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
+.c-message { min-height: 20rem; margin-top: 0.875rem; font-family: var(--font-mono); font-size: 0.8125rem; }
+.c-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem 0.45rem 0.65rem;
+  border: 1px solid var(--u-line);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  color: var(--u-soft);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.c-type svg { width: 1rem; height: 1rem; color: var(--c); }
+.c-type:hover { border-color: var(--c); }
+.c-type[aria-pressed="true"] { border-color: transparent; background: linear-gradient(135deg, var(--from), var(--to)); color: var(--art-ink); }
+.c-type[aria-pressed="true"] svg { color: currentColor; }
+.c-site i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--c); }
+.c-site[aria-pressed="true"] { background: var(--c); color: #fff; }
+.c-type:focus-visible, .m-pill:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+.c-need { margin-top: 1rem; padding: 0.6rem 0.8rem; border-radius: 0.75rem; background: color-mix(in srgb, var(--c) 14%, transparent); font-size: 0.8125rem; color: var(--u-fg); }
+
+/* Reviews (home page). */
+.h-review-empty { margin-top: 2.5rem; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1px dashed color-mix(in srgb, var(--u-fg) 22%, transparent); border-radius: 1.5rem; background: var(--u-card); }
+.h-reviews { display: grid; gap: 1rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
+.h-reviews li { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); }
+.h-stars { color: var(--u-acid); letter-spacing: 0.15em; }
+.h-stars span { color: var(--u-faint); }
+.h-reviews blockquote { font-family: var(--font-display); font-size: 1.25rem; font-style: italic; line-height: 1.45; }
+.h-review-by { margin-top: auto; font-size: 0.8125rem; color: var(--u-muted); }
+.h-review-by strong { color: var(--u-fg); }
+.h-review-by a { text-decoration: underline; text-underline-offset: 2px; }

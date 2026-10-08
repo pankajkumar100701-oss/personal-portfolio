@@ -1,10 +1,10 @@
 import { parties } from "@/data/multitudes";
 import type { CSSProperties } from "react";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Card, Heading, Hero } from "./ui";
 
 // Parties: a wall of polaroids (CSS placeholders until real photos go in).
-export default function Parties({ m }: { m: Multitude }) {
+export default function Parties({ m }: { m: WebsiteType }) {
   return (
     <div className="space-y-20">
       <Hero m={m} />

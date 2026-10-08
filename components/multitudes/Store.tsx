@@ -1,10 +1,10 @@
 import { store } from "@/data/multitudes";
-import type { Multitude } from "@/data/profile";
+import type { WebsiteType } from "@/data/profile";
 import { Card, Cta, Heading, Hero } from "./ui";
 
 // Store: online stores. A terminal hero (a shopper's session), what every
 // store gets and how one comes together; the page adds the store websites.
-export default function Store({ m }: { m: Multitude }) {
+export default function Store({ m }: { m: WebsiteType }) {
   return (
     <div className="space-y-24">
       <div className="grid items-end gap-10 lg:grid-cols-[1.2fr_1fr]">

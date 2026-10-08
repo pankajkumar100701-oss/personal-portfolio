@@ -3,7 +3,8 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
-import { profile, whatsappLink } from "@/data/profile";
+import { AddToMessage } from "@/components/MessageActions";
+import { profile } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -162,20 +163,20 @@ export default function MultitudesTrack() {
       <div className="u-track-stage">
         <div ref={rowRef} className="u-track-row">
           <div className="u-track-intro">
-            <p className="u-track-kicker">Pick your type</p>
+            <p className="u-track-kicker">Trending right now</p>
             <h2>
-              Which website
+              Twelve doors.
               <br />
-              <em>is yours?</em>
+              <em>One is yours.</em>
             </h2>
-            <p className="u-track-hint">Find yours below: open it to see examples, or message me right from its card.</p>
-            <Link href="/work" className="u-track-work">
-              Or see all my work <span aria-hidden>→</span>
+            <p className="u-track-hint">The websites businesses want most today. Open a door for details and examples, or add it to your message.</p>
+            <Link href="/explore" className="u-track-work">
+              See every type <span aria-hidden>→</span>
             </Link>
           </div>
           {multitudes.map((m) => (
             // The whole card opens the multitude (a stretched link); its
-            // "Message me" button sits above that and opens WhatsApp instead.
+            // "Add to message" button sits above that and adds it instead.
             <div key={m.slug} className="u-card" style={{ "--c": m.color, ...artVars(m.slug, m.color) } as CSSProperties}>
               {/* Hover (or, on phones, the snapped card) floods it with its gradient. */}
               <span className="u-card-flood" aria-hidden />
@@ -194,14 +195,7 @@ export default function MultitudesTrack() {
                 <span className="u-card-go">
                   Open <span aria-hidden>→</span>
                 </span>
-                <a
-                  href={whatsappLink(`Hi Pankaj! I saw your portfolio and I'd like a ${m.title} website.\n\nAbout my business/idea: \nWhen I'd like it live: \n\nCould you share a plan and a price? Thanks!`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="u-card-msg"
-                >
-                  Message me
-                </a>
+                <AddToMessage kind="types" id={m.slug} className="u-card-msg" label="Add to message" />
               </span>
             </div>
           ))}

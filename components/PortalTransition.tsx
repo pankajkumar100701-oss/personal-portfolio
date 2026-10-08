@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArtIcon, DEFAULT_ART, MULTITUDE_ART } from "@/components/MultitudeArt";
-import { profile } from "@/data/profile";
+import { allTypes } from "@/data/profile";
 import { motionReduced } from "@/lib/prefs";
 
 const ENTER = 720; // ms: the disk floods the screen
@@ -57,7 +57,7 @@ export default function PortalTransition() {
       const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="/multitudes/"]');
       if (!a || (a.target && a.target !== "_self")) return;
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
-      const m = profile.multitudes.find((x) => href === `/multitudes/${x.slug}`);
+      const m = allTypes.find((x) => href === `/multitudes/${x.slug}`);
       if (!m || href === location.pathname) return;
       if (motionReduced()) return;
       e.preventDefault();
@@ -113,7 +113,7 @@ export default function PortalTransition() {
     requestAnimationFrame(() => requestAnimationFrame(() => exitRef.current()));
   }, [pathname]);
 
-  const m = profile.multitudes.find((x) => x.slug === slug);
+  const m = allTypes.find((x) => x.slug === slug);
   const icon = slug ? (MULTITUDE_ART[slug] ?? DEFAULT_ART).icon : null;
   return (
     <div ref={rootRef} className="portal-x" aria-hidden>

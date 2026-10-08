@@ -1,17 +1,29 @@
 // Edit this file to personalise the portfolio — every section reads from here.
 
-export type Multitude = {
+// A kind of website I build. Each has its own page (/multitudes/<slug>).
+export type WebsiteType = {
   n: string;
   slug: string;
   title: string;
   sub: string;
-  x: number;
-  y: number;
-  depth: number;
   color: string;
   intro: string;
   points: string[];
+  features: string[]; // what a site like this can have; pickable on the Contact page
+  idealFor: string; // who it's for, comma-separated
   link?: { label: string; href: string };
+};
+
+// One of the 12 trending types: also a floating card in the hero.
+export type Multitude = WebsiteType & { x: number; y: number; depth: number };
+
+// A kind word from someone I built a site for (the Reviews section).
+export type Review = {
+  name: string;
+  role: string; // e.g. "Owner, Him Woollen"
+  text: string;
+  rating?: number; // 1–5
+  site?: string; // a project title from `projects`, linked on the card
 };
 
 // Used by the contact links below and the multitude pages' calls to action.
@@ -46,71 +58,165 @@ export const profile = {
     eyebrow: "UI Designer / Website Developer",
     subline: "I design & build websites — for shops, gyms, artists, restaurants & more",
   },
-  // Floating nodes in the hero. x/y are % positions in the hero "world"; depth sets how fast each flies toward you on zoom.
+  // The 12 website types in demand right now: the hero's floating cards, the
+  // home page's row of cards and the menu. x/y are % positions in the hero
+  // "world"; depth sets how fast each flies toward you on zoom. `features`
+  // are the ideas a visitor can pick on the Contact page.
   multitudes: [
     {
-      n: "01", slug: "store", title: "Store", sub: "Shop / Cart / Checkout", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
+      n: "01", slug: "store", title: "Online Store", sub: "Shop / Cart / Checkout", x: 7, y: 22, depth: 1.05, color: "var(--m-lime)",
       intro: "Online stores built to sell — easy to browse on a phone, quick to pay for and simple to run.",
       points: ["Catalogues, carts and checkouts that convert", "UPI, card and cash-on-delivery payments", "Orders and stock that stay in sync"],
+      features: ["Product catalogue", "Cart & checkout", "UPI / card payments", "Cash on delivery", "Order updates on WhatsApp", "Discount codes", "Admin panel"],
+      idealFor: "Boutiques, D2C brands, handmade goods, local shops",
       link: { label: "Browse the stores", href: "#websites" },
     },
     {
-      n: "02", slug: "painting-art", title: "Painting / Art", sub: "Galleries / Studios / Artists", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
+      n: "02", slug: "painting-art", title: "Art & Artists", sub: "Galleries / Studios / Artists", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
       intro: "Websites for painters and artists — quiet galleries that let the work breathe, and a simple way for people to buy it.",
       points: ["Online galleries and portfolios", "Shops for originals and prints", "Studio stories, letters and news"],
+      features: ["Gallery", "Prices & availability", "Buy originals / prints", "Artist story", "Commission requests", "Newsletter"],
+      idealFor: "Painters, illustrators, studios, galleries",
     },
     {
       n: "03", slug: "fitness", title: "Gym / Fitness", sub: "Gyms / Yoga / Trainers", x: 79, y: 47, depth: 1.18, color: "var(--m-blue)",
       intro: "Websites for gyms, yoga studios and personal trainers — plans, timings and trainers at a glance, and a quick way to book a free trial.",
       points: ["Membership plans that are easy to compare", "Class timetables and trainer profiles", "Free-trial and enquiry buttons that reach you directly"],
+      features: ["Membership plans", "Class timetable", "Trainer profiles", "Free-trial booking", "Transformations gallery", "BMI / diet tools"],
+      idealFor: "Gyms, yoga studios, personal trainers, CrossFit boxes",
     },
     {
-      n: "04", slug: "education", title: "Education", sub: "Learn / Unlearn / Grow", x: 12, y: 63, depth: 0.82, color: "var(--m-lime)",
-      intro: "Learning never really stopped after the classroom. I keep picking up new tools, ideas and ways of seeing.",
-      points: ["Formal education and the foundations it gave me", "Self-taught everything else, one project at a time", "Unlearning habits that no longer serve"],
+      n: "04", slug: "education", title: "Coaching / Education", sub: "Tuition / Courses / Schools", x: 12, y: 63, depth: 0.82, color: "var(--m-lime)",
+      intro: "Websites for coaching centres, tutors and schools — courses, results and faculty up front, and a free demo class one tap away.",
+      points: ["Courses, batches and fees laid out clearly", "Results, toppers and faculty that build trust", "Demo-class and admission enquiries straight to you"],
+      features: ["Courses & batches", "Faculty profiles", "Results & toppers", "Demo-class booking", "Quizzes / notes", "Admission form"],
+      idealFor: "Coaching centres, home tutors, schools, online courses",
     },
     {
-      n: "05", slug: "clubbing", title: "Clubbing", sub: "Music / Night / Energy", x: 42, y: 7, depth: 1.25, color: "var(--m-coral)",
-      intro: "Music, lights and a room full of energy — nights out are where I recharge.",
-      points: ["Favourite venues and sounds", "Music that ends up on my coding playlists", "The rhythm that carries into the work"],
+      n: "05", slug: "real-estate", title: "Real Estate", sub: "Properties / Builders / Agents", x: 42, y: 7, depth: 1.25, color: "var(--m-coral)",
+      intro: "Websites for builders, brokers and property dealers — listings people can filter, projects that look premium and leads that land on your WhatsApp.",
+      points: ["Property listings with photos, price and location", "Project pages with floor plans and amenities", "Site-visit and callback requests that reach you instantly"],
+      features: ["Property listings", "Search & filters", "Floor plans", "Map & location", "Site-visit booking", "EMI calculator"],
+      idealFor: "Builders, brokers, property dealers, co-living",
     },
     {
-      n: "06", slug: "parties", title: "Parties", sub: "People / Moments", x: 53, y: 82, depth: 0.9, color: "var(--m-blue)",
-      intro: "Good people, good conversations, moments worth remembering.",
-      points: ["Hosting and gathering friends", "Celebrations big and small", "Memories that outlast the night"],
+      n: "06", slug: "salon", title: "Salon & Beauty", sub: "Salons / Spas / Makeup", x: 53, y: 82, depth: 0.9, color: "var(--m-blue)",
+      intro: "Websites for salons, spas and makeup artists — services and prices at a glance, a lookbook that sells, and appointments booked in seconds.",
+      points: ["Service menu with clear prices", "Lookbook of your best work", "Online appointments and WhatsApp booking"],
+      features: ["Service & price menu", "Appointment booking", "Lookbook gallery", "Packages & offers", "Stylist profiles", "Google reviews"],
+      idealFor: "Salons, spas, makeup artists, nail & bridal studios",
     },
     {
-      n: "07", slug: "restaurants", title: "Restaurants", sub: "Places / Taste", x: 2, y: 43, depth: 1.12, color: "var(--m-lime)",
-      intro: "Always hunting for the next great plate — street stalls to sit-down dinners.",
-      points: ["Places I keep going back to", "New spots worth the trip", "Notes on taste, service and atmosphere"],
+      n: "07", slug: "restaurants", title: "Restaurants / Cafés", sub: "Menus / Tables / Orders", x: 2, y: 43, depth: 1.12, color: "var(--m-lime)",
+      intro: "Websites for restaurants and cafés — a menu that makes people hungry, table bookings and the vibe of the place before they walk in.",
+      points: ["A menu that's easy to read on a phone", "Table bookings and order links", "Photos, reviews and directions in one place"],
+      features: ["Digital menu", "Table booking", "QR menu", "Online ordering links", "Events & offers", "Review slider"],
+      idealFor: "Restaurants, cafés, cloud kitchens, bakeries",
     },
     {
-      n: "08", slug: "recipes", title: "Recipes", sub: "Make / Taste / Repeat", x: 30, y: 78, depth: 0.76, color: "var(--m-coral)",
-      intro: "Cooking is just building with ingredients — iterate until it tastes right.",
-      points: ["Everyday recipes I swear by", "Kitchen experiments, wins and failures", "Endless cups of chai"],
+      n: "08", slug: "travel", title: "Travel & Tours", sub: "Packages / Treks / Trips", x: 30, y: 78, depth: 0.76, color: "var(--m-coral)",
+      intro: "Websites for travel agents and tour operators — packages that sell the trip, day-by-day plans and enquiries that turn into bookings.",
+      points: ["Tour packages with itinerary and price", "Destination guides and photo galleries", "Enquiry and booking forms that reach you directly"],
+      features: ["Tour packages", "Day-by-day itinerary", "Destination pages", "Enquiry / booking form", "Traveller reviews", "Photo gallery"],
+      idealFor: "Travel agents, trek & tour operators, taxi services",
     },
     {
-      n: "09", slug: "rental", title: "Rental", sub: "Service / System / Ride", x: 76, y: 84, depth: 1.28, color: "var(--m-blue)",
-      intro: "A rental service built on simple systems — easy booking, reliable rides.",
-      points: ["How the service works", "The systems behind bookings and fleet", "What's coming next"],
+      n: "09", slug: "rental", title: "Rentals", sub: "Cars / Bikes / Equipment", x: 76, y: 84, depth: 1.28, color: "var(--m-blue)",
+      intro: "Websites for rental businesses — pick a vehicle, choose dates and confirm, with prices and availability that are always clear.",
+      points: ["Fleet with prices and photos", "Date-based booking and availability", "Documents, deposits and pickup details made simple"],
+      features: ["Fleet / catalogue", "Date & time booking", "Price calculator", "Document upload", "Pickup locations", "WhatsApp booking"],
+      idealFor: "Car & bike rentals, equipment hire, camping gear",
     },
     {
-      n: "10", slug: "business", title: "Business", sub: "Ideas / Products / Systems", x: 89, y: 27, depth: 0.88, color: "var(--m-lime)",
-      intro: "Ideas that grow into products, and products that need good systems behind them.",
-      points: ["Ventures I'm building and backing", "Product thinking beyond code", "Open to collaborations"],
+      n: "10", slug: "business", title: "Business / Brand", sub: "Companies / Services / Startups", x: 89, y: 27, depth: 0.88, color: "var(--m-lime)",
+      intro: "A professional home for your business — what you do, why you, and an easy way to get in touch. The site that makes you look as good as you are.",
+      points: ["Services and work that explain you in seconds", "Trust: clients, numbers, reviews", "Enquiries that land on your WhatsApp and email"],
+      features: ["Services pages", "About & team", "Client logos", "Case studies", "Enquiry form", "Blog"],
+      idealFor: "Agencies, manufacturers, consultants, local services",
       link: { label: "Get in touch", href: `mailto:${email}` },
     },
     {
-      n: "11", slug: "medical", title: "Medical", sub: "Health / Care / Science", x: 21, y: 6, depth: 1.02, color: "var(--m-coral)",
-      intro: "Health, care and the science behind it — the side of me that's curious about how people heal.",
-      points: ["What I'm learning about health and medicine", "Care, habits and staying well", "Where tech can help people get better care"],
+      n: "11", slug: "medical", title: "Clinic / Doctor", sub: "Clinics / Doctors / Labs", x: 21, y: 6, depth: 1.02, color: "var(--m-coral)",
+      intro: "Websites for clinics, doctors and labs — treatments explained simply, timings and fees up front, and appointments booked without a phone call.",
+      points: ["Doctor profiles, treatments and timings", "Online appointment booking", "Trust: qualifications, reviews and directions"],
+      features: ["Doctor profiles", "Appointment booking", "Treatments & services", "Clinic timings", "Health blog", "Map & directions"],
+      idealFor: "Clinics, dentists, physiotherapists, diagnostic labs",
     },
     {
-      n: "12", slug: "stay", title: "Stay", sub: "Rooms / Rest / Travel", x: 84, y: 65, depth: 1.08, color: "var(--m-blue)",
-      intro: "Good places to stay — the homestays, hotels and hideaways worth booking again.",
-      points: ["Stays I keep going back to", "What makes a place feel like home", "Tips for finding the right room on the road"],
+      n: "12", slug: "stay", title: "Hotels & Homestays", sub: "Rooms / Rest / Travel", x: 84, y: 65, depth: 1.08, color: "var(--m-blue)",
+      intro: "Websites for hotels, homestays and resorts — rooms that look as good as they are, and direct bookings without the OTA commission.",
+      points: ["Rooms with photos, amenities and prices", "Direct booking and enquiry", "Nearby places, reviews and how to reach"],
+      features: ["Room gallery", "Direct booking", "Amenities", "Nearby attractions", "Guest reviews", "Offers & packages"],
+      idealFor: "Hotels, homestays, resorts, hostels, villas",
     },
   ] as Multitude[],
+  // More website types: everything else I build, shown on the Explore page
+  // (/explore) next to the 12 above, each with its own page.
+  moreTypes: [
+    {
+      n: "13", slug: "photography", title: "Photography", sub: "Photographers / Studios", color: "var(--m-lime)",
+      intro: "Portfolios for photographers and studios — big, fast galleries, packages and a booking form for the next shoot.",
+      points: ["Full-screen galleries that load fast", "Packages and pricing", "Shoot enquiries straight to you"],
+      features: ["Portfolio galleries", "Packages", "Client albums", "Booking form", "Testimonials"],
+      idealFor: "Wedding & product photographers, studios, videographers",
+    },
+    {
+      n: "14", slug: "events", title: "Weddings & Events", sub: "Planners / Venues / Parties", color: "var(--m-coral)",
+      intro: "Websites for event planners, venues and decorators — past events that wow, packages and enquiries for the big day.",
+      points: ["Past events as stories", "Packages and venue details", "Date-check and enquiry forms"],
+      features: ["Event gallery", "Packages", "Venue details", "Date enquiry", "Wedding invite page"],
+      idealFor: "Event planners, banquet halls, decorators, DJs",
+    },
+    {
+      n: "15", slug: "interior", title: "Interior Design", sub: "Interiors / Architects", color: "var(--m-blue)",
+      intro: "Websites for interior designers and architects — projects shown room by room, your process, and consultations booked online.",
+      points: ["Before/after project galleries", "Design process and services", "Consultation booking"],
+      features: ["Project gallery", "Before / after", "Services", "Consultation booking", "Cost estimator"],
+      idealFor: "Interior designers, architects, modular kitchens",
+    },
+    {
+      n: "16", slug: "professional", title: "CA / Lawyer", sub: "Consultants / Firms", color: "var(--m-lime)",
+      intro: "Clean, trustworthy websites for CAs, lawyers and consultants — services, credentials and a consultation one tap away.",
+      points: ["Services explained in plain words", "Credentials and team", "Consultation booking and FAQs"],
+      features: ["Services", "Team profiles", "Consultation booking", "FAQs", "Articles / updates"],
+      idealFor: "CAs, lawyers, tax consultants, insurance advisors",
+    },
+    {
+      n: "17", slug: "startup", title: "Startup / Landing", sub: "Launches / Apps / SaaS", color: "var(--m-coral)",
+      intro: "Sharp landing pages for startups and apps — one clear message, a product that's shown not told, and sign-ups that convert.",
+      points: ["One-page launch sites", "Product demos and pricing", "Waitlists and sign-ups"],
+      features: ["Hero & product demo", "Pricing table", "Waitlist / sign-up", "FAQs", "Analytics"],
+      idealFor: "Startups, apps, product launches, offers",
+    },
+    {
+      n: "18", slug: "portfolio", title: "Personal Portfolio", sub: "Creators / Professionals", color: "var(--m-blue)",
+      intro: "A personal site that stands out — your work, your story and a way for the right people to reach you.",
+      points: ["Work and case studies", "Résumé and story", "Contact and social links"],
+      features: ["Projects / case studies", "Résumé", "Blog", "Contact form", "Social links"],
+      idealFor: "Freelancers, creators, job seekers, influencers",
+    },
+    {
+      n: "19", slug: "ngo", title: "NGO / Trust", sub: "Causes / Donations", color: "var(--m-lime)",
+      intro: "Websites for NGOs and trusts — the cause, the impact and an easy way to donate or volunteer.",
+      points: ["Your cause and impact in numbers", "Online donations", "Volunteer sign-ups and events"],
+      features: ["Impact stories", "Donate button", "Volunteer form", "Events", "Reports & 80G info"],
+      idealFor: "NGOs, trusts, foundations, community groups",
+    },
+    {
+      n: "20", slug: "clubbing", title: "Clubs & Nightlife", sub: "Clubs / Bars / DJs", color: "var(--m-coral)",
+      intro: "Loud, bold websites for clubs, bars and DJs — tonight's line-up, table bookings and the energy of the night.",
+      points: ["Event line-ups and nights", "Table and guest-list booking", "Photos, mixes and socials"],
+      features: ["Event calendar", "Table booking", "Guest list", "Photo wall", "DJ mixes"],
+      idealFor: "Clubs, bars, lounges, DJs, event nights",
+    },
+    {
+      n: "21", slug: "recipes", title: "Food Blog", sub: "Recipes / Home chefs", color: "var(--m-blue)",
+      intro: "Food blogs and home-chef sites — recipes people can actually follow, and orders for your home kitchen.",
+      points: ["Recipe pages with steps and timings", "Home-kitchen menus and orders", "Newsletter and socials"],
+      features: ["Recipe pages", "Search by ingredient", "Home-kitchen orders", "Newsletter", "Video recipes"],
+      idealFor: "Food bloggers, home chefs, tiffin services",
+    },
+  ] as WebsiteType[],
   about: [
     "I'm a web developer from India. I design and build websites for shops, artists, gyms, restaurants, schools — anyone with something worth putting online.",
     "No templates: every site is made for you, loads fast and looks great on a phone. Tell me what you need, and I'll take care of everything from the first sketch to the day it goes live.",
@@ -188,6 +294,10 @@ export const profile = {
       highlights: ["Subjects · 8 streams", "Tutor profiles", "Free demo booking", "How it works", "Quiz", "FAQ"],
     },
   ] as Project[],
+  // Reviews from real clients, shown on the home page (an invitation to leave
+  // one shows while this is empty). e.g.
+  // { name: "Ravi", role: "Owner, Him Woollen", text: "…", rating: 5, site: "Him Woollen" }
+  reviews: [] as Review[],
   // Swap in your real email (the `email` const above) and profile links here;
   // the site menu and the hero's "Open for projects" read from this.
   contact: {
@@ -203,3 +313,7 @@ export const profile = {
     links: [] as { label: string; href: string }[],
   },
 };
+
+// Every website type: the 12 trending ones first, then the rest.
+export const allTypes: WebsiteType[] = [...profile.multitudes, ...profile.moreTypes];
+export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);

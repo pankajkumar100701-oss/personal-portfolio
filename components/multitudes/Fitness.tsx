@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { fitness } from "@/data/multitudes";
-import { profile, type Multitude } from "@/data/profile";
+import { profile, type WebsiteType } from "@/data/profile";
 import { Heading } from "./ui";
 
 // Gym / Fitness: a gym landing page with a plan picker, the week's classes,
 // trainers and how to join. "Book a free trial" opens an email for now.
-export default function Fitness({ m }: { m: Multitude }) {
+export default function Fitness({ m }: { m: WebsiteType }) {
   const [pick, setPick] = useState(fitness.plans[1].name);
   const [day, setDay] = useState(fitness.days[0]);
   const plan = fitness.plans.find((p) => p.name === pick)!;
