@@ -42,7 +42,7 @@ export const profile = {
     first: "Pankaj",
     accent: "Multitudes",
     eyebrow: "UI Designer / Website Developer",
-    subline: "interfaces · websites · art · ideas",
+    subline: "I design & build websites — for shops, gyms, artists, restaurants & more",
   },
   // Floating nodes in the hero. x/y are % positions in the hero "world"; depth sets how fast each flies toward you on zoom.
   multitudes: [
