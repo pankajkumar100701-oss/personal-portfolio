@@ -103,6 +103,9 @@ export default function SiteMenu() {
               <Link href="/#top" className="menu-chip">Home</Link>
             </li>
             <li>
+              <Link href="/work" className="menu-chip">My work</Link>
+            </li>
+            <li>
               <Link href="/#about" className="menu-chip">About</Link>
             </li>
             <li>

@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
-import { profile, type Multitude } from "@/data/profile";
+import { profile, type Multitude, type Project } from "@/data/profile";
 import { Heading } from "./ui";
 
 // Closes every multitude's page: the websites built for it (projects in
@@ -33,60 +33,69 @@ export default function Websites({ m }: { m: Multitude }) {
       ) : (
         <div className="space-y-6">
           {sites.map((p, i) => (
-            <article key={p.title} className="m-show m-rise group grid overflow-hidden rounded-2xl md:grid-cols-[1.3fr_1fr]" style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
-              {/* The site in a little browser window that tilts toward you on hover. */}
-              <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-show-stage" aria-label={`Open ${p.title}`}>
-                <span className="m-browser">
-                  <span className="m-browser-bar" aria-hidden>
-                    <i />
-                    <i />
-                    <i />
-                    <span>{p.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
-                  </span>
-                  <span className="m-shot relative block aspect-[16/10] overflow-hidden">
-                    {p.image ? (
-                      <Image src={p.image} alt={`${p.title} — home page`} fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover object-top transition duration-[1.2s] group-hover:scale-[1.03]" />
-                    ) : (
-                      <span className="m-shot-blank" aria-hidden>
-                        {p.title}
-                      </span>
-                    )}
-                    {p.concept && <span className="m-concept">Concept</span>}
-                  </span>
-                </span>
-              </a>
-              <div className="flex flex-col justify-center p-5 sm:p-8 lg:px-12">
-                <p className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
-                  <span>{String(i + 1).padStart(2, "0")} — Live</span>
-                  {p.year && <span className="text-muted">{p.year}</span>}
-                </p>
-                <h3 className="mt-3 font-display text-3xl italic leading-[1.05] lg:text-4xl">{p.title}</h3>
-                {p.client && <p className="mt-1.5 text-sm text-muted">for {p.client}</p>}
-                <p className="mt-3 text-sm leading-relaxed text-soft">{p.description}</p>
-                {p.highlights && (
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {p.highlights.map((h) => (
-                      <li key={h} className="m-show-point">
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {p.tags.map((t) => (
-                    <span key={t} className="m-tag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm mt-5 self-start">
-                  Visit the site <span aria-hidden>↗</span>
-                </a>
-              </div>
-            </article>
+            <ProjectShowcase key={p.title} p={p} i={i} />
           ))}
         </div>
       )}
     </section>
+  );
+}
+
+// One website as a showcase: the site in a browser frame beside who it's for,
+// what's inside, tags and a live link. Also used by the /work page, where
+// `kicker` names the multitude it belongs to.
+export function ProjectShowcase({ p, i, kicker }: { p: Project; i: number; kicker?: ReactNode }) {
+  return (
+    <article className="m-show m-rise group grid overflow-hidden rounded-2xl md:grid-cols-[1.3fr_1fr]" style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
+      {/* The site in a little browser window that tilts toward you on hover. */}
+      <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-show-stage" aria-label={`Open ${p.title}`}>
+        <span className="m-browser">
+          <span className="m-browser-bar" aria-hidden>
+            <i />
+            <i />
+            <i />
+            <span>{p.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
+          </span>
+          <span className="m-shot relative block aspect-[16/10] overflow-hidden">
+            {p.image ? (
+              <Image src={p.image} alt={`${p.title} — home page`} fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover object-top transition duration-[1.2s] group-hover:scale-[1.03]" />
+            ) : (
+              <span className="m-shot-blank" aria-hidden>
+                {p.title}
+              </span>
+            )}
+            {p.concept && <span className="m-concept">Concept</span>}
+          </span>
+        </span>
+      </a>
+      <div className="flex flex-col justify-center p-5 sm:p-8 lg:px-12">
+        <p className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
+          <span>{String(i + 1).padStart(2, "0")} — {kicker ?? "Live"}</span>
+          {p.year && <span className="text-muted">{p.year}</span>}
+        </p>
+        <h3 className="mt-3 font-display text-3xl italic leading-[1.05] lg:text-4xl">{p.title}</h3>
+        {p.client && <p className="mt-1.5 text-sm text-muted">for {p.client}</p>}
+        <p className="mt-3 text-sm leading-relaxed text-soft">{p.description}</p>
+        {p.highlights && (
+          <ul className="mt-4 flex flex-wrap gap-1.5">
+            {p.highlights.map((h) => (
+              <li key={h} className="m-show-point">
+                {h}
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {p.tags.map((t) => (
+            <span key={t} className="m-tag">
+              {t}
+            </span>
+          ))}
+        </div>
+        <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm mt-5 self-start">
+          Visit the site <span aria-hidden>↗</span>
+        </a>
+      </div>
+    </article>
   );
 }

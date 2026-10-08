@@ -3,7 +3,7 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
-import { profile } from "@/data/profile";
+import { profile, whatsappLink } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -11,7 +11,6 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const SPEED = 0.85;
 // Share of the pinned scroll spent holding still at each end.
 const HOLD = 0.06;
-const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
 
 // After the arrival: the multitudes as a row of big cards that slides
 // sideways as you scroll down (the stage is pinned while the row travels).
@@ -163,19 +162,25 @@ export default function MultitudesTrack() {
       <div className="u-track-stage">
         <div ref={rowRef} className="u-track-row">
           <div className="u-track-intro">
-            <p className="u-track-kicker">The multitudes</p>
+            <p className="u-track-kicker">Pick your type</p>
             <h2>
-              {WORDS[multitudes.length] ?? multitudes.length} of me,
+              Which website
               <br />
-              <em>one by one.</em>
+              <em>is yours?</em>
             </h2>
-            <p className="u-track-hint">Scroll (or swipe) to meet each side of me. Pick any to dive in.</p>
+            <p className="u-track-hint">Find yours below: open it to see examples, or message me right from its card.</p>
+            <Link href="/work" className="u-track-work">
+              Or see all my work <span aria-hidden>→</span>
+            </Link>
           </div>
           {multitudes.map((m) => (
-            <Link key={m.slug} href={`/multitudes/${m.slug}`} className="u-card" style={{ "--c": m.color, ...artVars(m.slug, m.color) } as CSSProperties}>
+            // The whole card opens the multitude (a stretched link); its
+            // "Message me" button sits above that and opens WhatsApp instead.
+            <div key={m.slug} className="u-card" style={{ "--c": m.color, ...artVars(m.slug, m.color) } as CSSProperties}>
               {/* Hover (or, on phones, the snapped card) floods it with its gradient. */}
               <span className="u-card-flood" aria-hidden />
               <ArtIcon icon={artIcon(m.slug)} className="u-card-mark" />
+              <Link href={`/multitudes/${m.slug}`} className="u-card-link" aria-label={`${m.title}: open`} />
               <span className="u-card-top">
                 <b>{m.n}</b>
                 <span className="u-card-icon">
@@ -185,10 +190,20 @@ export default function MultitudesTrack() {
               <strong>{m.title}</strong>
               <small>{m.sub}</small>
               <p>{m.intro}</p>
-              <span className="u-card-go">
-                Open <span aria-hidden>→</span>
+              <span className="u-card-actions">
+                <span className="u-card-go">
+                  Open <span aria-hidden>→</span>
+                </span>
+                <a
+                  href={whatsappLink(`Hi Pankaj! I saw your portfolio and I'd like a ${m.title} website.\n\nAbout my business/idea: \nWhen I'd like it live: \n\nCould you share a plan and a price? Thanks!`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="u-card-msg"
+                >
+                  Message me
+                </a>
               </span>
-            </Link>
+            </div>
           ))}
         </div>
         <div className="u-track-meter" aria-hidden>

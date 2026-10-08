@@ -453,20 +453,14 @@ export default function MultitudesHero() {
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");
-  // The websites I've built, shown under the title on phones and in the
-  // bottom bar on desktop (where the cards leave no room under the title).
-  // Hidden until there are some in data/profile.ts.
+  // One way into all the websites I've built (the /work page): under the title
+  // on phones, in the bottom bar on desktop (where the cards leave no room
+  // under the title). Hidden until there are some in data/profile.ts. (It used
+  // to list every site here, which read as clutter, mostly on phones.)
   const sites = profile.projects.length > 0 && (
-    <>
-      <span>Websites I&apos;ve built</span>
-      <ul>
-        {profile.projects.map((p) => (
-          <li key={p.title} style={{ "--c": p.color } as CSSProperties}>
-            <a href={p.href}>{p.title}</a>
-          </li>
-        ))}
-      </ul>
-    </>
+    <Link href="/work" style={{ "--c": "var(--u-acid)" } as CSSProperties}>
+      Explore my work · {profile.projects.length} sites <span aria-hidden>→</span>
+    </Link>
   );
 
   return (
@@ -506,7 +500,7 @@ export default function MultitudesHero() {
                   </em>
                 </h1>
                 <p className="u-subline">{hero.subline}</p>
-                {/* Phones: the websites list sits under the title (desktop has it in the bottom bar). */}
+                {/* Phones: the link to my work sits under the title (desktop has it in the bottom bar). */}
                 {sites && <div className="u-sites u-sites-mobile">{sites}</div>}
               </div>
 
@@ -533,7 +527,7 @@ export default function MultitudesHero() {
               {/* Phones skip the dive, so the arrival's call to action lives here. */}
               <div className="u-mobile-cta">
                 <a href="#multitudes" className="u-cta-primary">
-                  See my work <span aria-hidden>→</span>
+                  Explore your type <span aria-hidden>→</span>
                 </a>
                 <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
                   <i className="u-live" aria-hidden /> Open for projects
@@ -588,7 +582,7 @@ export default function MultitudesHero() {
             </ul>
             <div className="u-arrive-cta">
               <a href="#multitudes" tabIndex={-1} className="u-cta-primary">
-                See my work <span aria-hidden>→</span>
+                Explore your type <span aria-hidden>→</span>
               </a>
               <a href={`mailto:${profile.contact.email}`} tabIndex={-1} className="u-cta-ghost">
                 <i className="u-live" aria-hidden /> Open for projects

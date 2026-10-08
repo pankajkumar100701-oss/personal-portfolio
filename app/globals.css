@@ -735,7 +735,7 @@ body {
 .u-copy > :nth-child(3) { animation-delay: 0.24s; }
 .u-subline { margin-top: 1.5625rem; font-size: 1.0625rem; font-style: italic; letter-spacing: 0; color: var(--u-dim); }
 .u-copy > :nth-child(4) { animation-delay: 0.36s; }
-/* The websites I've built, as a row of small pills: in the bottom bar on
+/* The link to all my work (/work), as a small pill: in the bottom bar on
    desktop, under the title on phones. */
 .u-sites { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-sans); }
 .u-sites > span { font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-dim); }
@@ -1312,6 +1312,8 @@ body {
 .u-track-intro h2 { margin-top: 1rem; font-size: clamp(2.75rem, 5vw, 4.5rem); font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
 .u-track-intro em { color: var(--u-acid); }
 .u-track-hint { margin-top: 1.5rem; max-width: 20rem; font-family: var(--font-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--u-muted); }
+.u-track-work { display: inline-flex; gap: 0.375rem; margin-top: 1.25rem; padding-bottom: 0.125rem; border-bottom: 1px solid color-mix(in srgb, var(--u-acid) 50%, transparent); font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600; color: var(--u-acid); transition: border-color 0.25s; }
+.u-track-work:hover { border-color: var(--u-acid); }
 .u-card {
   position: relative;
   flex: none;
@@ -1332,7 +1334,7 @@ body {
   /* Hover growth rides on `transform`, separate from the per-frame `scale`. */
   transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1.15), border-color 0.3s, box-shadow 0.4s;
 }
-.u-card > :not(.u-card-flood, .u-card-mark) { position: relative; z-index: 1; }
+.u-card > :not(.u-card-flood, .u-card-mark, .u-card-link) { position: relative; z-index: 1; }
 .u-card-flood { position: absolute; inset: 0; opacity: 0; background: radial-gradient(130% 120% at 20% 0%, var(--from), var(--to)); transition: opacity 0.5s; }
 .u-card-mark {
   position: absolute;
@@ -1353,14 +1355,14 @@ body {
 .u-card :is(strong, p, .u-card-top b) { transition: color 0.4s; }
 /* Hovered (or snapped, on phones): grow, flood with the gradient, ink text,
    redraw the icon and swing the watermark in. */
-.u-card:is(:hover, :focus-visible, [data-active]) { transform: scale(1.06); border-color: transparent; box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--to) 70%, transparent); }
-.u-card:is(:hover, :focus-visible, [data-active]) .u-card-flood { opacity: 1; }
-.u-card:is(:hover, :focus-visible, [data-active]) .u-card-mark { opacity: 0.18; rotate: 0deg; }
-.u-card:is(:hover, :focus-visible, [data-active]) :is(strong, .u-card-top b, small, .u-card-icon) { color: var(--art-ink); }
-.u-card:is(:hover, :focus-visible, [data-active]) p { color: color-mix(in srgb, var(--art-ink) 85%, transparent); }
-.u-card:is(:hover, :focus-visible, [data-active]) .u-card-icon { border-color: color-mix(in srgb, var(--art-ink) 40%, transparent); background: color-mix(in srgb, var(--art-ink) 10%, transparent); }
-.u-card:is(:hover, :focus-visible, [data-active]) .u-card-icon svg * { animation: px-draw 0.8s cubic-bezier(0.6, 0, 0.2, 1) both; stroke-dashoffset: 1; }
-.u-card:is(:hover, :focus-visible, [data-active]) .u-card-go { background: var(--art-ink); color: var(--to); }
+.u-card:is(:hover, :focus-within, [data-active]) { transform: scale(1.06); border-color: transparent; box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--to) 70%, transparent); }
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-flood { opacity: 1; }
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-mark { opacity: 0.18; rotate: 0deg; }
+.u-card:is(:hover, :focus-within, [data-active]) :is(strong, .u-card-top b, small, .u-card-icon) { color: var(--art-ink); }
+.u-card:is(:hover, :focus-within, [data-active]) p { color: color-mix(in srgb, var(--art-ink) 85%, transparent); }
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-icon { border-color: color-mix(in srgb, var(--art-ink) 40%, transparent); background: color-mix(in srgb, var(--art-ink) 10%, transparent); }
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-icon svg * { animation: px-draw 0.8s cubic-bezier(0.6, 0, 0.2, 1) both; stroke-dashoffset: 1; }
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-go { background: var(--art-ink); color: var(--to); }
 /* A big soft disk of the card's colour: the multitude's "dot". */
 .u-card::before {
   content: "";
@@ -1374,7 +1376,26 @@ body {
   transition: scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .u-card:hover::before { scale: 1.5; }
-.u-card:focus-visible { outline: 2px solid var(--c); outline-offset: 4px; }
+.u-card:has(.u-card-link:focus-visible) { outline: 2px solid var(--c); outline-offset: 4px; }
+.u-card-link { position: absolute; inset: 0; z-index: 2; border-radius: inherit; outline: none; }
+/* "Open" (just a label: the whole card is the link) and "Message me" (WhatsApp),
+   lifted above the card's link so only the button itself is clickable. */
+.u-card > .u-card-actions { z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 1.5rem; pointer-events: none; }
+.u-card-actions .u-card-go { margin-top: 0; }
+.u-card-msg {
+  pointer-events: auto;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.u-card:is(:hover, :focus-within, [data-active]) .u-card-msg { border-color: color-mix(in srgb, var(--art-ink) 55%, transparent); color: var(--art-ink); }
+.u-card-msg:hover { background: color-mix(in srgb, var(--art-ink) 14%, transparent); }
+.u-card-msg:focus-visible { outline: 2px solid var(--art-ink); outline-offset: 2px; }
 .u-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; font-family: var(--font-sans); }
 .u-card-top b { font-family: var(--font-display); font-size: 4.5rem; font-style: italic; font-weight: 400; line-height: 0.9; color: var(--ink); }
 .u-card strong { margin-top: auto; font-size: 2.5rem; font-style: italic; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
