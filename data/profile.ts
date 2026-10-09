@@ -346,6 +346,10 @@ export const profile = {
       highlights: ["Stay search", "8 stay types", "Popular destinations", "13 listings", "Wishlist", "Become a host"],
     },
   ] as Project[],
+  // The trending websites shown in the hero (max 5): titles from `projects`
+  // above, in order. Swap any title here to change what the hero shows; the
+  // rest stay one click away on /work.
+  trendingSites: ["IronForge Fitness", "Aangan Estates", "Waypoint", "Saffron Hearth", "Art by the Passenger"],
   // Reviews from real clients, shown on the home page (an invitation to leave
   // one shows while this is empty). e.g.
   // { name: "Ravi", role: "Owner, Him Woollen", text: "…", rating: 5, site: "Him Woollen" }

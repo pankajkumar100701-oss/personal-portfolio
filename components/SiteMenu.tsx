@@ -116,7 +116,7 @@ export default function SiteMenu() {
           <Link href="/contact" className="menu-contact">
             <span>
               <b>Contact</b>
-              <small>Customise your website &amp; send</small>
+              <small>Customise your website plans &amp; send</small>
             </span>
             <span aria-hidden>→</span>
           </Link>

@@ -457,14 +457,20 @@ export default function MultitudesHero() {
   // The websites I've built (a scrolling strip of screenshot cards), then the way into every website type
   // (/explore): under the title on phones (so it's on the first screen), in
   // the bottom bar on desktop (where the cards leave no room under the title).
-  // The list hides until there are projects in data/profile.ts.
+  // The list hides until profile.trendingSites names a project.
+  // Only the trending websites (profile.trendingSites, max 5) show here.
+  const trendingSites = profile.trendingSites
+    .map((title) => profile.projects.find((p) => p.title === title))
+    .filter((p) => p !== undefined)
+    .slice(0, 5);
+  const moreSites = profile.projects.length - trendingSites.length;
   const sites = (
     <>
-      {profile.projects.length > 0 && (
+      {trendingSites.length > 0 && (
         <>
           <span>Websites I&apos;ve built</span>
           <ul>
-            {profile.projects.map((p) => (
+            {trendingSites.map((p) => (
               <li key={p.title} style={{ "--c": p.color } as CSSProperties}>
                 <a href={p.href} target="_blank" rel="noopener noreferrer" className="u-site-card">
                   {p.image && (
@@ -474,6 +480,15 @@ export default function MultitudesHero() {
                 </a>
               </li>
             ))}
+            {moreSites > 0 && (
+              <li>
+                <Link href="/work" className="u-site-card u-site-more">
+                  <b>
+                    +{moreSites} more <span aria-hidden>→</span>
+                  </b>
+                </Link>
+              </li>
+            )}
           </ul>
         </>
       )}
