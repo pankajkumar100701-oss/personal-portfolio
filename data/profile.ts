@@ -383,6 +383,7 @@ export const profile = {
     { name: "Google Maps & SEO", text: "Show up when someone nearby searches for what you do, with directions one tap away." },
     { name: "Wishlist / save for later", text: "Let visitors heart the rooms, products or properties they like and come back to them later.", seenIn: ["Waypoint"] },
     { name: "Hindi + English", text: "Speak your customers' language: a simple switch to read the whole site in Hindi or English." },
+    { name: "Blog & articles", text: "Regular posts keep your site fresh and help you rank on Google. Short on time? I can also write the blogs for you, in your brand's voice." },
   ] as Idea[],
   // Reviews from real clients, as plain text: paste a client's words here and
   // they show in the home page's Reviews section and, when `site` names one

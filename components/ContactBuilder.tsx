@@ -7,7 +7,7 @@ import { allTypes, findType, profile, whatsappLink } from "@/data/profile";
 import { addToBasket, toggleInBasket, useBasket, writeBasket } from "@/lib/basket";
 
 // Ideas that fit any kind of site, offered next to the chosen types' own.
-const EXTRAS = ["WhatsApp chat button", "Google Maps & SEO", "Hindi + English", "Reviews section", "Blog / updates", "Admin panel to edit content", "Domain & hosting setup"];
+const EXTRAS = ["WhatsApp chat button", "Google Maps & SEO", "Hindi + English", "Reviews section", "Blog & articles", "Admin panel to edit content", "Domain & hosting setup"];
 const BUDGETS = ["Not sure yet", "Under ₹10k", "₹10k – ₹25k", "₹25k – ₹50k", "₹50k+"];
 const TIMELINES = ["Flexible", "ASAP", "2–4 weeks", "1–2 months"];
 // Ideas shown before "Show more" (chosen ones always show).
