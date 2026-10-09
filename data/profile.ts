@@ -363,6 +363,19 @@ export const profile = {
       client: "a fictional salon in Gurugram",
       highlights: ["Service menu · 6 types", "Stylist profiles", "Bridal", "Lookbook", "FAQ", "Appointment booking"],
     },
+    {
+      title: "Threads & Tradition",
+      description: "Himachali traditional wear on rent — pattu, chola, topi and silver from Kullu, Chamba, Kinnaur and Lahaul, for a byah, mela or stage.",
+      tags: ["Next.js", "Rentals", "Outfit Builder", "Bookings"],
+      href: "https://threads-tradition.vercel.app/",
+      color: "#c9a96e",
+      multitude: "rental",
+      image: "/work/threads-tradition.webp",
+      year: "2026",
+      concept: true,
+      client: "a fictional Himachali wear rental",
+      highlights: ["Collections · 6", "Shop by occasion", "Rental dates", "Outfit builder", "Studio trial", "Journal"],
+    },
   ] as Project[],
   // The trending websites shown in the hero (max 5): titles from `projects`
   // above, in order. Swap any title here to change what the hero shows; the
