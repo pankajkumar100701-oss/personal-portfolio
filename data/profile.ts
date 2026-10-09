@@ -332,6 +332,19 @@ export const profile = {
       client: "a fictional counselling practice",
       highlights: ["Therapies · 18", "Category filter", "Our approach", "About", "FAQ", "Free consultation"],
     },
+    {
+      title: "Waypoint",
+      description: "A booking site for handpicked stays across India — Himalayan cabins, Goa villas, Jaipur havelis and Kerala houseboats.",
+      tags: ["Next.js", "Search", "Listings", "Wishlist"],
+      href: "https://stays-seven.vercel.app/",
+      color: "#c2502e",
+      multitude: "stay",
+      image: "/work/waypoint-stays.webp",
+      year: "2026",
+      concept: true,
+      client: "a fictional homestay platform",
+      highlights: ["Stay search", "8 stay types", "Popular destinations", "13 listings", "Wishlist", "Become a host"],
+    },
   ] as Project[],
   // Reviews from real clients, shown on the home page (an invitation to leave
   // one shows while this is empty). e.g.
