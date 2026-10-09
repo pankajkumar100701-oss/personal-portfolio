@@ -4,7 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage } from "@/components/MessageActions";
-import { profile } from "@/data/profile";
+import { allTypes, profile } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -163,15 +163,17 @@ export default function MultitudesTrack() {
       <div className="u-track-stage">
         <div ref={rowRef} className="u-track-row">
           <div className="u-track-intro">
-            <p className="u-track-kicker">Trending right now</p>
+            <p className="u-track-kicker">In demand this year</p>
             <h2>
-              Twelve doors.
+              Find your kind.
               <br />
-              <em>One is yours.</em>
+              <em>I&apos;ll build the rest.</em>
             </h2>
-            <p className="u-track-hint">The websites businesses want most today. Open a door for details and examples, or add it to your message.</p>
+            <p className="u-track-hint">
+              From gyms and clinics to stores and homestays: the {multitudes.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
+            </p>
             <Link href="/explore" className="u-track-work">
-              See every type <span aria-hidden>→</span>
+              Browse all {allTypes.length} types <span aria-hidden>→</span>
             </Link>
           </div>
           {multitudes.map((m) => (

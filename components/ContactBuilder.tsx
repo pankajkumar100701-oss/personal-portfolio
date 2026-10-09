@@ -25,7 +25,6 @@ export default function ContactBuilder() {
   const [email, setEmail] = useState("");
   const [business, setBusiness] = useState("");
   const [city, setCity] = useState("");
-  const [ideas, setIdeas] = useState<string[]>([]);
   const [budget, setBudget] = useState(BUDGETS[0]);
   const [timeline, setTimeline] = useState(TIMELINES[0]);
   const [notes, setNotes] = useState("");
@@ -46,9 +45,12 @@ export default function ContactBuilder() {
 
   const types = basket.types.map(findType).filter((t) => t !== undefined);
   const sites = profile.projects.filter((p) => basket.sites.includes(p.title));
-  // The chosen types' ideas first, then the general ones, without repeats.
-  const ideaOptions = [...new Set([...types.flatMap((t) => t.features), ...EXTRAS])];
-  const toggleIdea = (f: string) => setIdeas((list) => (list.includes(f) ? list.filter((x) => x !== f) : [...list, f]));
+  // Ideas live in the basket, so ones added from the home page's suggestions
+  // arrive already picked. The chosen types' ideas first, then the general
+  // ones, then any picked elsewhere, without repeats.
+  const ideas = basket.ideas;
+  const ideaOptions = [...new Set([...types.flatMap((t) => t.features), ...EXTRAS, ...ideas])];
+  const toggleIdea = (f: string) => toggleInBasket("ideas", f);
 
   const generated = (() => {
     const lines = ["Hi Pankaj! I saw your portfolio and I'd like a website.", ""];
@@ -211,9 +213,9 @@ export default function ContactBuilder() {
               {copied ? "Copied" : "Copy message"}
             </button>
           </div>
-          {(basket.types.length > 0 || basket.sites.length > 0) && (
-            <button type="button" className="mt-4 text-xs text-muted underline underline-offset-2" onClick={() => writeBasket({ types: [], sites: [] })}>
-              Clear chosen types &amp; sites
+          {(basket.types.length > 0 || basket.sites.length > 0 || ideas.length > 0) && (
+            <button type="button" className="mt-4 text-xs text-muted underline underline-offset-2" onClick={() => writeBasket({ types: [], sites: [], ideas: [] })}>
+              Clear chosen types, sites &amp; ideas
             </button>
           )}
           <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted">

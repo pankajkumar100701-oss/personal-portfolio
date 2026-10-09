@@ -1665,6 +1665,20 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .c-need { margin-top: 1rem; padding: 0.6rem 0.8rem; border-radius: 0.75rem; background: color-mix(in srgb, var(--c) 14%, transparent); font-size: 0.8125rem; color: var(--u-fg); }
 
 /* Reviews (home page). */
+/* Home: "Ideas for your website", a grid of suggestion cards. */
+.h-ideas { display: grid; gap: 1rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+.h-ideas li { display: flex; flex-direction: column; align-items: flex-start; gap: 0.625rem; padding: 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); box-shadow: 0 10px 30px -18px var(--u-shade); transition: border-color 0.25s, translate 0.25s; }
+.h-ideas li:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--u-acid) 45%, var(--u-line)); }
+.h-ideas b { font-family: var(--font-display); font-size: 1.75rem; font-style: italic; font-weight: 400; line-height: 1; color: var(--u-acid); }
+.h-ideas strong { font-size: 1.0625rem; font-weight: 600; }
+.h-ideas li > p { font-size: 0.9375rem; line-height: 1.55; color: var(--u-muted); }
+.h-ideas .h-idea-seen { font-size: 0.8125rem; color: var(--u-dim); }
+.h-idea-seen a { color: var(--u-soft); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--u-acid) 60%, transparent); text-underline-offset: 2px; }
+.h-idea-seen a:hover { color: var(--u-acid); }
+.h-ideas .h-idea-add { margin-top: auto; }
+.h-ideas-foot { margin-top: 2rem; font-size: 0.9375rem; color: var(--u-muted); }
+.h-ideas-foot a { font-weight: 600; color: var(--u-acid); }
+.h-ideas-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .h-review-empty { margin-top: 2.5rem; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1px dashed color-mix(in srgb, var(--u-fg) 22%, transparent); border-radius: 1.5rem; background: var(--u-card); }
 .h-reviews { display: grid; gap: 1rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
 .h-reviews li { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); }

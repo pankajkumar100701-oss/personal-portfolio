@@ -1,6 +1,7 @@
 import Cosmos from "@/components/Cosmos";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
+import IdeasSection from "@/components/IdeasSection";
 import MultitudesHero from "@/components/MultitudesHero";
 import MultitudesTrack from "@/components/MultitudesTrack";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -8,7 +9,7 @@ import SiteMenu from "@/components/SiteMenu";
 import { profile } from "@/data/profile";
 
 // Dive into the dot, then scroll on through the multitudes as a sideways row
-// of cards, then About, Reviews and Contact; the footer line sits over the bottom edge of the
+// of cards, then Ideas, About, Reviews and Contact; the footer line sits over the bottom edge of the
 // last screen.
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <main id="top" className="relative">
         <MultitudesHero />
         <MultitudesTrack />
+        <IdeasSection />
         <AboutSection />
         <ReviewsSection />
         <ContactSection />

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toggleInBasket, useBasket, writeBasket, type Basket } from "@/lib/basket";
 
-// "Add to message": puts a website type (or one of my websites) into the
+// "Add to message": puts a website type (or one of my websites, or an idea) into the
 // visitor's message, which the Contact page turns into a WhatsApp / email.
 export function AddToMessage({ kind, id, className = "", label = "Add to message" }: { kind: keyof Basket; id: string; className?: string; label?: string }) {
   const added = useBasket()[kind].includes(id);
@@ -47,14 +47,14 @@ export function ShareLink({ path, title, className = "" }: { path: string; title
 export function BasketPill() {
   const basket = useBasket();
   const pathname = usePathname();
-  const count = basket.types.length + basket.sites.length;
+  const count = basket.types.length + basket.sites.length + basket.ideas.length;
   if (count === 0 || pathname === "/contact") return null;
   return (
     <div className="x-pill" role="status">
       <Link href="/contact">
         <b>{count}</b> in your message · Customise &amp; send <span aria-hidden>→</span>
       </Link>
-      <button type="button" onClick={() => writeBasket({ types: [], sites: [] })} aria-label="Clear your message">
+      <button type="button" onClick={() => writeBasket({ types: [], sites: [], ideas: [] })} aria-label="Clear your message">
         ×
       </button>
     </div>

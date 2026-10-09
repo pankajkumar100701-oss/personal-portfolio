@@ -33,6 +33,11 @@ const whatsapp = "917833085612";
 // A WhatsApp chat with me, the message box pre-filled with `text`.
 export const whatsappLink = (text: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
 
+// A suggestion in the home page's "Ideas for your website" section. `name`
+// is what goes into the visitor's message; `seenIn` names projects (by
+// title) that already have it, linked as live examples.
+export type Idea = { name: string; text: string; seenIn?: string[] };
+
 export type Project = {
   title: string;
   description: string; // one line: who it's for and what it does
@@ -350,6 +355,18 @@ export const profile = {
   // above, in order. Swap any title here to change what the hero shows; the
   // rest stay one click away on /work.
   trendingSites: ["IronForge Fitness", "Aangan Estates", "Waypoint", "Saffron Hearth", "Art by the Passenger"],
+  // Suggestions on the home page ("Ideas for your website"): add, remove or
+  // reorder freely. Each one can be added to the visitor's message.
+  ideas: [
+    { name: "Book in one tap", text: "Tables, trial classes, site visits, demo lessons: let people book straight from the page, any time of day.", seenIn: ["Saffron Hearth", "IronForge Fitness", "VidyaTutors"] },
+    { name: "A smart calculator", text: "BMI for a gym, EMI for a home, fees for a course. A small tool keeps visitors on your page and starts the conversation.", seenIn: ["IronForge Fitness", "Aangan Estates"] },
+    { name: "Search & filters", text: "Veg-only dishes, budget and locality, type of therapy: help people find their thing in seconds.", seenIn: ["Saffron Hearth", "Aangan Estates", "Still Waters Therapy"] },
+    { name: "WhatsApp chat button", text: "Most of your customers already live on WhatsApp. One tap and they're talking to you, no forms needed." },
+    { name: "Reviews & results", text: "Star ratings, real reviews and before-and-after stories build trust faster than any sales line.", seenIn: ["IronForge Fitness"] },
+    { name: "Google Maps & SEO", text: "Show up when someone nearby searches for what you do, with directions one tap away." },
+    { name: "Wishlist / save for later", text: "Let visitors heart the rooms, products or properties they like and come back to them later.", seenIn: ["Waypoint"] },
+    { name: "Hindi + English", text: "Speak your customers' language: a simple switch to read the whole site in Hindi or English." },
+  ] as Idea[],
   // Reviews from real clients, shown on the home page (an invitation to leave
   // one shows while this is empty). e.g.
   // { name: "Ravi", role: "Owner, Him Woollen", text: "…", rating: 5, site: "Him Woollen" }
