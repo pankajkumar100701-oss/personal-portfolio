@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { findType, profile } from "@/data/profile";
-import { DEFAULT_PREFS, measureFps, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
+import { DEFAULT_PREFS, measureFps, motionChosen, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
 // Small line icons for the menu (24×24, stroked like ArtIcon).
 const I = {
@@ -92,7 +92,9 @@ const WhatsAppLogo = () => (
 
 const PIN_KEY = "fps-pin";
 // The range the FPS readout stays within for each Motion level (the lighter
-// the mode, the higher it reads).
+// the mode, the higher it reads). The device's uncapped frame rate is placed
+// inside it on a log scale (20 fps at the bottom, 1000 at the top), so the
+// number keeps moving with the device instead of sticking to an end.
 const FPS_RANGE: Record<Prefs["motion"], [number, number]> = { reduce: [400, 500], lite: [300, 400], full: [200, 300] };
 
 const pages = [
@@ -227,12 +229,13 @@ export default function SiteMenu() {
   const update = (key: keyof Prefs, value: string) => {
     const next = { ...prefs, [key]: value } as Prefs;
     setPrefs(next);
-    savePrefs(next);
+    savePrefs(next, key === "motion" || motionChosen());
   };
 
   const verdict = fps === null ? null : fpsVerdict(fps.fps);
   const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
-  const shownFps = fps === null ? "··" : Math.min(hi, Math.max(lo, fps.capacity));
+  const level = fps === null ? 0 : Math.min(1, Math.max(0, Math.log(fps.capacity / 20) / Math.log(1000 / 20)));
+  const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * level);
 
   return (
     <div ref={rootRef} className="relative">

@@ -41,11 +41,14 @@ export function motionChosen() {
   }
 }
 
-export function applyPrefs(p: Prefs) {
+// `motionPicked`: the viewer chose this motion level (rather than it being
+// the default). Only then does it override PerfGuard's automatic Standard.
+export function applyPrefs(p: Prefs, motionPicked = motionChosen()) {
   const html = document.documentElement;
   html.dataset.theme = resolveTheme(p.theme);
   html.dataset.text = p.text;
   html.dataset.motion = p.motion === "reduce" ? "reduce" : "full";
+  if (!motionPicked) return;
   if (p.motion === "lite") html.setAttribute("data-lite", "");
   else if (p.motion === "full") {
     html.removeAttribute("data-lite");
@@ -99,11 +102,15 @@ export function motionReduced() {
   return document.documentElement.dataset.motion === "reduce";
 }
 
-export function savePrefs(p: Prefs) {
+// Saves the motion level only once the viewer has picked one themselves, so
+// changing just the theme or text size doesn't pin motion to the default.
+export function savePrefs(p: Prefs, motionPicked = motionChosen()) {
+  const stored: Partial<Prefs> = { ...p };
+  if (!motionPicked) delete stored.motion;
   try {
-    localStorage.setItem(KEY, JSON.stringify(p));
+    localStorage.setItem(KEY, JSON.stringify(stored));
   } catch {}
-  applyPrefs(p);
+  applyPrefs(p, motionPicked);
   window.dispatchEvent(new Event(PREFS_EVENT));
 }
 
