@@ -153,18 +153,19 @@ const trending = profile.trackTypes
 
 // How well this device is running the page, 0–1: mostly how close the frames
 // shown come to the screen's refresh rate (smoothness, what you actually
-// feel), plus a little of the uncapped capacity (headroom). The FPS number,
-// its colour and the advice all come from this one score, so they agree.
+// feel), plus a little of the uncapped capacity (headroom). It places the FPS
+// number inside its Motion level's range.
 function fpsScore(fps: number, capacity: number, refresh: number) {
   const smooth = Math.min(1, fps / refresh);
   const headroom = Math.min(1, Math.max(0, Math.log(capacity / 20) / Math.log(1000 / 20)));
   return 0.75 * smooth + 0.25 * headroom;
 }
 
-// The score as a colour and a line of advice for the current Motion level.
-function fpsVerdict(score: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
-  if (score >= 0.8) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
-  if (score >= 0.6) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
+// A colour and a line of advice for the current Motion level, from the frames
+// actually shown each second: above 40 green, 20–40 yellow, below 20 red.
+function fpsVerdict(shown: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
+  if (shown > 40) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
+  if (shown >= 20) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
   if (motion === "reduce") return { tone: "slow", text: "This device is working hard. Lite is the lightest it gets." };
   return { tone: "slow", text: motion === "full" ? "A bit out of breath. Standard will feel better." : "Still heavy here. Lite will feel better." };
 }
@@ -256,7 +257,7 @@ export default function SiteMenu() {
 
   const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
   const score = fps === null ? 0 : fpsScore(fps.fps, fps.capacity, refresh);
-  const verdict = fps === null ? null : fpsVerdict(score, prefs.motion);
+  const verdict = fps === null ? null : fpsVerdict(fps.fps, prefs.motion);
   // The picked Motion level, shown on the folded Performance row.
   const motionLabel = motionSetting.options.find((o) => o.value === prefs.motion)?.label;
   const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * score);
