@@ -19,11 +19,11 @@ const types = profile.trackTypes
   .filter((t) => t !== undefined)
   .slice(0, 10);
 const num = (i: number) => String(i + 1).padStart(2, "0");
-// What the meter shows for each card, the last one being "See all".
-const labels = [...types.map((_, i) => num(i)), "All"];
+// What the meter shows for each card, the last one being "My work".
+const labels = [...types.map((_, i) => num(i)), "Work"];
 
 // After the arrival: the trending types as a row of big cards (and a last
-// "See all categories" card opening /explore) that slides
+// "My work" card opening /work) that slides
 // sideways as you scroll down (the stage is pinned while the row travels).
 // The card nearest the centre sits straight and full size; the others lean,
 // shrink and dim toward the edges. Desktop + motion-allowed only; elsewhere
@@ -181,8 +181,8 @@ export default function MultitudesTrack() {
             <p className="u-track-hint">
               From gyms and clinics to stores and homestays: the {types.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
             </p>
-            <Link href="/explore" className="u-track-work">
-              Browse every type <span aria-hidden>→</span>
+            <Link href="/work" className="u-track-work">
+              See my work <span aria-hidden>→</span>
             </Link>
           </div>
           {types.map((m, i) => (
@@ -212,19 +212,19 @@ export default function MultitudesTrack() {
           ))}
           <div className="u-card u-card-all" style={{ "--c": "var(--m-lime)", ...artVars("all", "var(--m-lime)"), "--art-ink": "#0b0d10" } as CSSProperties}>
             <span className="u-card-flood" aria-hidden />
-            <Link href="/explore" className="u-card-link" aria-label="See all categories" />
+            <Link href="/work" className="u-card-link" aria-label="My work: every website I've built" />
             <span className="u-card-top">
-              <b>All</b>
+              <b>Work</b>
               <span className="u-card-icon" aria-hidden>
                 →
               </span>
             </span>
-            <strong>See all categories</strong>
-            <small>Every kind / search / filters</small>
-            <p>Photography, weddings, interiors, lawyers, NGOs and more: every kind of website I build, each with details and live examples.</p>
+            <strong>My work</strong>
+            <small>Live sites / filter / sort</small>
+            <p>Every website I&apos;ve built, live and clickable. Filter by type, sort your way and pick the one you&apos;d like yours to be like.</p>
             <span className="u-card-actions">
               <span className="u-card-go">
-                Browse all <span aria-hidden>→</span>
+                See my work <span aria-hidden>→</span>
               </span>
             </span>
           </div>
