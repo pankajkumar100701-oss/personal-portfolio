@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
@@ -453,7 +454,7 @@ export default function MultitudesHero() {
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");
-  // The websites I've built, then the way into every website type
+  // The websites I've built (a scrolling strip of screenshot cards), then the way into every website type
   // (/explore): under the title on phones (so it's on the first screen), in
   // the bottom bar on desktop (where the cards leave no room under the title).
   // The list hides until there are projects in data/profile.ts.
@@ -465,8 +466,11 @@ export default function MultitudesHero() {
           <ul>
             {profile.projects.map((p) => (
               <li key={p.title} style={{ "--c": p.color } as CSSProperties}>
-                <a href={p.href} target="_blank" rel="noopener noreferrer">
-                  {p.title}
+                <a href={p.href} target="_blank" rel="noopener noreferrer" className="u-site-card">
+                  {p.image && (
+                    <Image src={p.image} alt="" width={168} height={105} sizes="96px" className="u-site-shot" />
+                  )}
+                  <b>{p.title}</b>
                 </a>
               </li>
             ))}
