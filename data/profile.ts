@@ -133,7 +133,7 @@ export const profile = {
       idealFor: "Car & bike rentals, equipment hire, camping gear",
     },
     {
-      n: "10", slug: "business", title: "Business / Brand", sub: "Companies / Services / Startups", x: 89, y: 27, depth: 0.88, color: "var(--m-lime)",
+      n: "10", slug: "business", title: "Business / Brand", sub: "Companies / Startups", x: 89, y: 27, depth: 0.88, color: "var(--m-lime)",
       intro: "A professional home for your business — what you do, why you, and an easy way to get in touch. The site that makes you look as good as you are.",
       points: ["Services and work that explain you in seconds", "Trust: clients, numbers, reviews", "Enquiries that land on your WhatsApp and email"],
       features: ["Services pages", "About & team", "Client logos", "Case studies", "Enquiry form", "Blog"],

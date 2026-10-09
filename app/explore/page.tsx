@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import ExploreTypes from "@/components/ExploreTypes";
 import SiteMenu from "@/components/SiteMenu";
-import { allTypes, profile } from "@/data/profile";
+import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
   title: `Explore your type — ${profile.name}`,
@@ -32,7 +32,7 @@ export default function ExplorePage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Explore your type · {allTypes.length} kinds</p>
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Explore your type · every kind</p>
           <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">
             Find the website
             <br />

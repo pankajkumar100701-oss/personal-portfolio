@@ -4,7 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage } from "@/components/MessageActions";
-import { allTypes, findType, profile } from "@/data/profile";
+import { findType, profile } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -182,7 +182,7 @@ export default function MultitudesTrack() {
               From gyms and clinics to stores and homestays: the {types.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
             </p>
             <Link href="/explore" className="u-track-work">
-              Browse all {allTypes.length} types <span aria-hidden>→</span>
+              Browse every type <span aria-hidden>→</span>
             </Link>
           </div>
           {types.map((m, i) => (
@@ -212,15 +212,15 @@ export default function MultitudesTrack() {
           ))}
           <div className="u-card u-card-all" style={{ "--c": "var(--m-lime)", ...artVars("all", "var(--m-lime)"), "--art-ink": "#0b0d10" } as CSSProperties}>
             <span className="u-card-flood" aria-hidden />
-            <Link href="/explore" className="u-card-link" aria-label={`See all ${allTypes.length} categories`} />
+            <Link href="/explore" className="u-card-link" aria-label="See all categories" />
             <span className="u-card-top">
-              <b>{allTypes.length}</b>
+              <b>All</b>
               <span className="u-card-icon" aria-hidden>
                 →
               </span>
             </span>
             <strong>See all categories</strong>
-            <small>{allTypes.length - types.length} more kinds / search / filters</small>
+            <small>Every kind / search / filters</small>
             <p>Photography, weddings, interiors, lawyers, NGOs and more: every kind of website I build, each with details and live examples.</p>
             <span className="u-card-actions">
               <span className="u-card-go">
