@@ -1,24 +1,92 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
-import { profile } from "@/data/profile";
-import { DEFAULT_PREFS, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
+import { usePathname } from "next/navigation";
+import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
+import { findType, profile } from "@/data/profile";
+import { DEFAULT_PREFS, measureFps, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
-const settings: { key: keyof Prefs; label: string; options: { value: string; label: string }[] }[] = [
+// Small line icons for the menu (24×24, stroked like ArtIcon).
+const I = {
+  home: <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />,
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="m15.5 8.5-2 5-5 2 2-5z" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+    </>
+  ),
+  chat: <path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19z" />,
+  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </>
+  ),
+  monitor: (
+    <>
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M8 20h8M12 16v4" />
+    </>
+  ),
+  text: <path d="M4 18 8.5 6l4.5 12M5.7 14h5.6M15 18l3-8 3 8M15.8 16h4.4" />,
+  motion: <path d="M3 12c3-6 6-6 9 0s6 6 9 0" />,
+  gear: (
+    <>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
+    </>
+  ),
+  flame: <path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5.5 1 1.5 2 2 2 2S10 6 12 3z" />,
+};
+const Icon = ({ d }: { d: ReactNode }) => <ArtIcon icon={d} className="menu-ico" />;
+
+const pages = [
+  { href: "/#top", match: "/", label: "Home", icon: I.home },
+  { href: "/explore", match: "/explore", label: "Explore types", icon: I.compass },
+  { href: "/work", match: "/work", label: "My work", icon: I.grid },
+  { href: "/#about", match: "", label: "About", icon: I.user },
+];
+
+const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { value: string; label: string; icon?: ReactNode }[] }[] = [
   {
     key: "theme",
     label: "Theme",
+    icon: I.moon,
     options: [
-      { value: "dark", label: "Dark" },
-      { value: "light", label: "Light" },
-      { value: "system", label: "System" },
+      { value: "dark", label: "Dark", icon: I.moon },
+      { value: "light", label: "Light", icon: I.sun },
+      { value: "system", label: "System", icon: I.monitor },
     ],
   },
   {
     key: "text",
     label: "Text size",
+    icon: I.text,
     options: [
+      { value: "small", label: "Small" },
       { value: "default", label: "Default" },
       { value: "large", label: "Large" },
     ],
@@ -26,21 +94,42 @@ const settings: { key: keyof Prefs; label: string; options: { value: string; lab
   {
     key: "motion",
     label: "Motion",
+    icon: I.motion,
     options: [
-      { value: "full", label: "Full" },
-      { value: "reduce", label: "Reduced" },
+      { value: "full", label: "🚀 Max" },
+      { value: "lite", label: "🍃 Lite" },
+      { value: "reduce", label: "🥔 Potato" },
     ],
   },
 ];
 
-// The logo doubles as the site menu: navigation, the trending website types,
-// viewer settings and contact details in one panel.
+// The menu's trending types: the first 5 of the home page's card row
+// (profile.trackTypes), so both change together.
+const trending = profile.trackTypes
+  .map(findType)
+  .filter((t) => t !== undefined)
+  .slice(0, 5);
+
+// What the measured frame rate says about this device, with a nudge toward
+// the right Motion setting.
+function fpsVerdict(fps: number): { tone: "good" | "ok" | "slow"; text: string } {
+  if (fps >= 55) return { tone: "good", text: `${fps} fps · your device is flying. Max is all yours.` };
+  if (fps >= 40) return { tone: "ok", text: `${fps} fps · pretty smooth. Try Lite if it ever stutters.` };
+  if (fps >= 25) return { tone: "slow", text: `${fps} fps · a bit out of breath. Lite will feel better.` };
+  return { tone: "slow", text: `${fps} fps · potato alert. Potato mode keeps things calm.` };
+}
+
+// The logo doubles as the site menu: navigation, the Contact page with my
+// email and WhatsApp, the top trending website types, and viewer settings
+// (with a live frame-rate check for picking a Motion level) in one panel.
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
+  const [fps, setFps] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelId = useId();
+  const pathname = usePathname();
 
   // Stored prefs are only readable in the browser; sync them in after hydration.
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -64,11 +153,25 @@ export default function SiteMenu() {
     };
   }, [open]);
 
+  // Measure the frame rate each time the menu opens (after its own opening
+  // animation), and again after a Motion change has settled.
+  const measure = () => {
+    setFps(null);
+    window.setTimeout(() => measureFps(1000).then(setFps), 400);
+  };
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (open) measure();
+  }, [open]);
+
   const update = (key: keyof Prefs, value: string) => {
     const next = { ...prefs, [key]: value } as Prefs;
     setPrefs(next);
     savePrefs(next);
+    if (key === "motion") measure();
   };
+
+  const verdict = fps === null ? null : fpsVerdict(fps);
 
   return (
     <div ref={rootRef} className="relative">
@@ -88,94 +191,105 @@ export default function SiteMenu() {
       </button>
 
       <div id={panelId} className="menu-panel" data-open={open || undefined} inert={!open}>
-        <MenuGroup title="Pages">
-          <ul className="flex flex-wrap gap-1.5">
-            <li>
-              <Link href="/#top" className="menu-chip">Home</Link>
-            </li>
-            <li>
-              <Link href="/explore" className="menu-chip">Explore types</Link>
-            </li>
-            <li>
-              <Link href="/work" className="menu-chip">My work</Link>
-            </li>
-            <li>
-              <Link href="/#about" className="menu-chip">About</Link>
-            </li>
+        <MenuGroup title="Navigation">
+          <ul className="grid grid-cols-2 gap-1.5">
+            {pages.map((p) => (
+              <li key={p.label}>
+                <Link href={p.href} className="menu-nav" aria-current={p.match === pathname ? "page" : undefined} onClick={() => setOpen(false)}>
+                  <Icon d={p.icon} />
+                  {p.label}
+                </Link>
+              </li>
+            ))}
           </ul>
-          {/* Contact is its own page, where visitors write their message to me. */}
-          <Link href="/contact" className="menu-contact">
-            <span>
-              <b>Contact</b>
-              <small>Customise your website plans &amp; send</small>
-            </span>
-            <span aria-hidden>→</span>
-          </Link>
         </MenuGroup>
 
-        <MenuGroup title="Trending websites">
-          <ul className="flex flex-wrap gap-1.5">
-            {profile.multitudes.map((m) => (
-              <li key={m.slug}>
-                <Link href={`/multitudes/${m.slug}`} className="menu-chip" style={{ "--c": m.color } as CSSProperties}>
-                  {m.title}
+        {/* Contact is its own page, where visitors write their message to me;
+            email and WhatsApp sit right under it for a quick hello. */}
+        <section className="menu-contact-card">
+          <Link href="/contact" className="menu-contact-main" onClick={() => setOpen(false)}>
+            <span>
+              <small className="menu-eyebrow">
+                <i className="u-live" aria-hidden /> Let&apos;s connect
+              </small>
+              <b>Contact</b>
+              <span className="menu-contact-sub">Customise your website plans &amp; send me a message.</span>
+            </span>
+            <span className="menu-contact-go" aria-hidden>
+              <Icon d={I.arrow} />
+            </span>
+          </Link>
+          <div className="menu-contact-row">
+            <a href={`mailto:${profile.contact.email}`} title={profile.contact.email}>
+              <Icon d={I.mail} /> Email
+            </a>
+            <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer">
+              <Icon d={I.chat} /> WhatsApp
+            </a>
+          </div>
+        </section>
+
+        <MenuGroup
+          title="Trending websites"
+          icon={I.flame}
+          action={
+            <Link href="/explore" className="menu-viewall" onClick={() => setOpen(false)}>
+              View all →
+            </Link>
+          }
+        >
+          <ul className="grid grid-cols-2 gap-1.5">
+            {trending.map((t) => (
+              <li key={t.slug}>
+                <Link
+                  href={`/multitudes/${t.slug}`}
+                  className="menu-type"
+                  style={{ "--c": t.color, ...artVars(t.slug, t.color) } as CSSProperties}
+                  onClick={() => setOpen(false)}
+                >
+                  <ArtIcon icon={artIcon(t.slug)} className="menu-ico" />
+                  {t.title}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/explore" className="menu-chip">
-                All types →
+              <Link href="/explore" className="menu-type menu-type-more" onClick={() => setOpen(false)}>
+                <Icon d={I.grid} />
+                Explore more
+                <span aria-hidden className="ml-auto">→</span>
               </Link>
             </li>
           </ul>
         </MenuGroup>
 
-        <MenuGroup title="Settings">
-          <div className="space-y-2.5">
+        <MenuGroup title="Settings" icon={I.gear}>
+          <div className="space-y-2">
             {settings.map((s) => (
-              <div key={s.key} className="flex items-center justify-between gap-3">
-                <span className="text-sm text-fg/70">{s.label}</span>
+              <div key={s.key} className="menu-setting">
+                <span className="menu-setting-label">
+                  <span className="menu-setting-ico">
+                    <Icon d={s.icon} />
+                  </span>
+                  {s.label}
+                </span>
                 <div role="radiogroup" aria-label={s.label} className="menu-segment">
                   {s.options.map((o) => (
-                    <button
-                      key={o.value}
-                      type="button"
-                      role="radio"
-                      aria-checked={prefs[s.key] === o.value}
-                      onClick={() => update(s.key, o.value)}
-                    >
+                    <button key={o.value} type="button" role="radio" aria-checked={prefs[s.key] === o.value} onClick={() => update(s.key, o.value)}>
+                      {o.icon && <Icon d={o.icon} />}
                       {o.label}
                     </button>
                   ))}
                 </div>
               </div>
             ))}
+            <p className="menu-fps" data-tone={verdict?.tone} aria-live="polite">
+              <i aria-hidden />
+              {verdict ? verdict.text : "Measuring your device…"}
+            </p>
           </div>
         </MenuGroup>
 
-        <MenuGroup title="Get in touch">
-          <ul className="flex flex-wrap gap-1.5">
-            <li>
-              <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="menu-chip">
-                WhatsApp ↗
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${profile.contact.email}`} className="menu-chip" title={profile.contact.email}>
-                Email ↗
-              </a>
-            </li>
-            {profile.contact.links.map((l) => (
-              <li key={l.label}>
-                <a href={l.href} target="_blank" rel="noopener noreferrer" className="menu-chip">
-                  {l.label} ↗
-                </a>
-              </li>
-            ))}
-          </ul>
-        </MenuGroup>
-
-        <p className="px-1 pt-1 text-xs text-fg/45">
+        <p className="px-1 text-xs text-fg/45">
           {profile.role} · {profile.location}
         </p>
       </div>
@@ -183,10 +297,14 @@ export default function SiteMenu() {
   );
 }
 
-function MenuGroup({ title, children }: { title: string; children: React.ReactNode }) {
+function MenuGroup({ title, icon, action, children }: { title: string; icon?: ReactNode; action?: ReactNode; children: ReactNode }) {
   return (
     <section className="border-b border-fg/10 pb-4">
-      <h2 className="mb-2.5 px-1 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-fg/45">{title}</h2>
+      <h2 className="mb-2.5 flex items-center gap-2 px-1 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-fg/45">
+        {icon && <ArtIcon icon={icon} className="menu-ico menu-ico-acid" />}
+        {title}
+        {action && <span className="ml-auto normal-case tracking-normal">{action}</span>}
+      </h2>
       {children}
     </section>
   );

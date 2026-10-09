@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { LITE_KEY } from "@/lib/prefs";
+import { LITE_KEY, motionChosen } from "@/lib/prefs";
 
 const SAMPLE_MS = 1500;
 const MAX_PROBES = 6;
@@ -15,7 +15,8 @@ const MAX_PROBES = 6;
 export default function PerfGuard() {
   useEffect(() => {
     const html = document.documentElement;
-    if (html.hasAttribute("data-lite")) return;
+    // Already lite, or the viewer picked a motion level in the menu.
+    if (html.hasAttribute("data-lite") || motionChosen()) return;
 
     const enable = () => {
       html.setAttribute("data-lite", "");
