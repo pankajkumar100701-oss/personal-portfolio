@@ -382,6 +382,36 @@ body {
 .menu-segment button .menu-ico { width: 0.8rem; height: 0.8rem; }
 /* The live frame-rate check under the settings. */
 .menu-fps { display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.6rem; border-radius: 0.6rem; background: color-mix(in srgb, var(--foreground) 5%, transparent); font-size: 0.6875rem; line-height: 1.35; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
+.menu-fps { flex-wrap: wrap; }
+.menu-fps > span { flex: 1 1 8rem; }
+/* "Pin" toggle switch at the end of the FPS row. */
+.menu-switch { display: inline-flex; align-items: center; gap: 0.35rem; margin-left: auto; font-size: 0.6875rem; font-weight: 600; color: color-mix(in srgb, var(--foreground) 75%, transparent); cursor: pointer; }
+.menu-switch .menu-ico { width: 0.8rem; height: 0.8rem; }
+.menu-switch > span { position: relative; width: 1.9rem; height: 1.05rem; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 18%, transparent); transition: background 0.2s; }
+.menu-switch > span::after { content: ""; position: absolute; top: 0.15rem; left: 0.15rem; width: 0.75rem; height: 0.75rem; border-radius: 50%; background: #fff; transition: translate 0.2s; }
+.menu-switch[aria-checked="true"] { color: var(--foreground); }
+.menu-switch[aria-checked="true"] > span { background: var(--u-acid); }
+.menu-switch[aria-checked="true"] > span::after { translate: 0.85rem 0; }
+.menu-switch:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; border-radius: 0.4rem; }
+/* The pinned live FPS, fixed top-left under the logo. */
+.fps-badge { position: fixed; top: 4.25rem; left: 1rem; z-index: 60; display: flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent); border-radius: 999px; background: var(--panel-bg); font-family: var(--font-sans); font-size: 0.6875rem; color: color-mix(in srgb, var(--foreground) 65%, transparent); pointer-events: none; }
+.fps-badge b { min-width: 1.4rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.fps-badge i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }
+.fps-badge[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+.fps-badge[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
+.fps-badge[data-tone="slow"] i { background: #fb7185; box-shadow: 0 0 8px #fb7185; }
+/* "Get in touch": WhatsApp and email as two buttons. */
+.menu-touch { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem; border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent); border-radius: 0.8rem; font-size: 0.8125rem; font-weight: 600; color: var(--foreground); transition: background 0.2s, border-color 0.2s, translate 0.2s; }
+.menu-touch .menu-ico { width: 1.1rem; height: 1.1rem; color: var(--u-acid); }
+.menu-touch-wa .menu-ico { color: #25d366; }
+.menu-touch:hover { translate: 0 -1px; border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 10%, transparent); }
+.menu-touch-wa:hover { border-color: #25d366; background: rgb(37 211 102 / 0.1); }
+.menu-touch:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+/* Dark theme: the menu takes the reference's warm orange accent (inside the
+   menu only; the rest of the site keeps its lime). */
+:root:not([data-theme="light"]) .menu-panel { --u-acid: #fb7a1f; }
+.menu-panel .u-live, .menu-panel .u-live::after { background: var(--u-acid); }
+.menu-panel .menu-segment button[aria-checked="true"] { background: var(--u-acid); color: #fff; box-shadow: 0 0 16px -4px var(--u-acid); }
 .menu-fps b { min-width: 1.6rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .menu-fps span { margin-left: 0.25rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
 .menu-fps i { flex: none; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }

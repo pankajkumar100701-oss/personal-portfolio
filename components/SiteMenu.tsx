@@ -36,7 +36,8 @@ const I = {
       <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
     </>
   ),
-  chat: <path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19z" />,
+  pin: <path d="M9 4h6l-1 5 3 3v2H7v-2l3-3zM12 14v6" />,
+  chat2: <path d="M4 5h16v11H9l-5 4z" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   moon: <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z" />,
   sun: (
@@ -81,6 +82,15 @@ const I = {
   flame: <path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5.5 1 1.5 2 2 2 2S10 6 12 3z" />,
 };
 const Icon = ({ d }: { d: ReactNode }) => <ArtIcon icon={d} className="menu-ico" />;
+
+// WhatsApp's logo (filled, unlike the line icons above).
+const WhatsAppLogo = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="menu-ico" aria-hidden>
+    <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.8 9.8 0 0 1-5-1.37l-.36-.21-3.72.98 1-3.63-.24-.37a9.8 9.8 0 1 1 8.33 4.6zm8.34-18.13A11.8 11.8 0 0 0 12.04.2C5.5.2.17 5.53.17 12.08c0 2.1.55 4.13 1.59 5.93L.07 24.2l6.33-1.66a11.8 11.8 0 0 0 5.65 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.24-6.16-3.48-8.4z" />
+  </svg>
+);
+
+const PIN_KEY = "fps-pin";
 
 const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
@@ -139,21 +149,29 @@ function fpsVerdict(fps: number): { tone: "good" | "ok" | "slow"; text: string }
   return { tone: "slow", text: "Struggling here. Lite keeps things calm." };
 }
 
-// The logo doubles as the site menu: navigation, the Contact page with my
-// email and WhatsApp, the top trending website types, and viewer settings
-// (with a live frame-rate check for picking a Motion level) in one panel.
+// The logo doubles as the site menu: navigation, the Contact page, the top
+// trending website types, viewer settings (with a live frame-rate check for
+// picking a Motion level, which can be pinned on screen) and my WhatsApp and
+// email, in one panel.
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
   const [fps, setFps] = useState<number | null>(null);
+  // "Pin": keep the live frame rate on screen (top-left) with the menu closed.
+  const [pinned, setPinned] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelId = useId();
   const pathname = usePathname();
 
   // Stored prefs are only readable in the browser; sync them in after hydration.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => setPrefs(readPrefs()), []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPrefs(readPrefs());
+    try {
+      setPinned(localStorage.getItem(PIN_KEY) === "1");
+    } catch {}
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -173,10 +191,11 @@ export default function SiteMenu() {
     };
   }, [open]);
 
-  // A live frame-rate readout while the menu is open, refreshed twice a
-  // second (so a Motion change shows its effect right away).
+  // A live frame-rate readout while the menu is open (or pinned), refreshed
+  // twice a second, so a Motion change shows its effect right away.
+  const live = open || pinned;
   useEffect(() => {
-    if (!open) return;
+    if (!live) return;
     let alive = true;
     const loop = (): void => {
       measureFps(500).then((f) => {
@@ -190,7 +209,16 @@ export default function SiteMenu() {
       alive = false;
       setFps(null);
     };
-  }, [open]);
+  }, [live]);
+
+  const togglePin = () => {
+    const next = !pinned;
+    setPinned(next);
+    try {
+      if (next) localStorage.setItem(PIN_KEY, "1");
+      else localStorage.removeItem(PIN_KEY);
+    } catch {}
+  };
 
   const update = (key: keyof Prefs, value: string) => {
     const next = { ...prefs, [key]: value } as Prefs;
@@ -231,8 +259,7 @@ export default function SiteMenu() {
           </ul>
         </MenuGroup>
 
-        {/* Contact is its own page, where visitors write their message to me;
-            email and WhatsApp sit right under it for a quick hello. */}
+        {/* Contact is its own page, where visitors write their message to me. */}
         <section className="menu-contact-card">
           <Link href="/contact" className="menu-contact-main" onClick={() => setOpen(false)}>
             <span>
@@ -246,14 +273,6 @@ export default function SiteMenu() {
               <Icon d={I.arrow} />
             </span>
           </Link>
-          <div className="menu-contact-row">
-            <a href={`mailto:${profile.contact.email}`} title={profile.contact.email}>
-              <Icon d={I.mail} /> Email
-            </a>
-            <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer">
-              <Icon d={I.chat} /> WhatsApp
-            </a>
-          </div>
         </section>
 
         <MenuGroup
@@ -309,11 +328,29 @@ export default function SiteMenu() {
                 </div>
               </div>
             ))}
-            <p className="menu-fps" data-tone={verdict?.tone}>
+            <div className="menu-fps" data-tone={verdict?.tone}>
               <i aria-hidden />
               <b>{fps ?? "··"}</b> fps
               <span>{verdict ? verdict.text : "Measuring your device…"}</span>
-            </p>
+              <button type="button" role="switch" aria-checked={pinned} onClick={togglePin} className="menu-switch" title="Keep the live FPS on screen">
+                <Icon d={I.pin} />
+                Pin
+                <span aria-hidden />
+              </button>
+            </div>
+          </div>
+        </MenuGroup>
+
+        <MenuGroup title="Get in touch" icon={I.chat2}>
+          <div className="grid grid-cols-2 gap-1.5">
+            <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="menu-touch menu-touch-wa">
+              <WhatsAppLogo />
+              WhatsApp
+            </a>
+            <a href={`mailto:${profile.contact.email}`} title={profile.contact.email} className="menu-touch">
+              <Icon d={I.mail} />
+              Email
+            </a>
           </div>
         </MenuGroup>
 
@@ -321,6 +358,14 @@ export default function SiteMenu() {
           {profile.role} · {profile.location}
         </p>
       </div>
+
+      {/* The pinned live FPS, top-left, while the menu is closed. */}
+      {pinned && !open && (
+        <p className="fps-badge" data-tone={verdict?.tone} aria-hidden>
+          <i />
+          <b>{fps ?? "··"}</b> fps
+        </p>
+      )}
     </div>
   );
 }
