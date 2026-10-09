@@ -156,7 +156,8 @@ function fpsVerdict(fps: number): { tone: "good" | "ok" | "slow"; text: string }
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
-  const [fps, setFps] = useState<number | null>(null);
+  // Live frame rate: `fps` shown on screen, `capacity` with no cap (see measureFps).
+  const [fps, setFps] = useState<{ fps: number; capacity: number } | null>(null);
   // "Pin": keep the live frame rate on screen (top-left) with the menu closed.
   const [pinned, setPinned] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -226,7 +227,7 @@ export default function SiteMenu() {
     savePrefs(next);
   };
 
-  const verdict = fps === null ? null : fpsVerdict(fps);
+  const verdict = fps === null ? null : fpsVerdict(fps.fps);
 
   return (
     <div ref={rootRef} className="relative">
@@ -330,8 +331,11 @@ export default function SiteMenu() {
             ))}
             <div className="menu-fps" data-tone={verdict?.tone}>
               <i aria-hidden />
-              <b>{fps ?? "··"}</b> fps
-              <span>{verdict ? verdict.text : "Measuring your device…"}</span>
+              <b>{fps?.capacity ?? "··"}</b> fps
+              <span>
+                {verdict ? verdict.text : "Measuring your device…"}
+                {fps && <small className="menu-fps-screen"> Screen shows {fps.fps}.</small>}
+              </span>
               <button type="button" role="switch" aria-checked={pinned} onClick={togglePin} className="menu-switch" title="Keep the live FPS on screen">
                 <Icon d={I.pin} />
                 Pin
@@ -363,7 +367,7 @@ export default function SiteMenu() {
       {pinned && !open && (
         <p className="fps-badge" data-tone={verdict?.tone} aria-hidden>
           <i />
-          <b>{fps ?? "··"}</b> fps
+          <b>{fps?.capacity ?? "··"}</b> fps
         </p>
       )}
     </div>

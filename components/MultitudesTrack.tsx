@@ -135,11 +135,11 @@ export default function MultitudesTrack() {
       onScroll();
     };
 
-    // Without the pinned row (phones, reduced motion) there's no hover: the
-    // card snapped into view gets the hover look instead.
+    // Phones have no hover: the card snapped into view gets the hover look
+    // instead. (Wide screens in Lite show every card at once, so none.)
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) (e.target as HTMLElement).toggleAttribute("data-active", !active() && e.intersectionRatio > 0.7);
+        for (const e of entries) (e.target as HTMLElement).toggleAttribute("data-active", !wide.matches && e.intersectionRatio > 0.7);
       },
       { root: row, threshold: [0, 0.7, 1] },
     );

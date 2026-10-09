@@ -396,7 +396,7 @@ body {
 .menu-switch:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; border-radius: 0.4rem; }
 /* The pinned live FPS, fixed top-left under the logo. */
 .fps-badge { position: fixed; top: 4.25rem; left: 1rem; z-index: 60; display: flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent); border-radius: 999px; background: var(--panel-bg); font-family: var(--font-sans); font-size: 0.6875rem; color: color-mix(in srgb, var(--foreground) 65%, transparent); pointer-events: none; }
-.fps-badge b { min-width: 1.4rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.fps-badge b { min-width: 2rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .fps-badge i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }
 .fps-badge[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
 .fps-badge[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
@@ -415,7 +415,8 @@ body {
 /* The picked option: a soft orange tint with an orange edge, not a solid fill. */
 .menu-panel .menu-segment button[aria-checked="true"] { background: color-mix(in srgb, var(--u-acid) 18%, transparent); color: var(--foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-acid) 70%, transparent); }
 .menu-panel .menu-segment button[aria-checked="true"] .menu-ico { color: var(--u-acid); }
-.menu-fps b { min-width: 1.6rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.menu-fps-screen { font-size: inherit; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
+.menu-fps b { min-width: 2.2rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .menu-fps span { margin-left: 0.25rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
 .menu-fps i { flex: none; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }
 .menu-fps[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
@@ -1333,17 +1334,48 @@ body {
   .menu-panel, .m-concept { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .m-concept { background: rgb(0 0 0 / 0.75); }
 }
-@media (min-width: 800px) {
-  :root[data-motion="reduce"] .u-section { height: 100svh; }
-  :root[data-motion="reduce"] .u-readout { display: none; }
-  :root[data-motion="reduce"] .u-bottom > span:first-child { visibility: hidden; }
-}
 
-/* Slow machines (components/PerfGuard.tsx): drop the idle decoration that
-   costs every frame but carries no content, so the dive and the card row stay
-   smooth. Nothing moves in the layout; the glows just hold still. */
-:root[data-lite] :is(.u-orb, .u-halo, .u-node, .portal-x-mark) { animation: none; will-change: auto; }
-:root[data-lite] :is(.u-grain, .u-spot, .portal-x::after) { display: none; }
+/* Motion: Standard (data-lite; also set by PerfGuard on slow machines).
+   Same layout and the same scroll animations (the dive, the card row), with
+   about half the motion: the glows hold still, only every other floating
+   card drifts, the cards' cursor tilt and spotlight are off, and the grain,
+   cursor light and panel blurs are gone. */
+:root[data-lite] :is(.u-orb, .u-halo, .portal-x-mark, .u-copy h1 em) { animation: none; will-change: auto; }
+:root[data-lite] .u-node:nth-child(odd) { animation: none; }
+:root[data-lite] :is(.u-grain, .u-spot, .portal-x::after, .u-node > *::before, .u-node > *::after) { display: none; }
+:root[data-lite] .u-node:is(:hover, :focus-within) > * { transform: none; }
+:root[data-lite] :is(.menu-panel, .m-concept, .u-node > *) { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+/* Motion: Lite (data-motion="reduce") on wider screens: a different, simpler
+   page. No camera or dive: the hero stacks like on phones (title, my sites,
+   buttons, then the twelve types as a plain grid), the card row becomes a
+   wrapped grid, and every decorative layer (grain, glows, orbits, cursor
+   light, blurs) is gone. Easy to read, nothing to wait for. */
+@media (min-width: 800px) {
+  :root[data-motion="reduce"] .u-section { height: auto; }
+  :root[data-motion="reduce"] .u-stage { position: relative; height: auto; min-height: 0; padding: 7rem 2rem 4rem; }
+  :root[data-motion="reduce"] .u-scene { position: static; mask: none; }
+  :root[data-motion="reduce"] .u-camera { position: relative; display: block; perspective: none; }
+  :root[data-motion="reduce"] .u-world { width: 100%; max-width: 72rem; height: auto; margin-inline: auto; transform: none !important; }
+  :root[data-motion="reduce"] :is(.u-orbit, .u-micro, .u-bottom, .u-vignette, .u-grain, .u-spot, .u-orb, .u-halo, .u-portal, .u-arrive) { display: none; }
+  :root[data-motion="reduce"] .u-copy { position: relative; left: auto; top: auto; transform: none !important; white-space: normal; text-align: center; }
+  :root[data-motion="reduce"] .u-copy h1 { font-size: clamp(4.5rem, 9vw, 7.5rem); }
+  :root[data-motion="reduce"] .u-sites-mobile { display: flex; flex-direction: column; align-items: center; gap: 0.625rem; margin-top: 1.5rem; }
+  :root[data-motion="reduce"] .u-sites-mobile ul { max-width: none; }
+  :root[data-motion="reduce"] .u-mobile-cta { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.75rem; font-family: var(--font-sans); }
+  :root[data-motion="reduce"] .u-nodes { position: relative; inset: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 3.5rem; }
+  :root[data-motion="reduce"] .u-node { position: relative; left: auto; top: auto; transform: none !important; animation: none; }
+  :root[data-motion="reduce"] .u-node > * { width: auto; min-width: 0; height: 100%; padding: 1rem 1.1rem; backdrop-filter: none; background: var(--u-card); }
+  :root[data-motion="reduce"] .u-node strong, :root[data-motion="reduce"] .u-node small { white-space: normal; }
+  :root[data-motion="reduce"] .u-node > *::before, :root[data-motion="reduce"] .u-node > *::after { display: none; }
+  :root[data-motion="reduce"] .u-node:is(:hover, :focus-within) > * { transform: none; scale: 1; }
+  :root[data-motion="reduce"] .u-track .u-track-row { flex-wrap: wrap; row-gap: 0.875rem; justify-content: center; overflow: visible; scroll-snap-type: none; max-width: 76rem; margin-inline: auto; padding-inline: 2rem; }
+  :root[data-motion="reduce"] .u-track .u-track-intro { width: 100%; margin: 0 0 1.5rem; text-align: center; scroll-snap-align: none; }
+  :root[data-motion="reduce"] .u-track-intro .u-track-hint { margin-inline: auto; }
+  :root[data-motion="reduce"] .u-track .u-card { width: calc((100% - 2 * 0.875rem) / 3); height: auto; min-height: 20rem; transform: none; translate: none; rotate: none; scale: none; opacity: 1; animation: none; }
+  :root[data-motion="reduce"] .u-card:is(:hover, :focus-within) { transform: none; }
+  :root[data-motion="reduce"] :is(.menu-panel, .m-concept) { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
 
 /* ---------- Page-to-page portal (components/PortalTransition.tsx) ---------- */
 /* A multitude-coloured cover that floods out of the clicked link, then opens

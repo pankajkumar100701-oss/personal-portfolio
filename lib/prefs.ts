@@ -55,17 +55,41 @@ export function applyPrefs(p: Prefs) {
   }
 }
 
-// Frames per second over `ms`, as this page is running right now (so it
-// reflects both the device and what the page is animating).
-export function measureFps(ms = 1000): Promise<number> {
+// How this page is running right now, over `ms`:
+// - `fps`: frames actually shown. Browsers draw at most once per screen
+//   refresh, so this tops out at the screen's rate (60, 120, 144…).
+// - `capacity`: frames this device could make with no cap. Each frame, a
+//   message posted from requestAnimationFrame arrives once that frame's work
+//   (scripts, style, layout, paint) is done; 1000 / that work time is how
+//   many such frames would fit in a second. Not capped, so a fast PC shows
+//   hundreds; it covers the main thread, not the GPU.
+export function measureFps(ms = 1000): Promise<{ fps: number; capacity: number }> {
   return new Promise((resolve) => {
     let frames = 0;
     let start = 0;
+    let work = 0;
+    let samples = 0;
+    let frameStart = 0;
+    const channel = new MessageChannel();
+    channel.port1.onmessage = () => {
+      work += performance.now() - frameStart;
+      samples++;
+    };
     const tick = (now: number) => {
       if (!start) start = now;
       else frames++;
-      if (now - start < ms) requestAnimationFrame(tick);
-      else resolve(Math.round((frames * 1000) / (now - start)));
+      if (now - start < ms) {
+        frameStart = performance.now();
+        channel.port2.postMessage(0);
+        requestAnimationFrame(tick);
+        return;
+      }
+      channel.port1.close();
+      const fps = Math.round((frames * 1000) / (now - start));
+      // At least a quarter of a millisecond a frame: below that the timer's
+      // own resolution is the limit, not the device.
+      const avg = Math.max(0.25, samples ? work / samples : 1000 / Math.max(fps, 1));
+      resolve({ fps, capacity: Math.max(fps, Math.round(1000 / avg)) });
     };
     requestAnimationFrame(tick);
   });
