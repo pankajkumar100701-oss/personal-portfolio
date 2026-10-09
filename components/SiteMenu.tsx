@@ -92,9 +92,8 @@ const WhatsAppLogo = () => (
 
 const PIN_KEY = "fps-pin";
 // The range the FPS readout stays within for each Motion level (the lighter
-// the mode, the higher it reads). The device's uncapped frame rate is placed
-// inside it on a log scale (20 fps at the bottom, 1000 at the top), so the
-// number keeps moving with the device instead of sticking to an end.
+// the mode, the higher it reads). Where it sits inside comes from fpsScore:
+// the bottom means struggling (red), the top means smooth (green).
 const FPS_RANGE: Record<Prefs["motion"], [number, number]> = { reduce: [400, 500], lite: [300, 400], full: [200, 300] };
 
 const pages = [
@@ -145,13 +144,22 @@ const trending = profile.trackTypes
   .filter((t) => t !== undefined)
   .slice(0, 6);
 
-// What the measured frame rate says about this device, with a nudge toward
-// the right Motion setting.
-function fpsVerdict(fps: number): { tone: "good" | "ok" | "slow"; text: string } {
-  if (fps >= 55) return { tone: "good", text: "Running smoothly. Max is all yours." };
-  if (fps >= 40) return { tone: "ok", text: "Pretty smooth. Try Standard if it stutters." };
-  if (fps >= 25) return { tone: "slow", text: "A bit out of breath. Standard will feel better." };
-  return { tone: "slow", text: "Struggling here. Lite keeps things calm." };
+// How well this device is running the page, 0–1: mostly how close the frames
+// shown come to the screen's refresh rate (smoothness, what you actually
+// feel), plus a little of the uncapped capacity (headroom). The FPS number,
+// its colour and the advice all come from this one score, so they agree.
+function fpsScore(fps: number, capacity: number, refresh: number) {
+  const smooth = Math.min(1, fps / refresh);
+  const headroom = Math.min(1, Math.max(0, Math.log(capacity / 20) / Math.log(1000 / 20)));
+  return 0.75 * smooth + 0.25 * headroom;
+}
+
+// The score as a colour and a line of advice for the current Motion level.
+function fpsVerdict(score: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
+  if (score >= 0.8) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
+  if (score >= 0.6) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
+  if (motion === "reduce") return { tone: "slow", text: "This device is working hard. Lite is the lightest it gets." };
+  return { tone: "slow", text: motion === "full" ? "A bit out of breath. Standard will feel better." : "Still heavy here. Lite will feel better." };
 }
 
 // The logo doubles as the site menu: navigation, the Contact page, the top
@@ -163,6 +171,7 @@ export default function SiteMenu() {
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
   // Live frame rate: `fps` shown on screen, `capacity` with no cap (see measureFps).
   const [fps, setFps] = useState<{ fps: number; capacity: number } | null>(null);
+  const [refresh, setRefresh] = useState(60);
   // "Pin": keep the live frame rate on screen (top-left) with the menu closed.
   const [pinned, setPinned] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -206,6 +215,9 @@ export default function SiteMenu() {
     const loop = (): void => {
       measureFps(500).then((f) => {
         if (!alive) return;
+        // The screen's refresh rate: the most frames ever shown in a second
+        // here (at least 60), rounded to a common rate.
+        setRefresh((r) => Math.max(r, [60, 75, 90, 120, 144, 165, 240].find((hz) => f.fps <= hz + 4) ?? f.fps));
         setFps(f);
         loop();
       });
@@ -232,10 +244,10 @@ export default function SiteMenu() {
     savePrefs(next, key === "motion" || motionChosen());
   };
 
-  const verdict = fps === null ? null : fpsVerdict(fps.fps);
   const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
-  const level = fps === null ? 0 : Math.min(1, Math.max(0, Math.log(fps.capacity / 20) / Math.log(1000 / 20)));
-  const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * level);
+  const score = fps === null ? 0 : fpsScore(fps.fps, fps.capacity, refresh);
+  const verdict = fps === null ? null : fpsVerdict(score, prefs.motion);
+  const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * score);
 
   return (
     <div ref={rootRef} className="relative">
