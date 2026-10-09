@@ -293,6 +293,19 @@ export const profile = {
       year: "2026",
       highlights: ["Subjects · 8 streams", "Tutor profiles", "Free demo booking", "How it works", "Quiz", "FAQ"],
     },
+    {
+      title: "IronForge Fitness",
+      description: "A bold, high-energy site for a modern gym — programs, coaches, a weekly class schedule and a free trial booking.",
+      tags: ["Next.js", "Schedule", "BMI Calculator", "Bookings"],
+      href: "https://gym-ten-pink.vercel.app/",
+      color: "#c6ff00",
+      multitude: "fitness",
+      image: "/work/ironforge-fitness.webp",
+      year: "2026",
+      concept: true,
+      client: "a fictional gym in Noida",
+      highlights: ["Programs · 6 types", "Trainer profiles", "Class schedule", "BMI calculator", "Transformations", "FAQ"],
+    },
   ] as Project[],
   // Reviews from real clients, shown on the home page (an invitation to leave
   // one shows while this is empty). e.g.
