@@ -1514,27 +1514,6 @@ body {
 .u-sites .u-sites-explore::before { display: none; }
 .u-sites .u-sites-explore:hover { border-color: transparent; color: var(--u-bg); box-shadow: 0 8px 22px -10px var(--u-acid); }
 [data-theme="light"] .u-sites .u-sites-explore:hover { color: #fff; }
-/* Hero: the websites I've built as a scrolling strip of screenshot cards. */
-.u-sites ul { flex-wrap: nowrap; justify-content: flex-start; max-width: min(56vw, 760px); overflow-x: auto; padding: 0.25rem 0.125rem; scrollbar-width: none; scroll-snap-type: x proximity; mask-image: linear-gradient(90deg, transparent, #000 0.75rem, #000 calc(100% - 1.5rem), transparent); }
-.u-sites ul::-webkit-scrollbar { display: none; }
-.u-sites li { flex: none; scroll-snap-align: start; }
-.u-sites .u-site-card { flex-direction: column; align-items: stretch; gap: 0.3rem; width: 7rem; padding: 0.25rem; border-radius: 0.625rem; }
-.u-sites .u-site-card::before { display: none; }
-.u-site-shot { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-radius: 0.4rem; background: var(--u-line); }
-.u-sites .u-site-card b { display: flex; align-items: center; gap: 0.3rem; padding: 0 0.15rem 0.1rem; overflow: hidden; font-size: 0.625rem; font-weight: 500; white-space: nowrap; text-overflow: ellipsis; }
-.u-sites .u-site-card b::before { content: ""; flex: none; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--c); }
-.u-sites .u-site-card:hover { translate: 0 -2px; }
-.u-sites .u-site-more { justify-content: center; align-self: stretch; height: 100%; color: var(--u-acid); font-weight: 600; text-align: center; }
-.u-sites .u-site-more b { flex-direction: column; justify-content: center; height: 100%; white-space: normal; font-size: 0.6875rem; font-weight: 600; }
-.u-sites .u-site-more b::before { display: none; }
-.u-sites li:has(.u-site-more) { display: flex; }
-@media (max-width: 799px) {
-  .u-sites-mobile ul { max-width: 100%; }
-  .u-sites-mobile .u-site-card { width: 7.5rem; }
-}
-@media (min-width: 800px) and (max-height: 800px) {
-  .u-sites .u-site-card { width: 6rem; }
-}
 @media (max-width: 799px) {
   .u-sites-mobile .u-sites-explore { align-self: stretch; justify-content: center; margin-top: 0.5rem; padding: 0.7rem 1.3rem; font-size: 0.875rem; }
 }

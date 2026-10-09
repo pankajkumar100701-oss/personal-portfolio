@@ -38,7 +38,6 @@ const settings: { key: keyof Prefs; label: string; options: { value: string; lab
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
-  const [copied, setCopied] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelId = useId();
@@ -69,14 +68,6 @@ export default function SiteMenu() {
     const next = { ...prefs, [key]: value } as Prefs;
     setPrefs(next);
     savePrefs(next);
-  };
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(profile.contact.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
-    } catch {}
   };
 
   return (
@@ -163,18 +154,15 @@ export default function SiteMenu() {
         </MenuGroup>
 
         <MenuGroup title="Get in touch">
-          <div className="flex items-center gap-2">
-            <a href={`mailto:${profile.contact.email}`} className="menu-link min-w-0 flex-1 truncate">
-              {profile.contact.email}
-            </a>
-            <button type="button" onClick={copyEmail} className="menu-chip shrink-0" aria-live="polite">
-              {copied ? "Copied" : "Copy"}
-            </button>
-          </div>
-          <ul className="mt-2 flex flex-wrap gap-1.5">
+          <ul className="flex flex-wrap gap-1.5">
             <li>
               <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="menu-chip">
                 WhatsApp ↗
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${profile.contact.email}`} className="menu-chip" title={profile.contact.email}>
+                Email ↗
               </a>
             </li>
             {profile.contact.links.map((l) => (
