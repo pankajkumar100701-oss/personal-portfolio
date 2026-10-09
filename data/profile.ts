@@ -350,6 +350,19 @@ export const profile = {
       client: "a fictional homestay platform",
       highlights: ["Stay search", "8 stay types", "Popular destinations", "13 listings", "Wishlist", "Become a host"],
     },
+    {
+      title: "Aurelia Salon & Spa",
+      description: "A soft, elegant site for a unisex salon — a full service menu, stylist profiles, bridal looks and easy appointment booking.",
+      tags: ["Next.js", "Services", "Stylists", "Bookings"],
+      href: "https://salon-virid-six.vercel.app/",
+      color: "#b0705a",
+      multitude: "salon",
+      image: "/work/aurelia-salon.webp",
+      year: "2026",
+      concept: true,
+      client: "a fictional salon in Gurugram",
+      highlights: ["Service menu · 6 types", "Stylist profiles", "Bridal", "Lookbook", "FAQ", "Appointment booking"],
+    },
   ] as Project[],
   // The trending websites shown in the hero (max 5): titles from `projects`
   // above, in order. Swap any title here to change what the hero shows; the
