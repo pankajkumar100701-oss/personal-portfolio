@@ -61,6 +61,13 @@ const I = {
     </>
   ),
   // Speedometers for the Motion levels: needle low, middle, high.
+  gauge: (
+    <>
+      <path d="M4 17a8 8 0 1 1 16 0" />
+      <path d="M12 17l3-5" />
+      <circle cx="12" cy="17" r="1" />
+    </>
+  ),
   gaugeLow: (
     <>
       <path d="M4 17a8 8 0 1 1 16 0" />
@@ -172,6 +179,7 @@ export default function SiteMenu() {
   // Live frame rate: `fps` shown on screen, `capacity` with no cap (see measureFps).
   const [fps, setFps] = useState<{ fps: number; capacity: number } | null>(null);
   const [refresh, setRefresh] = useState(60);
+  const [perfOpen, setPerfOpen] = useState(false);
   // "Pin": keep the live frame rate on screen (top-left) with the menu closed.
   const [pinned, setPinned] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -208,7 +216,9 @@ export default function SiteMenu() {
 
   // A live frame-rate readout while the menu is open (or pinned), refreshed
   // twice a second, so a Motion change shows its effect right away.
-  const live = open || pinned;
+  // Measured only while someone can see it: the Performance fold is open,
+  // or the FPS is pinned on screen.
+  const live = (open && perfOpen) || pinned;
   useEffect(() => {
     if (!live) return;
     let alive = true;
@@ -247,6 +257,8 @@ export default function SiteMenu() {
   const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
   const score = fps === null ? 0 : fpsScore(fps.fps, fps.capacity, refresh);
   const verdict = fps === null ? null : fpsVerdict(score, prefs.motion);
+  // The picked Motion level, shown on the folded Performance row.
+  const motionLabel = motionSetting.options.find((o) => o.value === prefs.motion)?.label;
   const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * score);
 
   return (
@@ -324,37 +336,39 @@ export default function SiteMenu() {
 
         <MenuGroup title="Settings" icon={I.gear}>
           <div className="space-y-2">
-            {settings.map((s) => (
-              <div key={s.key} className="menu-setting">
-                <span className="menu-setting-label">
-                  <span className="menu-setting-ico">
-                    <Icon d={s.icon} />
-                  </span>
-                  {s.label}
+            {settings
+              .filter((s) => s.key !== "motion")
+              .map((s) => (
+                <Setting key={s.key} s={s} value={prefs[s.key]} onPick={(v) => update(s.key, v)} />
+              ))}
+            {/* Motion and the live FPS are for the curious: folded away
+                under "Performance" so the menu stays simple for everyone else. */}
+            <details className="menu-perf" open={perfOpen} onToggle={(e) => setPerfOpen(e.currentTarget.open)}>
+              <summary>
+                <span className="menu-setting-ico">
+                  <Icon d={I.gauge} />
                 </span>
-                <div role="radiogroup" aria-label={s.label} className="menu-segment">
-                  {s.options.map((o) => (
-                    <button key={o.value} type="button" role="radio" aria-checked={prefs[s.key] === o.value} onClick={() => update(s.key, o.value)}>
-                      {o.icon && <Icon d={o.icon} />}
-                      {o.label}
-                    </button>
-                  ))}
+                Performance
+                <span className="menu-perf-hint">{motionLabel}</span>
+                <span className="menu-perf-chev" aria-hidden />
+              </summary>
+              <div className="space-y-2 pt-2">
+                <Setting s={motionSetting} value={prefs.motion} onPick={(v) => update("motion", v)} />
+                <div className="menu-fps" data-tone={verdict?.tone}>
+                  <i aria-hidden />
+                  <b>{shownFps}</b> fps
+                  <span>
+                    {verdict ? verdict.text : "Measuring your device…"}
+                    {fps && <small className="menu-fps-screen"> Screen shows {fps.fps}.</small>}
+                  </span>
+                  <button type="button" role="switch" aria-checked={pinned} onClick={togglePin} className="menu-switch" title="Keep the live FPS on screen">
+                    <Icon d={I.pin} />
+                    Pin
+                    <span aria-hidden />
+                  </button>
                 </div>
               </div>
-            ))}
-            <div className="menu-fps" data-tone={verdict?.tone}>
-              <i aria-hidden />
-              <b>{shownFps}</b> fps
-              <span>
-                {verdict ? verdict.text : "Measuring your device…"}
-                {fps && <small className="menu-fps-screen"> Screen shows {fps.fps}.</small>}
-              </span>
-              <button type="button" role="switch" aria-checked={pinned} onClick={togglePin} className="menu-switch" title="Keep the live FPS on screen">
-                <Icon d={I.pin} />
-                Pin
-                <span aria-hidden />
-              </button>
-            </div>
+            </details>
           </div>
         </MenuGroup>
 
@@ -383,6 +397,31 @@ export default function SiteMenu() {
           <b>{shownFps}</b> fps
         </p>
       )}
+    </div>
+  );
+}
+
+type SettingDef = (typeof settings)[number];
+const motionSetting = settings.find((s) => s.key === "motion")!;
+
+// One setting: its icon and label, then its options as a segmented control.
+function Setting({ s, value, onPick }: { s: SettingDef; value: string; onPick: (value: string) => void }) {
+  return (
+    <div className="menu-setting">
+      <span className="menu-setting-label">
+        <span className="menu-setting-ico">
+          <Icon d={s.icon} />
+        </span>
+        {s.label}
+      </span>
+      <div role="radiogroup" aria-label={s.label} className="menu-segment">
+        {s.options.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={value === o.value} onClick={() => onPick(o.value)}>
+            {o.icon && <Icon d={o.icon} />}
+            {o.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

@@ -413,6 +413,15 @@ body {
 /* The picked option: a soft orange tint with an orange edge, not a solid fill. */
 .menu-panel .menu-segment button[aria-checked="true"] { background: color-mix(in srgb, var(--u-acid) 18%, transparent); color: var(--foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-acid) 70%, transparent); }
 .menu-panel .menu-segment button[aria-checked="true"] .menu-ico { color: var(--u-acid); }
+/* Settings → "Performance": a fold holding Motion and the live FPS. */
+.menu-perf { border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); padding-top: 0.5rem; }
+.menu-perf summary { display: flex; align-items: center; gap: 0.5rem; padding: 0.15rem 0; list-style: none; font-size: 0.8125rem; color: color-mix(in srgb, var(--foreground) 75%, transparent); cursor: pointer; }
+.menu-perf summary::-webkit-details-marker { display: none; }
+.menu-perf summary:hover { color: var(--foreground); }
+.menu-perf summary:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; border-radius: 0.5rem; }
+.menu-perf-hint { margin-left: auto; font-size: 0.6875rem; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
+.menu-perf-chev { width: 0.45rem; height: 0.45rem; margin: 0 0.35rem 0.15rem 0.25rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: 45deg; transition: rotate 0.2s; }
+.menu-perf[open] .menu-perf-chev { rotate: 225deg; margin-bottom: -0.15rem; }
 .menu-fps-screen { font-size: inherit; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
 .menu-fps b { min-width: 2.2rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .menu-fps span { margin-left: 0.25rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
