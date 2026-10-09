@@ -59,6 +59,25 @@ const I = {
       <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
     </>
   ),
+  // Speedometers for the Motion levels: needle low, middle, high.
+  gaugeLow: (
+    <>
+      <path d="M4 17a8 8 0 1 1 16 0" />
+      <path d="M12 17 7.5 13.5" />
+    </>
+  ),
+  gaugeMid: (
+    <>
+      <path d="M4 17a8 8 0 1 1 16 0" />
+      <path d="M12 17V11" />
+    </>
+  ),
+  gaugeHigh: (
+    <>
+      <path d="M4 17a8 8 0 1 1 16 0" />
+      <path d="M12 17l4.5-3.5" />
+    </>
+  ),
   flame: <path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5.5 1 1.5 2 2 2 2S10 6 12 3z" />,
 };
 const Icon = ({ d }: { d: ReactNode }) => <ArtIcon icon={d} className="menu-ico" />;
@@ -95,10 +114,11 @@ const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { v
     key: "motion",
     label: "Motion",
     icon: I.motion,
+    // Lightest to heaviest, left to right.
     options: [
-      { value: "full", label: "🚀 Max" },
-      { value: "lite", label: "🍃 Lite" },
-      { value: "reduce", label: "🥔 Potato" },
+      { value: "reduce", label: "Lite", icon: I.gaugeLow },
+      { value: "lite", label: "Standard", icon: I.gaugeMid },
+      { value: "full", label: "Max", icon: I.gaugeHigh },
     ],
   },
 ];
@@ -113,10 +133,10 @@ const trending = profile.trackTypes
 // What the measured frame rate says about this device, with a nudge toward
 // the right Motion setting.
 function fpsVerdict(fps: number): { tone: "good" | "ok" | "slow"; text: string } {
-  if (fps >= 55) return { tone: "good", text: `${fps} fps · your device is flying. Max is all yours.` };
-  if (fps >= 40) return { tone: "ok", text: `${fps} fps · pretty smooth. Try Lite if it ever stutters.` };
-  if (fps >= 25) return { tone: "slow", text: `${fps} fps · a bit out of breath. Lite will feel better.` };
-  return { tone: "slow", text: `${fps} fps · potato alert. Potato mode keeps things calm.` };
+  if (fps >= 55) return { tone: "good", text: "Running smoothly. Max is all yours." };
+  if (fps >= 40) return { tone: "ok", text: "Pretty smooth. Try Standard if it stutters." };
+  if (fps >= 25) return { tone: "slow", text: "A bit out of breath. Standard will feel better." };
+  return { tone: "slow", text: "Struggling here. Lite keeps things calm." };
 }
 
 // The logo doubles as the site menu: navigation, the Contact page with my
@@ -153,22 +173,29 @@ export default function SiteMenu() {
     };
   }, [open]);
 
-  // Measure the frame rate each time the menu opens (after its own opening
-  // animation), and again after a Motion change has settled.
-  const measure = () => {
-    setFps(null);
-    window.setTimeout(() => measureFps(1000).then(setFps), 400);
-  };
+  // A live frame-rate readout while the menu is open, refreshed twice a
+  // second (so a Motion change shows its effect right away).
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (open) measure();
+    if (!open) return;
+    let alive = true;
+    const loop = (): void => {
+      measureFps(500).then((f) => {
+        if (!alive) return;
+        setFps(f);
+        loop();
+      });
+    };
+    loop();
+    return () => {
+      alive = false;
+      setFps(null);
+    };
   }, [open]);
 
   const update = (key: keyof Prefs, value: string) => {
     const next = { ...prefs, [key]: value } as Prefs;
     setPrefs(next);
     savePrefs(next);
-    if (key === "motion") measure();
   };
 
   const verdict = fps === null ? null : fpsVerdict(fps);
@@ -212,8 +239,8 @@ export default function SiteMenu() {
               <small className="menu-eyebrow">
                 <i className="u-live" aria-hidden /> Let&apos;s connect
               </small>
-              <b>Contact</b>
-              <span className="menu-contact-sub">Customise your website plans &amp; send me a message.</span>
+              <b>Customise your website</b>
+              <span className="menu-contact-sub">Pick what you need and send me your plan.</span>
             </span>
             <span className="menu-contact-go" aria-hidden>
               <Icon d={I.arrow} />
@@ -282,9 +309,10 @@ export default function SiteMenu() {
                 </div>
               </div>
             ))}
-            <p className="menu-fps" data-tone={verdict?.tone} aria-live="polite">
+            <p className="menu-fps" data-tone={verdict?.tone}>
               <i aria-hidden />
-              {verdict ? verdict.text : "Measuring your device…"}
+              <b>{fps ?? "··"}</b> fps
+              <span>{verdict ? verdict.text : "Measuring your device…"}</span>
             </p>
           </div>
         </MenuGroup>

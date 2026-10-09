@@ -363,7 +363,7 @@ body {
 }
 .menu-contact-main { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1rem 0.8rem; }
 .menu-eyebrow { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
-.menu-contact-main b { display: block; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; line-height: 1; }
+.menu-contact-main b { display: block; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; line-height: 1; }
 .menu-contact-sub { display: block; margin-top: 0.35rem; font-size: 0.75rem; line-height: 1.4; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
 .menu-contact-go { display: grid; flex: none; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--u-acid); color: var(--u-bg); transition: translate 0.2s, box-shadow 0.2s; }
 [data-theme="light"] .menu-contact-go { color: #fff; }
@@ -382,6 +382,8 @@ body {
 .menu-segment button .menu-ico { width: 0.8rem; height: 0.8rem; }
 /* The live frame-rate check under the settings. */
 .menu-fps { display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.6rem; border-radius: 0.6rem; background: color-mix(in srgb, var(--foreground) 5%, transparent); font-size: 0.6875rem; line-height: 1.35; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
+.menu-fps b { min-width: 1.6rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.menu-fps span { margin-left: 0.25rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
 .menu-fps i { flex: none; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }
 .menu-fps[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
 .menu-fps[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
