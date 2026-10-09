@@ -384,6 +384,8 @@ export const profile = {
   // the most in-demand kinds right now, then a "See all categories" card
   // that opens /explore. Swap slugs here to change what the row shows.
   trackTypes: ["store", "restaurants", "fitness", "salon", "medical", "education", "real-estate", "stay", "business", "travel"],
+  // The menu's "Trending websites" grid (6, by slug).
+  menuTypes: ["store", "restaurants", "fitness", "salon", "medical", "stay"],
   trendingSites: ["IronForge Fitness", "Aangan Estates", "Waypoint", "Saffron Hearth", "Art by the Passenger"],
   // Suggestions on the home page ("Ideas for your website"): add, remove or
   // reorder freely. Each one can be added to the visitor's message.
@@ -424,7 +426,7 @@ export const profile = {
 export const allTypes: WebsiteType[] = [...profile.multitudes, ...profile.moreTypes];
 export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);
 
-// Names that point at other entries (trendingSites, trackTypes, ideas'
+// Names that point at other entries (trendingSites, trackTypes, menuTypes, ideas'
 // seenIn, reviews' site, projects' multitude) are plain strings, so a typo
 // would silently hide something. Fail the build instead, naming the typo.
 {
@@ -433,6 +435,7 @@ export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);
   const bad = [
     ...profile.trendingSites.filter((t) => !titles.has(t)).map((t) => `trendingSites: "${t}"`),
     ...profile.trackTypes.filter((s) => !slugs.has(s)).map((s) => `trackTypes: "${s}"`),
+    ...profile.menuTypes.filter((s) => !slugs.has(s)).map((s) => `menuTypes: "${s}"`),
     ...profile.ideas.flatMap((i) => (i.seenIn ?? []).filter((t) => !titles.has(t)).map((t) => `ideas "${i.name}" seenIn: "${t}"`)),
     ...profile.reviews.filter((r) => r.site && !titles.has(r.site)).map((r) => `reviews (${r.name}) site: "${r.site}"`),
     ...profile.projects.filter((p) => !slugs.has(p.multitude)).map((p) => `projects "${p.title}" multitude: "${p.multitude}"`),

@@ -144,12 +144,8 @@ const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { v
   },
 ];
 
-// The menu's trending types: the first 6 of the home page's card row
-// (profile.trackTypes), so both change together. "View all" opens /explore.
-const trending = profile.trackTypes
-  .map(findType)
-  .filter((t) => t !== undefined)
-  .slice(0, 6);
+// The menu's trending types (profile.menuTypes). "View all" opens /explore.
+const trending = profile.menuTypes.map(findType).filter((t) => t !== undefined);
 
 // How well this device is running the page, 0–1: mostly how close the frames
 // shown come to the screen's refresh rate (smoothness, what you actually
