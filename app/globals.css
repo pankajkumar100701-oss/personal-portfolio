@@ -337,17 +337,18 @@ body {
 .menu-nav:hover { border-color: color-mix(in srgb, var(--u-acid) 60%, transparent); color: var(--foreground); }
 .menu-nav[aria-current="page"] { border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 14%, transparent); color: var(--foreground); box-shadow: 0 0 18px -6px color-mix(in srgb, var(--u-acid) 70%, transparent); }
 .menu-nav[aria-current="page"] .menu-ico { color: var(--u-acid); }
-/* Each trending type wears its own gradient, faintly until hovered. */
+/* Each trending type: a calm dark tile with its own coloured icon and a
+   faint edge in that colour, which glows on hover. */
 .menu-type {
   position: relative;
   overflow: hidden;
   min-height: 2.75rem;
   line-height: 1.2;
-  border-color: color-mix(in srgb, var(--c, var(--foreground)) 45%, transparent);
-  background: linear-gradient(120deg, color-mix(in srgb, var(--from, transparent) 22%, transparent), color-mix(in srgb, var(--to, transparent) 10%, transparent));
+  border-color: color-mix(in srgb, var(--c, var(--foreground)) 28%, color-mix(in srgb, var(--foreground) 10%, transparent));
+  background: color-mix(in srgb, var(--panel-bg) 70%, transparent);
 }
 .menu-type .menu-ico { color: var(--c, var(--u-acid)); }
-.menu-type:hover { translate: 0 -1px; border-color: var(--c, var(--u-acid)); background: linear-gradient(120deg, color-mix(in srgb, var(--from, transparent) 40%, transparent), color-mix(in srgb, var(--to, transparent) 22%, transparent)); color: var(--foreground); }
+.menu-type:hover { translate: 0 -1px; border-color: var(--c, var(--u-acid)); background: color-mix(in srgb, var(--c, var(--u-acid)) 10%, var(--panel-bg)); box-shadow: 0 0 18px -8px var(--c, var(--u-acid)); color: var(--foreground); }
 .menu-type-more { border-style: dashed; border-color: color-mix(in srgb, var(--u-acid) 55%, transparent); background: none; color: var(--u-acid); font-weight: 600; }
 .menu-type-more .menu-ico { color: var(--u-acid); }
 .menu-viewall { font-size: 0.6875rem; font-weight: 600; color: var(--u-acid); }
@@ -411,7 +412,9 @@ body {
    menu only; the rest of the site keeps its lime). */
 :root:not([data-theme="light"]) .menu-panel { --u-acid: #fb7a1f; }
 .menu-panel .u-live, .menu-panel .u-live::after { background: var(--u-acid); }
-.menu-panel .menu-segment button[aria-checked="true"] { background: var(--u-acid); color: #fff; box-shadow: 0 0 16px -4px var(--u-acid); }
+/* The picked option: a soft orange tint with an orange edge, not a solid fill. */
+.menu-panel .menu-segment button[aria-checked="true"] { background: color-mix(in srgb, var(--u-acid) 18%, transparent); color: var(--foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-acid) 70%, transparent); }
+.menu-panel .menu-segment button[aria-checked="true"] .menu-ico { color: var(--u-acid); }
 .menu-fps b { min-width: 1.6rem; font-family: var(--font-mono); font-size: 0.8125rem; text-align: right; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .menu-fps span { margin-left: 0.25rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
 .menu-fps i { flex: none; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 35%, transparent); }
