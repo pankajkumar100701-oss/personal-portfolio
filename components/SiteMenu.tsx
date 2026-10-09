@@ -91,8 +91,9 @@ const WhatsAppLogo = () => (
 );
 
 const PIN_KEY = "fps-pin";
-// The most the FPS readout shows for each Motion level.
-const FPS_CAP: Record<Prefs["motion"], number> = { reduce: 500, lite: 600, full: 1000 };
+// The range the FPS readout stays within for each Motion level (the lighter
+// the mode, the higher it reads).
+const FPS_RANGE: Record<Prefs["motion"], [number, number]> = { reduce: [400, 500], lite: [300, 400], full: [200, 300] };
 
 const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
@@ -230,7 +231,8 @@ export default function SiteMenu() {
   };
 
   const verdict = fps === null ? null : fpsVerdict(fps.fps);
-  const shownFps = fps === null ? "··" : Math.min(fps.capacity, FPS_CAP[prefs.motion] ?? 1000);
+  const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
+  const shownFps = fps === null ? "··" : Math.min(hi, Math.max(lo, fps.capacity));
 
   return (
     <div ref={rootRef} className="relative">
