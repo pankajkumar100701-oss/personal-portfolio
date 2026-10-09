@@ -354,6 +354,10 @@ export const profile = {
   // The trending websites shown in the hero (max 5): titles from `projects`
   // above, in order. Swap any title here to change what the hero shows; the
   // rest stay one click away on /work.
+  // The home page's row of big cards (max 10, by slug from the types above):
+  // the most in-demand kinds right now, then a "See all categories" card
+  // that opens /explore. Swap slugs here to change what the row shows.
+  trackTypes: ["store", "restaurants", "fitness", "salon", "medical", "education", "real-estate", "stay", "business", "travel"],
   trendingSites: ["IronForge Fitness", "Aangan Estates", "Waypoint", "Saffron Hearth", "Art by the Passenger"],
   // Suggestions on the home page ("Ideas for your website"): add, remove or
   // reorder freely. Each one can be added to the visitor's message.

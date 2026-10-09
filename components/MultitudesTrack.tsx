@@ -4,7 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage } from "@/components/MessageActions";
-import { allTypes, profile } from "@/data/profile";
+import { allTypes, findType, profile } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -13,7 +13,17 @@ const SPEED = 0.85;
 // Share of the pinned scroll spent holding still at each end.
 const HOLD = 0.06;
 
-// After the arrival: the multitudes as a row of big cards that slides
+// The cards in the row: profile.trackTypes (max 10), numbered in row order.
+const types = profile.trackTypes
+  .map(findType)
+  .filter((t) => t !== undefined)
+  .slice(0, 10);
+const num = (i: number) => String(i + 1).padStart(2, "0");
+// What the meter shows for each card, the last one being "See all".
+const labels = [...types.map((_, i) => num(i)), "All"];
+
+// After the arrival: the trending types as a row of big cards (and a last
+// "See all categories" card opening /explore) that slides
 // sideways as you scroll down (the stage is pinned while the row travels).
 // The card nearest the centre sits straight and full size; the others lean,
 // shrink and dim toward the edges. Desktop + motion-allowed only; elsewhere
@@ -23,7 +33,6 @@ export default function MultitudesTrack() {
   const rowRef = useRef<HTMLDivElement>(null);
   const countRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLElement>(null);
-  const { multitudes } = profile;
 
   useEffect(() => {
     const section = sectionRef.current!;
@@ -82,7 +91,7 @@ export default function MultitudesTrack() {
       });
       if (nearest !== shownIndex) {
         shownIndex = nearest;
-        count.textContent = multitudes[nearest].n;
+        count.textContent = labels[nearest];
       }
       bar.style.scale = `${cur} 1`;
     };
@@ -156,7 +165,7 @@ export default function MultitudesTrack() {
       wide.removeEventListener("change", onResize);
       window.removeEventListener(PREFS_EVENT, onResize);
     };
-  }, [multitudes]);
+  }, []);
 
   return (
     <section ref={sectionRef} id="multitudes" className="u-track" aria-label="The multitudes">
@@ -170,13 +179,13 @@ export default function MultitudesTrack() {
               <em>I&apos;ll build the rest.</em>
             </h2>
             <p className="u-track-hint">
-              From gyms and clinics to stores and homestays: the {multitudes.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
+              From gyms and clinics to stores and homestays: the {types.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
             </p>
             <Link href="/explore" className="u-track-work">
               Browse all {allTypes.length} types <span aria-hidden>→</span>
             </Link>
           </div>
-          {multitudes.map((m) => (
+          {types.map((m, i) => (
             // The whole card opens the multitude (a stretched link); its
             // "Add to message" button sits above that and adds it instead.
             <div key={m.slug} className="u-card" style={{ "--c": m.color, ...artVars(m.slug, m.color) } as CSSProperties}>
@@ -185,7 +194,7 @@ export default function MultitudesTrack() {
               <ArtIcon icon={artIcon(m.slug)} className="u-card-mark" />
               <Link href={`/multitudes/${m.slug}`} className="u-card-link" aria-label={`${m.title}: open`} />
               <span className="u-card-top">
-                <b>{m.n}</b>
+                <b>{num(i)}</b>
                 <span className="u-card-icon">
                   <ArtIcon icon={artIcon(m.slug)} />
                 </span>
@@ -201,9 +210,27 @@ export default function MultitudesTrack() {
               </span>
             </div>
           ))}
+          <div className="u-card u-card-all" style={{ "--c": "var(--m-lime)", ...artVars("all", "var(--m-lime)"), "--art-ink": "#0b0d10" } as CSSProperties}>
+            <span className="u-card-flood" aria-hidden />
+            <Link href="/explore" className="u-card-link" aria-label={`See all ${allTypes.length} categories`} />
+            <span className="u-card-top">
+              <b>{allTypes.length}</b>
+              <span className="u-card-icon" aria-hidden>
+                →
+              </span>
+            </span>
+            <strong>See all categories</strong>
+            <small>{allTypes.length - types.length} more kinds / search / filters</small>
+            <p>Photography, weddings, interiors, lawyers, NGOs and more: every kind of website I build, each with details and live examples.</p>
+            <span className="u-card-actions">
+              <span className="u-card-go">
+                Browse all <span aria-hidden>→</span>
+              </span>
+            </span>
+          </div>
         </div>
         <div className="u-track-meter" aria-hidden>
-          <span ref={countRef}>{multitudes[0].n}</span> / {String(multitudes.length).padStart(2, "0")}
+          <span ref={countRef}>{labels[0]}</span> / {num(types.length - 1)}
           <i>
             <b ref={barRef} />
           </i>

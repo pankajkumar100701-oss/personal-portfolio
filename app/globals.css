@@ -1378,6 +1378,9 @@ body {
 .u-card:hover::before { scale: 1.5; }
 .u-card:has(.u-card-link:focus-visible) { outline: 2px solid var(--c); outline-offset: 4px; }
 .u-card-link { position: absolute; inset: 0; z-index: 2; border-radius: inherit; outline: none; }
+/* The row's last card: "See all categories" (opens /explore). */
+.u-card-all { border-style: dashed; }
+.u-card-all .u-card-icon { font-family: var(--font-sans); font-size: 1.25rem; }
 /* "Open" (just a label: the whole card is the link) and "Message me" (WhatsApp),
    lifted above the card's link so only the button itself is clickable. */
 .u-card > .u-card-actions { z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 1.5rem; pointer-events: none; }
