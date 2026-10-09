@@ -91,6 +91,8 @@ const WhatsAppLogo = () => (
 );
 
 const PIN_KEY = "fps-pin";
+// The most the FPS readout shows for each Motion level.
+const FPS_CAP: Record<Prefs["motion"], number> = { reduce: 500, lite: 600, full: 1000 };
 
 const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
@@ -228,6 +230,7 @@ export default function SiteMenu() {
   };
 
   const verdict = fps === null ? null : fpsVerdict(fps.fps);
+  const shownFps = fps === null ? "··" : Math.min(fps.capacity, FPS_CAP[prefs.motion] ?? 1000);
 
   return (
     <div ref={rootRef} className="relative">
@@ -331,7 +334,7 @@ export default function SiteMenu() {
             ))}
             <div className="menu-fps" data-tone={verdict?.tone}>
               <i aria-hidden />
-              <b>{fps?.capacity ?? "··"}</b> fps
+              <b>{shownFps}</b> fps
               <span>
                 {verdict ? verdict.text : "Measuring your device…"}
                 {fps && <small className="menu-fps-screen"> Screen shows {fps.fps}.</small>}
@@ -367,7 +370,7 @@ export default function SiteMenu() {
       {pinned && !open && (
         <p className="fps-badge" data-tone={verdict?.tone} aria-hidden>
           <i />
-          <b>{fps?.capacity ?? "··"}</b> fps
+          <b>{shownFps}</b> fps
         </p>
       )}
     </div>
