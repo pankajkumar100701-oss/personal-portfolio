@@ -409,3 +409,19 @@ export const profile = {
 // Every website type: the 12 trending ones first, then the rest.
 export const allTypes: WebsiteType[] = [...profile.multitudes, ...profile.moreTypes];
 export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);
+
+// Names that point at other entries (trendingSites, trackTypes, ideas'
+// seenIn, reviews' site, projects' multitude) are plain strings, so a typo
+// would silently hide something. Fail the build instead, naming the typo.
+{
+  const titles = new Set(profile.projects.map((p) => p.title));
+  const slugs = new Set(allTypes.map((t) => t.slug));
+  const bad = [
+    ...profile.trendingSites.filter((t) => !titles.has(t)).map((t) => `trendingSites: "${t}"`),
+    ...profile.trackTypes.filter((s) => !slugs.has(s)).map((s) => `trackTypes: "${s}"`),
+    ...profile.ideas.flatMap((i) => (i.seenIn ?? []).filter((t) => !titles.has(t)).map((t) => `ideas "${i.name}" seenIn: "${t}"`)),
+    ...profile.reviews.filter((r) => r.site && !titles.has(r.site)).map((r) => `reviews (${r.name}) site: "${r.site}"`),
+    ...profile.projects.filter((p) => !slugs.has(p.multitude)).map((p) => `projects "${p.title}" multitude: "${p.multitude}"`),
+  ];
+  if (bad.length) throw new Error(`data/profile.ts: these names don't match anything:\n  ${bad.join("\n  ")}`);
+}
