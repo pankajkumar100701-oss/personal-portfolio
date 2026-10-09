@@ -367,8 +367,10 @@ export const profile = {
     { name: "Wishlist / save for later", text: "Let visitors heart the rooms, products or properties they like and come back to them later.", seenIn: ["Waypoint"] },
     { name: "Hindi + English", text: "Speak your customers' language: a simple switch to read the whole site in Hindi or English." },
   ] as Idea[],
-  // Reviews from real clients, shown on the home page (an invitation to leave
-  // one shows while this is empty). e.g.
+  // Reviews from real clients, as plain text: paste a client's words here and
+  // they show in the home page's Reviews section and, when `site` names one
+  // of the projects above, on that website's card too (/work and its type's
+  // page). A "coming soon" note shows while this is empty. e.g.
   // { name: "Ravi", role: "Owner, Him Woollen", text: "…", rating: 5, site: "Him Woollen" }
   reviews: [] as Review[],
   // Swap in your real email (the `email` const above) and profile links here;

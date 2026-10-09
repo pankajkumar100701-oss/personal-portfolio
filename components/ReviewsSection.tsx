@@ -1,9 +1,7 @@
-import { profile, whatsappLink } from "@/data/profile";
+import { profile } from "@/data/profile";
 
-const askReview = whatsappLink("Hi Pankaj! Here's my review of the website you built for me:\n\nName: \nBusiness / website: \nRating (1–5): \nReview: ");
-
-// Between About and Contact: what clients say (profile.reviews). Until
-// there are some, an invitation for clients to send theirs.
+// Between About and Contact: what clients say (profile.reviews, plain text).
+// Until there are some, a short "coming soon" note.
 export default function ReviewsSection() {
   const { reviews, projects } = profile;
   return (
@@ -19,15 +17,7 @@ export default function ReviewsSection() {
         {reviews.length === 0 ? (
           <div className="h-review-empty">
             <p className="font-display text-2xl italic leading-snug sm:text-3xl">The first reviews are on their way.</p>
-            <p className="h-text !mt-3">Did I build your website? I&apos;d love to put your words here.</p>
-            <div className="h-cta !justify-start">
-              <a href={askReview} target="_blank" rel="noopener noreferrer" className="u-cta-primary">
-                Leave a review on WhatsApp <span aria-hidden>→</span>
-              </a>
-              <a href={`mailto:${profile.contact.email}?subject=${encodeURIComponent("My review")}`} className="u-cta-ghost">
-                By email
-              </a>
-            </div>
+            <p className="h-text !mt-3">What my clients say about their websites will appear here soon.</p>
           </div>
         ) : (
           <ul className="h-reviews">

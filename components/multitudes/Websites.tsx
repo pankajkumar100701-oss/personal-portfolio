@@ -47,6 +47,8 @@ export default function Websites({ m }: { m: WebsiteType }) {
 // visitor's message). Also used by the /work page, where
 // `kicker` names the multitude it belongs to.
 export function ProjectShowcase({ p, i, kicker }: { p: Project; i: number; kicker?: ReactNode }) {
+  // Client reviews of this site (profile.reviews with `site` set to its title).
+  const reviews = profile.reviews.filter((r) => r.site === p.title);
   return (
     <article className="m-show m-rise group grid overflow-hidden rounded-2xl md:grid-cols-[1.3fr_1fr]" style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
       {/* The site in a little browser window that tilts toward you on hover. */}
@@ -94,6 +96,20 @@ export function ProjectShowcase({ p, i, kicker }: { p: Project; i: number; kicke
             </span>
           ))}
         </div>
+        {reviews.map((r) => (
+          <figure key={r.name + r.text.slice(0, 20)} className="m-show-review">
+            {r.rating && (
+              <p className="h-stars text-xs" aria-label={`${r.rating} out of 5`}>
+                {"★".repeat(r.rating)}
+                <span>{"★".repeat(5 - r.rating)}</span>
+              </p>
+            )}
+            <blockquote>“{r.text}”</blockquote>
+            <figcaption>
+              <strong>{r.name}</strong> · {r.role}
+            </figcaption>
+          </figure>
+        ))}
         <div className="mt-5 flex flex-wrap items-center gap-2">
           <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm">
             Visit the site <span aria-hidden>↗</span>
