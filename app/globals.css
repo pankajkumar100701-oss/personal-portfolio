@@ -349,8 +349,6 @@ body {
 }
 .menu-type .menu-ico { color: var(--c, var(--u-acid)); }
 .menu-type:hover { translate: 0 -1px; border-color: var(--c, var(--u-acid)); background: color-mix(in srgb, var(--c, var(--u-acid)) 10%, var(--panel-bg)); box-shadow: 0 0 18px -8px var(--c, var(--u-acid)); color: var(--foreground); }
-.menu-type-more { border-style: dashed; border-color: color-mix(in srgb, var(--u-acid) 55%, transparent); background: none; color: var(--u-acid); font-weight: 600; }
-.menu-type-more .menu-ico { color: var(--u-acid); }
 .menu-viewall { font-size: 0.6875rem; font-weight: 600; color: var(--u-acid); }
 .menu-viewall:hover { text-decoration: underline; text-underline-offset: 2px; }
 .menu-contact-card {

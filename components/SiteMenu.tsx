@@ -136,12 +136,12 @@ const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { v
   },
 ];
 
-// The menu's trending types: the first 5 of the home page's card row
-// (profile.trackTypes), so both change together.
+// The menu's trending types: the first 6 of the home page's card row
+// (profile.trackTypes), so both change together. "View all" opens /explore.
 const trending = profile.trackTypes
   .map(findType)
   .filter((t) => t !== undefined)
-  .slice(0, 5);
+  .slice(0, 6);
 
 // What the measured frame rate says about this device, with a nudge toward
 // the right Motion setting.
@@ -304,13 +304,6 @@ export default function SiteMenu() {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/explore" className="menu-type menu-type-more" onClick={() => setOpen(false)}>
-                <Icon d={I.grid} />
-                Explore more
-                <span aria-hidden className="ml-auto">→</span>
-              </Link>
-            </li>
           </ul>
         </MenuGroup>
 
