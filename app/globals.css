@@ -1866,3 +1866,42 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
   .c-input { font-size: 1rem; }
   .c-message { min-height: 14rem; }
 }
+
+/* ---------- Templates (/templates, components/TemplateViewer.tsx) ---------- */
+.t-card { display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: 1.25rem; }
+/* A live, scaled-down preview: the iframe renders 4× the card's width, then shrinks to fit. */
+.t-thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--u-line); background: color-mix(in srgb, var(--c) 12%, var(--u-bg)); }
+.t-thumb iframe { position: absolute; top: 0; left: 0; width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; }
+.t-tier { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: var(--u-acid); font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-bg); }
+[data-theme="light"] .t-tier { color: #fff; }
+.t-open { display: inline-flex; gap: 0.375rem; margin-top: 1.25rem; font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.t-card:hover .t-open span { translate: 0.25rem 0; }
+.t-open span { transition: translate 0.25s; }
+
+.t-viewer { overflow: hidden; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); }
+.t-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.75rem; border-bottom: 1px solid var(--u-line); }
+.t-tabs { display: inline-flex; padding: 0.25rem; border: 1px solid var(--u-line); border-radius: 999px; }
+.t-tabs button { padding: 0.45rem 1.1rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600; color: var(--u-muted); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.t-tabs button[aria-selected="true"] { background: var(--ink); color: var(--u-bg); }
+.t-actions { display: flex; gap: 0.5rem; }
+.t-act { padding: 0.5rem 1rem; border: 1px solid var(--u-line); border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: var(--u-fg); cursor: pointer; transition: border-color 0.2s, translate 0.2s; }
+.t-act:hover { border-color: var(--c); translate: 0 -1px; }
+.t-act-main { border-color: var(--ink); background: var(--ink); color: var(--u-bg); }
+.t-stage { background: color-mix(in srgb, var(--c) 8%, var(--u-bg)); }
+.t-browser-bar { border-radius: 0; }
+.t-frame { display: block; width: 100%; height: min(75svh, 46rem); border: 0; background: #fff; }
+.t-code { max-height: min(75svh, 46rem); margin: 0; overflow: auto; padding: 1rem 0; font-family: var(--font-mono); font-size: 0.8125rem; line-height: 1.65; color: var(--u-soft); tab-size: 2; }
+.t-code code { display: block; min-width: max-content; }
+.t-line { display: block; padding-right: 1.5rem; white-space: pre; }
+.t-line b { display: inline-block; width: 3.5rem; padding-right: 1.25rem; font-weight: 400; text-align: right; color: var(--u-faint); user-select: none; }
+.t-steps { display: grid; gap: 1rem; margin-top: 2.5rem; }
+.t-steps li { display: flex; gap: 1rem; padding: 1.125rem 1.25rem; border: 1px solid var(--u-line); border-radius: 1rem; font-size: 0.9375rem; line-height: 1.5; color: var(--u-soft); }
+.t-steps b { flex: none; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.15em; color: var(--ink); padding-top: 0.2rem; }
+.t-steps strong { color: var(--u-fg); }
+.t-steps code { font-family: var(--font-mono); font-size: 0.85em; color: var(--ink); }
+@media (min-width: 768px) { .t-steps { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 639px) {
+  .t-bar { padding: 0.625rem; }
+  .t-act-wide { display: none; }
+  .t-frame { height: 70svh; }
+}

@@ -24,6 +24,12 @@ const I = {
       <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
     </>
   ),
+  layers: (
+    <>
+      <path d="m12 3 9 5-9 5-9-5z" />
+      <path d="m3 12.5 9 5 9-5M3 17l9 5 9-5" />
+    </>
+  ),
   user: (
     <>
       <circle cx="12" cy="8" r="4" />
@@ -107,6 +113,7 @@ const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
   { href: "/explore", match: "/explore", label: "Explore types", icon: I.compass },
   { href: "/work", match: "/work", label: "My work", icon: I.grid },
+  { href: "/templates", match: "/templates", label: "Templates", icon: I.layers },
   { href: "/#about", match: "", label: "About", icon: I.user },
 ];
 
