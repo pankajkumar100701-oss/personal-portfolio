@@ -1766,7 +1766,7 @@ body {
 .x-folder-group legend { margin-bottom: 0.75rem; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-muted); }
 .x-folder-foot { position: sticky; bottom: -1.5rem; display: flex; justify-content: space-between; gap: 0.75rem; margin: 1.75rem -1.5rem -1.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--u-line); background: var(--panel-bg, var(--u-bg)); }
 .x-folder-foot .x-share:disabled { opacity: 0.4; cursor: default; }
-[data-page="work"] .x-bar { justify-content: space-between; }
+[data-page="work"] .x-bar, [data-page="templates"] .x-bar { justify-content: space-between; }
 
 /* A card popped open over the page (components/PopCard.tsx). */
 .pop { width: min(36rem, calc(100vw - 2rem)); max-width: none; max-height: min(88svh, 52rem); margin: auto; padding: 0; overflow: visible; border: 0; background: none; color: var(--u-fg); }
@@ -1825,7 +1825,7 @@ body {
   .x-size button svg { width: 1.1rem; height: 1.1rem; }
   .x-bar .x-folder { flex: 1; }
   .x-bar .x-folder small { max-width: none; }
-  [data-page="work"] .x-bar { flex-wrap: nowrap; }
+  [data-page="work"] .x-bar, [data-page="templates"] .x-bar { flex-wrap: nowrap; }
 }
 
 /* A type's page: the websites I can build for it. */
@@ -1972,6 +1972,7 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .t-thumb iframe { position: absolute; top: 0; left: 0; width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; }
 .t-tier { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: var(--u-acid); font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-bg); }
 [data-theme="light"] .t-tier { color: #fff; }
+.t-card[data-size="small"] .t-tier { top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.45rem; font-size: 0.5rem; }
 .t-open { display: inline-flex; gap: 0.375rem; margin-top: 1.25rem; font-size: 0.875rem; font-weight: 600; color: var(--ink); }
 .t-card:hover .t-open span { translate: 0.25rem 0; }
 .t-open span { transition: translate 0.25s; }

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<!--
+  Halden — Cylinder Gallery (free template)
+  Customise: edit the :root variables below (colours + fonts), then the PROJECTS
+  array in the <script> (title, category, year, note, art). Each "art" is a small
+  inline SVG, so swap in your own shapes or replace with <img> tags if you like.
+  No dependencies, no external requests — one file, works anywhere.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halden — Cylinder Gallery</title>
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg-2: #14110f;
+    --ink: #f1ebe2;
+    --muted: #9a9188;
+    --line: rgba(241, 235, 226, .12);
+    --accent: #e9a15b;
+    --accent-ink: #1a1009;
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background:
+      radial-gradient(60% 50% at 70% 55%, rgba(233, 161, 91, .10), transparent 70%),
+      radial-gradient(80% 60% at 10% 0%, #1c1714, transparent 60%), var(--bg);
+    min-height: 100svh;
+  }
+  body::after { /* film grain */
+    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .07; z-index: 50;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+  .wrap { width: min(1240px, 100% - 40px); margin-inline: auto; }
+  .hero { min-height: 100svh; display: flex; flex-direction: column; overflow: hidden; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.3rem; letter-spacing: .01em; }
+  .logo small { font-family: var(--sans); font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+  .links { display: flex; gap: 34px; font-size: .9rem; color: var(--muted); }
+  .links a:hover { color: var(--ink); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; font-size: .9rem; font-weight: 500; transition: transform .25s, background .25s, border-color .25s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-solid { background: var(--accent); color: var(--accent-ink); }
+  .btn-solid:hover { background: #f3b578; }
+  .btn-ghost { border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: rgba(241, 235, 226, .35); }
+  nav .btn { padding: 10px 18px; }
+
+  .intro { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: end; padding-top: clamp(16px, 4vh, 44px); }
+  .kicker { display: flex; align-items: center; gap: 10px; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  .kicker::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.3rem, 5.2vw, 4.6rem); line-height: 1.02; letter-spacing: -.02em; }
+  h1 em { color: var(--accent); }
+  .lede { color: var(--muted); font-size: 1rem; line-height: 1.6; max-width: 40ch; margin-bottom: 22px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .stage {
+    position: relative; flex: 1; min-height: clamp(300px, 50vh, 470px); perspective: 1300px; perspective-origin: 50% 40%;
+    touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; outline: none;
+  }
+  .stage.dragging { cursor: grabbing; }
+  .floor { position: absolute; left: 50%; bottom: 4%; width: min(900px, 120%); height: 34%; transform: translateX(-50%); background: radial-gradient(50% 50% at 50% 50%, rgba(233, 161, 91, .16), transparent 70%); pointer-events: none; }
+  .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+  .card {
+    --cw: clamp(124px, 15.5vw, 206px);
+    position: absolute; width: var(--cw); height: calc(var(--cw) * 1.32); left: calc(var(--cw) / -2); top: calc(var(--cw) * -.66);
+    border-radius: var(--radius); overflow: hidden; background: var(--bg-2);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .06); transition: filter .5s, box-shadow .5s;
+  }
+  .card svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .card.near { filter: blur(.8px) saturate(.85); }
+  .card.far { filter: blur(2.2px) saturate(.6); }
+  .card.front { box-shadow: 0 0 0 1px rgba(233, 161, 91, .55), 0 30px 70px -20px rgba(233, 161, 91, .45); }
+  .tag { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; justify-content: space-between; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .9); text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+  .sheen { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .22) 45%, transparent 60%); mix-blend-mode: soft-light; }
+  .shade { position: absolute; inset: 0; background: #060505; }
+
+  .hint { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); pointer-events: none; white-space: nowrap; }
+  .hint i { width: 26px; height: 1px; background: currentColor; position: relative; }
+  .hint i::after { content: ""; position: absolute; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: slide 2.4s ease-in-out infinite; }
+  @keyframes slide { 0%, 100% { left: 0; } 50% { left: 21px; } }
+
+  .bar { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding: 18px 0 28px; border-top: 1px solid var(--line); }
+  .caption { min-height: 92px; }
+  .cap-meta { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .cap-title { font-family: var(--serif); font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 400; line-height: 1.1; }
+  .cap-note { color: var(--muted); font-size: .9rem; margin-top: 6px; max-width: 46ch; }
+  .caption.swap > * { animation: rise .6s cubic-bezier(.2, .7, .2, 1) both; }
+  .caption.swap > :nth-child(2) { animation-delay: .05s; }
+  .caption.swap > :nth-child(3) { animation-delay: .1s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+  .controls { display: flex; align-items: center; gap: 18px; }
+  .count { font-family: var(--serif); font-size: 1.05rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .count b { color: var(--ink); font-weight: 400; font-size: 1.6rem; }
+  .progress { width: 90px; height: 2px; background: var(--line); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--accent); transform-origin: left; transition: transform .5s; }
+  .arrows { display: flex; gap: 8px; }
+  .arrows button { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; transition: border-color .25s, background .25s; }
+  .arrows button:hover { border-color: var(--accent); background: rgba(233, 161, 91, .08); }
+
+  @media (max-width: 860px) {
+    .links { display: none; }
+    .intro { grid-template-columns: 1fr; gap: 18px; }
+    .lede { margin-bottom: 18px; }
+  }
+  @media (max-width: 560px) {
+    .wrap { width: calc(100% - 32px); }
+    nav { padding: 16px 0; }
+    nav .btn { padding: 9px 14px; font-size: .82rem; }
+    .stage { min-height: 320px; }
+    .bar { grid-template-columns: 1fr; gap: 16px; }
+    .controls { justify-content: space-between; }
+    .progress { flex: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="hero" id="studio">
+  <div class="wrap">
+    <nav aria-label="Primary">
+      <a href="#studio" class="logo" aria-label="Halden Studio home">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12.5" fill="none" stroke="var(--ink)" stroke-opacity=".5"/><ellipse cx="14" cy="14" rx="5" ry="12.5" fill="none" stroke="var(--accent)"/><circle cx="14" cy="14" r="2.4" fill="var(--accent)"/></svg>
+        <span>Halden <small>Studio</small></span>
+      </a>
+      <div class="links"><a href="#work">Work</a><a href="#studio">Studio</a><a href="#journal">Journal</a><a href="#contact">Contact</a></div>
+      <a href="#contact" class="btn btn-solid">Book a shoot</a>
+    </nav>
+
+    <section class="intro">
+      <div>
+        <p class="kicker">Photography &amp; Art Direction — Oslo</p>
+        <h1>Light, held <em>still</em> long enough to remember.</h1>
+      </div>
+      <div>
+        <p class="lede">Halden is an independent studio making photographs, films and visual identities for people who care how things feel.</p>
+        <div class="ctas">
+          <a href="#work" class="btn btn-solid">View the work <span aria-hidden="true">→</span></a>
+          <a href="#journal" class="btn btn-ghost">Our process</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="stage" id="work" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Selected projects — use arrow keys to rotate">
+    <div class="floor"></div>
+    <div class="ring" id="ring"></div>
+    <p class="hint"><i></i>Drag to explore</p>
+  </div>
+
+  <div class="wrap bar" id="contact">
+    <div class="caption" id="caption" aria-live="polite">
+      <p class="cap-meta" id="capMeta"></p>
+      <h2 class="cap-title" id="capTitle"></h2>
+      <p class="cap-note" id="capNote"></p>
+    </div>
+    <div class="controls">
+      <p class="count"><b id="countNow">01</b> / <span id="countAll">10</span></p>
+      <div class="progress"><span id="progress"></span></div>
+      <div class="arrows">
+        <button id="prev" aria-label="Previous project"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 5 8l5 5"/></svg></button>
+        <button id="next" aria-label="Next project"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 3 5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(() => {
+  const svg = (body) => `<svg viewBox="0 0 200 264" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${body}</svg>`;
+  const lg = (id, stops, v = true) => `<linearGradient id="${id}" x1="0" y1="0" x2="${v ? 0 : 1}" y2="${v ? 1 : 0}">${stops.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join('')}</linearGradient>`;
+  const petals = Array.from({ length: 12 }, (_, k) => `<ellipse cx="100" cy="88" rx="15" ry="46" transform="rotate(${k * 30} 100 132)" fill="${k % 2 ? '#ff7aa0' : '#d6386a'}" opacity=".55"/>`).join('');
+
+  const PROJECTS = [
+    { title: 'Salt Flats at Dusk', cat: 'Landscape', year: 2025, note: 'A week chasing the last ten minutes of light on the Bolivian altiplano.',
+      art: svg(`<defs>${lg('g1', [[0, '#1d1533'], [.55, '#c4566a'], [.75, '#f4a95e']])}</defs><rect width="200" height="172" fill="url(#g1)"/><circle cx="100" cy="150" r="27" fill="#ffe1ad"/><rect y="170" width="200" height="94" fill="#d6bfab"/><ellipse cx="100" cy="186" rx="44" ry="6" fill="#ffe1ad" opacity=".6"/><path d="M100 170 L-60 264 M100 170 L260 264 M100 170 L50 264 M100 170 L150 264" stroke="#a88f7c" stroke-width=".7"/>`) },
+    { title: 'Night Ferry', cat: 'Editorial', year: 2024, note: 'Commuters, fog and sodium lamps on the last crossing to Nesodden.',
+      art: svg(`<defs>${lg('g2', [[0, '#04061a'], [1, '#22336b']])}</defs><rect width="200" height="264" fill="url(#g2)"/><circle cx="148" cy="62" r="13" fill="#f3ead2"/><rect y="172" width="200" height="92" fill="#060a1c"/><path d="M52 172h96l-10 12H62z" fill="#0d1230"/><rect x="74" y="156" width="46" height="16" fill="#0d1230"/><rect x="92" y="144" width="8" height="12" fill="#0d1230"/><g fill="#ffc86b"><rect x="79" y="161" width="5" height="4"/><rect x="88" y="161" width="5" height="4"/><rect x="97" y="161" width="5" height="4"/><rect x="106" y="161" width="5" height="4"/></g><g stroke="#ffc86b" opacity=".55"><path d="M76 192h44M82 202h32M90 212h16M95 222h6"/></g><g stroke="#f3ead2" opacity=".35"><path d="M138 190h20M142 200h12"/></g>`) },
+    { title: 'Atrium', cat: 'Architecture', year: 2025, note: 'Afternoon light moving through a restored 1920s library in Bergen.',
+      art: svg(`<defs>${lg('g3', [[0, '#2a1e17'], [1, '#7b5a42']])}</defs><rect width="200" height="264" fill="#e6d7c2"/><g fill="url(#g3)"><path d="M14 264V110a28 28 0 0 1 56 0v154z"/><path d="M72 264V90a28 28 0 0 1 56 0v174z"/><path d="M130 264V110a28 28 0 0 1 56 0v154z"/></g><path d="M86 70 L168 264 L120 264 L60 70z" fill="#fff6e4" opacity=".18"/><rect x="96" y="226" width="7" height="20" rx="3" fill="#1a120d"/><circle cx="99.5" cy="222" r="4" fill="#1a120d"/>`) },
+    { title: 'Bloom No. 4', cat: 'Still Life', year: 2023, note: 'A series of macro studies shot entirely by a single north window.',
+      art: svg(`<defs><radialGradient id="g4"><stop offset="0" stop-color="#3a0b1e"/><stop offset="1" stop-color="#0e0409"/></radialGradient></defs><rect width="200" height="264" fill="url(#g4)"/>${petals}<circle cx="100" cy="132" r="16" fill="#f4c35e"/><circle cx="100" cy="132" r="7" fill="#7a3a12"/>`) },
+    { title: 'Erg Chebbi', cat: 'Travel', year: 2024, note: 'Wind, sand and long shadows for a hotel group’s winter campaign.',
+      art: svg(`<defs>${lg('g5', [[0, '#f6d3a6'], [1, '#e2804e']])}</defs><rect width="200" height="264" fill="url(#g5)"/><circle cx="140" cy="70" r="16" fill="#fff0d6"/><path d="M0 150 C50 110 90 170 140 130 S200 120 200 120V264H0z" fill="#c9683e"/><path d="M0 190 C60 150 110 210 200 160V264H0z" fill="#a24a2c"/><path d="M0 230 C70 200 120 250 200 215V264H0z" fill="#6e2c1a"/><g fill="#3b1a10"><circle cx="58" cy="142" r="2"/><circle cx="66" cy="146" r="2"/></g>`) },
+    { title: 'Neon Alley', cat: 'Street', year: 2023, note: 'Rain-soaked nights in Shinjuku, shot handheld at ISO 6400.',
+      art: svg(`<defs><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter></defs><rect width="200" height="264" fill="#0b0614"/><g fill="#150c24"><rect x="0" y="30" width="62" height="190"/><rect x="138" y="10" width="62" height="210"/></g><g filter="url(#glow)"><rect x="18" y="60" width="8" height="70" fill="#ff3d9a"/><rect x="160" y="50" width="26" height="8" fill="#3de0ff"/><rect x="150" y="90" width="8" height="60" fill="#ffd23d"/></g><rect x="18" y="60" width="8" height="70" fill="#ffc2dd"/><rect x="160" y="50" width="26" height="8" fill="#c8f6ff"/><rect x="150" y="90" width="8" height="60" fill="#fff0b8"/><rect y="220" width="200" height="44" fill="#120a1e"/><g opacity=".5" filter="url(#glow)"><rect x="18" y="226" width="8" height="34" fill="#ff3d9a"/><rect x="150" y="226" width="8" height="30" fill="#ffd23d"/></g><circle cx="100" cy="200" r="5" fill="#0b0614"/><rect x="95" y="205" width="10" height="16" fill="#0b0614"/>`) },
+    { title: 'Glasshouse', cat: 'Botanical', year: 2025, note: 'A year inside the Victorian palm house at Kew, one frame per week.',
+      art: svg(`<defs>${lg('g7', [[0, '#9fd3b0'], [1, '#13382a']])}<pattern id="p7" width="25" height="33" patternUnits="userSpaceOnUse"><path d="M25 0V33M0 33H25" stroke="#e8fff1" stroke-opacity=".35" fill="none"/></pattern></defs><rect width="200" height="264" fill="url(#g7)"/><rect width="200" height="264" fill="url(#p7)"/><path d="M0 60 Q100 -10 200 60" stroke="#e8fff1" stroke-opacity=".5" fill="none" stroke-width="2"/><g fill="#1f5a3a"><ellipse cx="60" cy="200" rx="18" ry="60" transform="rotate(-30 60 200)"/><ellipse cx="110" cy="190" rx="16" ry="70" transform="rotate(10 110 190)"/><ellipse cx="150" cy="215" rx="14" ry="50" transform="rotate(35 150 215)"/></g><g fill="#2d7a4f"><ellipse cx="85" cy="230" rx="12" ry="40" transform="rotate(-10 85 230)"/></g>`) },
+    { title: 'Moon Study', cat: 'Astro', year: 2022, note: 'Twelve nights, one telescope, a slow portrait of our nearest neighbour.',
+      art: svg(`<defs><radialGradient id="g8" cx=".4" cy=".4"><stop offset="0" stop-color="#e9e5dc"/><stop offset="1" stop-color="#8e8a82"/></radialGradient></defs><rect width="200" height="264" fill="#050506"/><circle cx="100" cy="128" r="66" fill="url(#g8)"/><g fill="#77736c" opacity=".7"><circle cx="78" cy="104" r="12"/><circle cx="118" cy="150" r="9"/><circle cx="96" cy="160" r="5"/><circle cx="126" cy="100" r="6"/><circle cx="70" cy="142" r="7"/></g><circle cx="146" cy="116" r="70" fill="#050506" opacity=".88"/><g fill="#fff" opacity=".7"><circle cx="30" cy="30" r="1"/><circle cx="170" cy="230" r="1"/><circle cx="40" cy="220" r=".8"/><circle cx="180" cy="40" r=".8"/></g>`) },
+    { title: 'Tide Lines', cat: 'Seascape', year: 2024, note: 'Long exposures on the Lofoten coast for a slow-fashion knitwear label.',
+      art: svg(`<defs>${lg('g9', [[0, '#cfe4e6'], [.4, '#3f8a96'], [1, '#08262f']])}</defs><rect width="200" height="264" fill="url(#g9)"/><g fill="none" stroke="#eaf8f8" stroke-linecap="round"><path d="M-10 140 Q25 128 60 140 T130 140 T210 140" opacity=".7"/><path d="M-10 170 Q25 156 60 170 T130 170 T210 170" opacity=".55" stroke-width="2"/><path d="M-10 204 Q25 188 60 204 T130 204 T210 204" opacity=".4" stroke-width="3"/><path d="M-10 242 Q25 224 60 242 T130 242 T210 242" opacity=".3" stroke-width="4"/></g><circle cx="58" cy="64" r="20" fill="#fdf7ea" opacity=".85"/>`) },
+    { title: 'Portrait in Ochre', cat: 'Portrait', year: 2025, note: 'Cover series for a Nordic music label’s tenth anniversary.',
+      art: svg(`<defs>${lg('g10', [[0, '#d99a48'], [1, '#8f4f1c']])}</defs><rect width="200" height="264" fill="url(#g10)"/><circle cx="112" cy="104" r="58" fill="#f2d39a"/><path d="M88 264V214c-26-4-34-20-30-34l-12-8 12-14c-4-36 18-64 54-64 32 0 50 22 50 52 0 26-14 40-20 50l6 58z" fill="#2a1810"/><rect x="0" y="236" width="200" height="28" fill="#2a1810" opacity=".35"/>`) }
+  ];
+
+  const ring = document.getElementById('ring'), stage = document.getElementById('work');
+  const caption = document.getElementById('caption');
+  const capMeta = document.getElementById('capMeta'), capTitle = document.getElementById('capTitle'), capNote = document.getElementById('capNote');
+  const countNow = document.getElementById('countNow'), progress = document.getElementById('progress');
+  const N = PROJECTS.length, STEP = 360 / N, pad = (n) => String(n).padStart(2, '0');
+  document.getElementById('countAll').textContent = pad(N);
+
+  const cards = PROJECTS.map((p, i) => {
+    const el = document.createElement('figure');
+    el.className = 'card';
+    el.innerHTML = `${p.art}<i class="sheen"></i><figcaption class="tag"><span>${pad(i + 1)}</span><span>${p.cat}</span></figcaption><i class="shade"></i>`;
+    el.setAttribute('aria-label', `${p.title}, ${p.cat}, ${p.year}`);
+    ring.appendChild(el);
+    return { el, shade: el.querySelector('.shade'), sheen: el.querySelector('.sheen'), tag: el.querySelector('.tag'), tier: '' };
+  });
+
+  let R = 300;
+  function layout() {
+    const w = cards[0].el.offsetWidth;
+    R = Math.round((w + Math.max(14, w * .12)) / (2 * Math.tan(Math.PI / N)));
+    cards.forEach((c, i) => { c.el.style.transform = `rotateY(${i * STEP}deg) translateZ(${R}px)`; });
+  }
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let angle = 0, vel = 0, target = 0, mode = 'spring', dragging = false, hovering = false;
+  let lastInput = performance.now(), front = -1, raf = 0, lastT = 0;
+  const snap = (a) => Math.round(a / STEP) * STEP;
+  const touch = () => { lastInput = performance.now(); if (mode === 'auto') { mode = 'spring'; target = snap(angle - STEP / 2); } };
+
+  function go(dir) { touch(); if (mode !== 'spring') target = snap(angle); mode = 'spring'; target -= dir * STEP; }
+
+  function setFront(i) {
+    front = i;
+    const p = PROJECTS[i];
+    capMeta.textContent = `${p.cat} · ${p.year}`;
+    capTitle.textContent = p.title;
+    capNote.textContent = p.note;
+    countNow.textContent = pad(i + 1);
+    progress.style.transform = `scaleX(${(i + 1) / N})`;
+    caption.classList.remove('swap'); void caption.offsetWidth; caption.classList.add('swap');
+  }
+
+  function render() {
+    ring.style.transform = `translateZ(${-R}px) rotateX(-7deg) rotateY(${angle}deg)`;
+    cards.forEach((c, i) => {
+      let rel = ((i * STEP + angle) % 360 + 540) % 360 - 180;
+      const f = Math.cos(rel * Math.PI / 180), abs = Math.abs(rel);
+      c.shade.style.opacity = (Math.min(.82, (1 - f) * .48)).toFixed(3);
+      c.sheen.style.opacity = (Math.max(0, f) ** 6).toFixed(3);
+      c.tag.style.opacity = Math.max(0, f * 1.6 - .6).toFixed(3);
+      const tier = abs < STEP / 2 ? 'front' : abs < STEP * 1.6 ? 'near' : 'far';
+      if (tier !== c.tier) { c.el.classList.remove(c.tier || 'x'); c.el.classList.add(tier); c.tier = tier; }
+    });
+    const idx = ((Math.round(-angle / STEP) % N) + N) % N;
+    if (idx !== front) setFront(idx);
+  }
+
+  function step(dt) {
+    if (dragging) return;
+    if (mode === 'spring') {
+      const k = .00011, c = 2 * Math.sqrt(k);
+      for (let t = dt; t > 0; t -= 8) {
+        const h = Math.min(8, t);
+        vel += (k * (target - angle) - c * vel) * h;
+        angle += vel * h;
+      }
+      const settled = Math.abs(target - angle) < .05 && Math.abs(vel) < .001;
+      if (settled && !reduced.matches && !hovering && performance.now() - lastInput > 3500) mode = 'auto';
+    } else if (mode === 'auto') {
+      angle -= .0055 * dt;
+    }
+  }
+
+  function loop(t) {
+    const dt = Math.min(48, t - (lastT || t));
+    lastT = t;
+    step(dt);
+    render();
+    raf = requestAnimationFrame(loop);
+  }
+  const start = () => { if (!raf) { lastT = 0; raf = requestAnimationFrame(loop); } };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+  // Pointer drag with momentum
+  let startX = 0, lastX = 0, lastMoveT = 0, moved = 0, pid = null, suppressClick = false;
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    pid = e.pointerId; startX = lastX = e.clientX; lastMoveT = performance.now(); moved = 0; vel = 0;
+    touch(); target = angle; mode = 'spring';
+  });
+  stage.addEventListener('pointermove', (e) => {
+    if (e.pointerId !== pid) return;
+    const now = performance.now(), dx = e.clientX - lastX;
+    moved = Math.max(moved, Math.abs(e.clientX - startX));
+    if (!dragging && moved > 5) { dragging = true; stage.classList.add('dragging'); stage.setPointerCapture(pid); }
+    if (!dragging) return;
+    const dDeg = dx / R * 57.2958;
+    angle += dDeg;
+    const dtm = Math.max(1, now - lastMoveT);
+    vel = vel * .7 + (dDeg / dtm) * .3;
+    lastX = e.clientX; lastMoveT = now; lastInput = now;
+  });
+  const end = (e) => {
+    if (e.pointerId !== pid) return;
+    pid = null;
+    if (!dragging) return;
+    dragging = false; suppressClick = true; stage.classList.remove('dragging');
+    if (performance.now() - lastMoveT > 80) vel = 0;
+    vel = Math.max(-1.2, Math.min(1.2, vel));
+    target = snap(angle + vel * 260); mode = 'spring'; lastInput = performance.now();
+  };
+  stage.addEventListener('pointerup', end);
+  stage.addEventListener('pointercancel', end);
+  stage.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovering = true; });
+  stage.addEventListener('pointerleave', () => { hovering = false; lastInput = performance.now(); });
+
+  ring.addEventListener('click', (e) => {
+    if (suppressClick) { suppressClick = false; return; }
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const i = cards.findIndex((c) => c.el === card);
+    let delta = ((-(i * STEP) - angle) % 360 + 540) % 360 - 180;
+    touch(); mode = 'spring'; target = snap(angle + delta);
+  });
+  stage.addEventListener('click', () => { suppressClick = false; });
+
+  document.getElementById('prev').addEventListener('click', () => go(-1));
+  document.getElementById('next').addEventListener('click', () => go(1));
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { go(1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); }
+  });
+
+  addEventListener('resize', layout);
+  layout();
+  render();
+  start();
+})();
+</script>
+</body>
+</html>
