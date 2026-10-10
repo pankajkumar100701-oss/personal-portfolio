@@ -117,3 +117,16 @@ export function savePrefs(p: Prefs, motionPicked = motionChosen()) {
 // Same as readPrefs + applyPrefs, inlined in <head> so the page paints in the
 // right theme before React loads.
 export const prefsScript = `(function(){try{var p=JSON.parse(localStorage.getItem("${KEY}")||"{}"),h=document.documentElement,t=p.theme||"${DEFAULT_PREFS.theme}";if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";h.dataset.theme=t;h.dataset.text=p.text||"${DEFAULT_PREFS.text}";h.dataset.motion=p.motion==="reduce"?"reduce":"full";if(p.motion==="lite"||(!p.motion&&sessionStorage.getItem("${LITE_KEY}")))h.dataset.lite=""}catch(e){}})()`;
+
+// Plays an element's closing animation, then resolves. The animation is CSS
+// on `[data-closing]` (see "Closing" in globals.css), defined for Max motion
+// only, so on the other levels this resolves at once and things just close.
+// The caller removes `data-closing` once it has closed the element.
+export function playExit(el: Element | null): Promise<void> {
+  if (!el) return Promise.resolve();
+  el.setAttribute("data-closing", "");
+  const exits = el.getAnimations().filter((a) => a instanceof CSSAnimation && a.animationName.endsWith("-out"));
+  if (!exits.length) return Promise.resolve();
+  // A timeout too, in case the tab is hidden and the animation never runs.
+  return Promise.race([Promise.all(exits.map((a) => a.finished)).then(() => {}), new Promise<void>((r) => setTimeout(r, 800))]).catch(() => {});
+}

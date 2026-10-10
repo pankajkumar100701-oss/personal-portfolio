@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { playExit } from "@/lib/prefs";
 
 let pendingBack: ReturnType<typeof setTimeout> | undefined;
 
@@ -14,11 +15,33 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
   // Where the press started: a drag that ends on the backdrop (selecting text) isn't a tap outside.
   const downOnBackdrop = useRef(false);
 
+  // What's inside stays on screen while the card plays its closing animation,
+  // though the page has already let go of it (`children` is usually empty by then).
+  const [kept, setKept] = useState({ children, style });
+  if (open && (kept.children !== children || kept.style !== style)) setKept({ children, style });
+  const [shown, setShown] = useState(open);
+  if (open && !shown) setShown(true);
+
   useEffect(() => {
     const d = ref.current;
     if (!d) return;
-    if (open && !d.open) d.showModal();
-    if (!open && d.open) d.close();
+    if (open) {
+      d.removeAttribute("data-closing");
+      if (!d.open) d.showModal();
+      return;
+    }
+    if (!d.open) return;
+    // Reopened mid-close: stop, and the branch above takes it back.
+    let cancelled = false;
+    playExit(d).then(() => {
+      if (cancelled) return;
+      d.close();
+      d.removeAttribute("data-closing");
+      setShown(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [open]);
 
   // Phones: the back button closes the card instead of leaving the page. An
@@ -80,8 +103,13 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
       ref={ref}
       className="pop"
       aria-label={label}
-      style={style}
+      style={open ? style : kept.style}
       onClose={onClose}
+      // Escape goes through onClose too, so it gets the closing animation.
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
       onClickCapture={onLinkClick}
       // A tap on the backdrop (the dialog itself, outside its panel) closes it.
       onPointerDown={(e) => (downOnBackdrop.current = e.target === e.currentTarget)}
@@ -91,7 +119,7 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
         <button type="button" className="pop-x" onClick={onClose} aria-label="Close">
           ×
         </button>
-        {open && children}
+        {shown && (open ? children : kept.children)}
       </div>
     </dialog>
   );

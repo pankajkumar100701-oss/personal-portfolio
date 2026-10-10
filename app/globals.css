@@ -2021,3 +2021,42 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
   .t-act-wide { display: none; }
   .t-frame { height: 70svh; }
 }
+
+/* Closing, Max motion only (data-motion="full" without data-lite): things
+   leave with their own animation instead of vanishing. The scripts wait on
+   the "-out" animations (playExit in lib/prefs.ts); Standard and Lite have
+   none of this, so there everything closes at once. */
+/* Pop-up cards: sink back, blur and fade; the dim behind fades with them. */
+:root[data-motion="full"]:not([data-lite]) .pop[data-closing] { animation: pop-out 0.3s cubic-bezier(0.5, 0, 0.75, 0) forwards; pointer-events: none; }
+:root[data-motion="full"]:not([data-lite]) .pop[data-closing]::backdrop { animation: pop-fade-out 0.3s ease-in forwards; }
+
+/* The menu: its rows lift away bottom-up, then the panel folds into the
+   corner it opened from. Opening is unchanged. */
+:root[data-motion="full"]:not([data-lite]) .menu-panel:not([data-open]) {
+  transform: translateY(-0.75rem) scale(0.94);
+  filter: blur(6px);
+  transition: opacity 0.22s 0.1s, transform 0.32s 0.05s cubic-bezier(0.5, 0, 0.75, 0), filter 0.3s 0.05s, visibility 0s 0.37s;
+}
+:root[data-motion="full"]:not([data-lite]) .menu-panel > * { transition: opacity 0.18s, translate 0.22s cubic-bezier(0.5, 0, 0.75, 0); }
+:root[data-motion="full"]:not([data-lite]) .menu-panel[data-open] > * { transition: none; }
+:root[data-motion="full"]:not([data-lite]) .menu-panel:not([data-open]) > * { opacity: 0; translate: 0 -0.5rem; }
+:root[data-motion="full"]:not([data-lite]) .menu-panel:not([data-open]) > :nth-last-child(2) { transition-delay: 0.03s; }
+:root[data-motion="full"]:not([data-lite]) .menu-panel:not([data-open]) > :nth-last-child(3) { transition-delay: 0.06s; }
+:root[data-motion="full"]:not([data-lite]) .menu-panel:not([data-open]) > :nth-last-child(n + 4) { transition-delay: 0.09s; }
+
+/* The Performance fold in the menu slides shut (where browsers can animate
+   <details>); it still opens at once. */
+:root[data-motion="full"]:not([data-lite]) .menu-perf { interpolate-size: allow-keywords; }
+:root[data-motion="full"]:not([data-lite]) .menu-perf::details-content { block-size: 0; overflow: clip; opacity: 0; transition: block-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s, content-visibility 0.3s allow-discrete; }
+:root[data-motion="full"]:not([data-lite]) .menu-perf[open]::details-content { block-size: auto; opacity: 1; transition: none; }
+
+/* The message pill: drops away and shrinks toward its corner badge. */
+:root[data-motion="full"]:not([data-lite]) .x-pill[data-closing] { animation: pill-out 0.32s cubic-bezier(0.5, 0, 0.75, 0) forwards; pointer-events: none; }
+@keyframes pop-out { to { opacity: 0; scale: 0.9; translate: 0 1.25rem; filter: blur(6px); } }
+@keyframes pop-fade-out { to { opacity: 0; } }
+@keyframes pill-out { to { opacity: 0; transform: translateY(1.5rem) scale(0.7); } }
+@media (max-width: 639px) {
+  /* Phones: the sheet slides back down. */
+  :root[data-motion="full"]:not([data-lite]) .pop[data-closing] { animation: pop-down-out 0.32s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+  @keyframes pop-down-out { to { translate: 0 100%; } }
+}

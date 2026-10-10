@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toggleInBasket, useBasket, writeBasket, type Basket } from "@/lib/basket";
+import { playExit } from "@/lib/prefs";
 
 // "Add to message": puts a website type (or one of my websites, or an idea) into the
 // visitor's message, which the Contact page turns into a WhatsApp / email.
@@ -59,6 +60,9 @@ export function BasketPill() {
       setMini(sessionStorage.getItem(MINI_KEY) === "1");
     } catch {}
   }, []);
+  const pillRef = useRef<HTMLDivElement>(null);
+  // The big pill plays its closing animation (Max motion) before it goes.
+  const leave = (then: () => void) => playExit(pillRef.current).then(then);
   const shrink = (v: boolean) => {
     setMini(v);
     try {
@@ -77,14 +81,14 @@ export function BasketPill() {
       </button>
     );
   return (
-    <div className="x-pill" role="status">
+    <div ref={pillRef} className="x-pill" role="status">
       <Link href="/contact">
         <b>{count}</b> in your message · Customise &amp; send <span aria-hidden>→</span>
       </Link>
-      <button type="button" onClick={() => shrink(true)} aria-label="Make it small" title="Make it small">
+      <button type="button" onClick={() => leave(() => shrink(true))} aria-label="Make it small" title="Make it small">
         –
       </button>
-      <button type="button" onClick={() => writeBasket({ types: [], sites: [], ideas: [] })} aria-label="Clear your message" title="Clear">
+      <button type="button" onClick={() => leave(() => writeBasket({ types: [], sites: [], ideas: [] }))} aria-label="Clear your message" title="Clear">
         ×
       </button>
     </div>
