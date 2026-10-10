@@ -8,12 +8,12 @@ import { Heading } from "./ui";
 // data/profile.ts whose `multitude` is this slug), each as a showcase — the
 // site in a browser frame beside who it's for, what's inside, tags and a
 // live link. Until there are some, a few "coming soon" slots.
-export default function Websites({ m }: { m: WebsiteType }) {
+export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string }) {
   const sites = profile.projects.filter((p) => p.multitude === m.slug);
 
   return (
     <section id="websites" className="mt-24 scroll-mt-10">
-      <Heading n="✦">Websites</Heading>
+      <Heading n={n}>{sites.length === 0 ? "Websites" : "Websites I've built"}</Heading>
       {sites.length === 0 ? (
         <div className="m-workshop-empty rounded-2xl p-6 sm:p-10">
           <p className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-ink">

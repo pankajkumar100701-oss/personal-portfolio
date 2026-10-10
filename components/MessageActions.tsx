@@ -7,11 +7,12 @@ import { toggleInBasket, useBasket, writeBasket, type Basket } from "@/lib/baske
 
 // "Add to message": puts a website type (or one of my websites, or an idea) into the
 // visitor's message, which the Contact page turns into a WhatsApp / email.
-export function AddToMessage({ kind, id, className = "", label = "Add to message" }: { kind: keyof Basket; id: string; className?: string; label?: string }) {
+// `addedLabel` replaces "Added" once it's in (chips keep their own name).
+export function AddToMessage({ kind, id, className = "", label = "Add to message", addedLabel = "Added" }: { kind: keyof Basket; id: string; className?: string; label?: string; addedLabel?: string }) {
   const added = useBasket()[kind].includes(id);
   return (
     <button type="button" aria-pressed={added} onClick={() => toggleInBasket(kind, id)} className={`x-add ${className}`}>
-      <span aria-hidden>{added ? "✓" : "+"}</span> {added ? "Added" : label}
+      <span aria-hidden>{added ? "✓" : "+"}</span> {added ? addedLabel : label}
     </button>
   );
 }

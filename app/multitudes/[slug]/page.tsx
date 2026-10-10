@@ -1,39 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { CSSProperties, ComponentType } from "react";
-import Art from "@/components/multitudes/Art";
-import Business from "@/components/multitudes/Business";
-import Clubbing from "@/components/multitudes/Clubbing";
-import Education from "@/components/multitudes/Education";
-import Fitness from "@/components/multitudes/Fitness";
-import Parties from "@/components/multitudes/Parties";
-import Recipes from "@/components/multitudes/Recipes";
-import Rental from "@/components/multitudes/Rental";
-import Store from "@/components/multitudes/Store";
-import Restaurants from "@/components/multitudes/Restaurants";
+import type { CSSProperties } from "react";
+import { AddToMessage, ShareLink } from "@/components/MessageActions";
 import Websites from "@/components/multitudes/Websites";
-import TypeBrief from "@/components/TypeBrief";
+import { Heading, Hero } from "@/components/multitudes/ui";
 import SiteMenu from "@/components/SiteMenu";
-import { allTypes, profile, type WebsiteType } from "@/data/profile";
+import { allTypes, profile } from "@/data/profile";
+import { kinds } from "@/data/multitudes";
 
 // Every website type has a page: the 12 trending ones, then the rest.
 const multitudes = allTypes;
-
-// Each multitude gets its own layout. A new multitude without one here falls
-// back to the simple Generic page below.
-const layouts: Record<string, ComponentType<{ m: WebsiteType }>> = {
-  store: Store,
-  "painting-art": Art,
-  fitness: Fitness,
-  education: Education,
-  clubbing: Clubbing,
-  events: Parties,
-  restaurants: Restaurants,
-  recipes: Recipes,
-  rental: Rental,
-  business: Business,
-};
 
 export const dynamicParams = false;
 
@@ -55,7 +32,7 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
   const m = multitudes[index];
   const prev = multitudes[(index - 1 + multitudes.length) % multitudes.length];
   const next = multitudes[(index + 1) % multitudes.length];
-  const Layout = layouts[m.slug] ?? Generic;
+  const list = kinds[m.slug] ?? [];
 
   return (
     <main className="u-detail" data-page={m.slug} style={{ "--c": m.color } as CSSProperties}>
@@ -75,9 +52,51 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
       </nav>
 
       <article className="u-detail-main">
-        <Layout m={m} />
-        <TypeBrief t={m} />
-        <Websites m={m} />
+        <Hero m={m}>
+          <div className="x-type-actions mt-8">
+            <Link href={`/contact?type=${m.slug}`} className="m-cta m-cta-sm">
+              Customise yours <span aria-hidden>→</span>
+            </Link>
+            <AddToMessage kind="types" id={m.slug} />
+            <ShareLink path={`/multitudes/${m.slug}`} title={`${m.title} websites — ${profile.name}`} />
+          </div>
+        </Hero>
+
+        {/* The different websites I can build for this kind of business. */}
+        <section id="what-i-build" className="mt-20 scroll-mt-10">
+          <Heading n="01">{m.title} websites I can build</Heading>
+          {list.length > 0 && (
+            <ul className="k-grid">
+              {list.map((k, i) => (
+                <li key={k.title} className="k-card m-rise" style={{ animationDelay: `${Math.min(i, 6) * 0.05}s` }}>
+                  <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-2 font-display text-2xl italic leading-tight">{k.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-soft">{k.text}</p>
+                  <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Includes">
+                    {k.has.map((h) => (
+                      <li key={h} className="m-tag">
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                  <AddToMessage kind="ideas" id={k.title} label="I want this" addedLabel="Added to message" className="k-add" />
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="k-extras">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Any of them can have</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {m.features.map((f) => (
+                <li key={f}>
+                  <AddToMessage kind="ideas" id={f} label={f} addedLabel={f} className="k-chip" />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <Websites m={m} n="02" />
       </article>
 
       <nav className="u-detail-pager" aria-label="Other website types">
@@ -91,22 +110,5 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
         </Link>
       </nav>
     </main>
-  );
-}
-
-function Generic({ m }: { m: WebsiteType }) {
-  return (
-    <div>
-      <h1 className="font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95]">{m.title}</h1>
-      <p className="mt-6 max-w-2xl text-lg text-soft">{m.intro}</p>
-      <ul className="u-detail-points">
-        {m.points.map((p, i) => (
-          <li key={p}>
-            <b>{String(i + 1).padStart(2, "0")}</b>
-            {p}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
