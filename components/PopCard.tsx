@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
+let pendingBack: ReturnType<typeof setTimeout> | undefined;
+
 // A card that pops open over the page (a sheet from the bottom on phones):
 // used by Explore and My work to open a compact card's full details. Closes
-// on ×, Escape, the back button area outside it, or `onClose`.
+// on ×, Escape, the phone's back button, a tap outside it, or `onClose`.
 export function PopCard({ open, onClose, label, style, children }: { open: boolean; onClose: () => void; label: string; style?: CSSProperties; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -13,6 +15,37 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
     if (!d) return;
     if (open && !d.open) d.showModal();
     if (!open && d.open) d.close();
+  }, [open]);
+
+  // Phones: the back button closes the card instead of leaving the page. An
+  // entry is pushed while it's open; closing it any other way takes it back off.
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  });
+  useEffect(() => {
+    if (!open) return;
+    let viaBack = false;
+    // A close that's immediately followed by an open (React re-running the
+    // effect) keeps the entry rather than going back and forth.
+    if (pendingBack) {
+      clearTimeout(pendingBack);
+      pendingBack = undefined;
+    }
+    if (!history.state?.popCard) history.pushState({ ...history.state, popCard: true }, "");
+    const onPop = () => {
+      viaBack = true;
+      closeRef.current();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      if (viaBack) return;
+      pendingBack = setTimeout(() => {
+        pendingBack = undefined;
+        if (history.state?.popCard) history.back();
+      });
+    };
   }, [open]);
 
   // Don't let the page behind scroll while it's open.

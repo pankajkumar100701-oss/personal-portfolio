@@ -73,13 +73,29 @@ export default function ContactBuilder() {
 
   const message = edited ?? generated;
 
-  // The message box grows with the message (no scrolling inside a small box).
-  useLayoutEffect(() => {
+  // The message box grows with the message (no scrolling inside a small box);
+  // measured again when its width changes or the fonts arrive, so text is
+  // never cut off.
+  const fitMessage = () => {
     const el = messageRef.current;
     if (!el) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight + 2}px`;
-  }, [message]);
+  };
+  useLayoutEffect(fitMessage, [message]);
+  useEffect(() => {
+    const el = messageRef.current;
+    if (!el) return;
+    let width = el.offsetWidth;
+    const ro = new ResizeObserver(() => {
+      if (el.offsetWidth === width) return;
+      width = el.offsetWidth;
+      fitMessage();
+    });
+    ro.observe(el);
+    document.fonts?.ready.then(fitMessage);
+    return () => ro.disconnect();
+  }, []);
   const ready = name.trim() !== "" && (phone.trim() !== "" || email.trim() !== "");
   const subject = `Website enquiry — ${name || "from your portfolio"}${business ? ` (${business})` : ""}`;
 

@@ -1826,6 +1826,8 @@ body {
 .x-type-live { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin-top: auto; padding-top: 1.25rem; font-size: 0.8125rem; }
 .x-type-live a { color: var(--ink); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent); text-underline-offset: 2px; }
 .x-type-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+/* No live examples: the buttons still sit at the bottom of the card. */
+.x-type > ul + .x-type-actions { margin-top: auto; padding-top: 1.25rem; }
 .x-open { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 999px; background: var(--ink); color: var(--u-bg); font-size: 0.8125rem; font-weight: 600; transition: translate 0.2s; }
 .x-open:hover { translate: 0 -1px; }
 

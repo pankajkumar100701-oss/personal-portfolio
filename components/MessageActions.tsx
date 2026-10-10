@@ -51,7 +51,8 @@ const MINI_KEY = "basket-pill-mini";
 export function BasketPill() {
   const basket = useBasket();
   const pathname = usePathname();
-  const [mini, setMini] = useState(false);
+  // null until this visit's choice is read, so a small pill doesn't flash big.
+  const [mini, setMini] = useState<boolean | null>(null);
   useEffect(() => {
     try {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -65,7 +66,7 @@ export function BasketPill() {
     } catch {}
   };
   const count = basket.types.length + basket.sites.length + basket.ideas.length;
-  if (count === 0 || pathname === "/contact") return null;
+  if (count === 0 || pathname === "/contact" || mini === null) return null;
   if (mini)
     return (
       <button type="button" className="x-pill-mini" onClick={() => shrink(false)} aria-label={`${count} in your message — show`}>
