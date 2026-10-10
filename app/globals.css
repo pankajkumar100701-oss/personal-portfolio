@@ -1969,7 +1969,8 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .t-card { display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: 1.25rem; }
 /* A live, scaled-down preview: the iframe renders 4× the card's width, then shrinks to fit. */
 .t-thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--u-line); background: color-mix(in srgb, var(--c) 12%, var(--u-bg)); }
-.t-thumb iframe { position: absolute; top: 0; left: 0; width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; }
+.t-thumb iframe { position: absolute; top: 0; left: 0; width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity 0.4s; }
+.t-thumb[data-loaded] iframe { opacity: 1; }
 .t-tier { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: var(--u-acid); font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-bg); }
 [data-theme="light"] .t-tier { color: #fff; }
 .t-card[data-size="small"] .t-tier { top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.45rem; font-size: 0.5rem; }

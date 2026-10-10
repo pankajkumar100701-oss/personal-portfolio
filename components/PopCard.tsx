@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
 let pendingBack: ReturnType<typeof setTimeout> | undefined;
 
@@ -9,6 +10,9 @@ let pendingBack: ReturnType<typeof setTimeout> | undefined;
 // on ×, Escape, the phone's back button, a tap outside it, or `onClose`.
 export function PopCard({ open, onClose, label, style, children }: { open: boolean; onClose: () => void; label: string; style?: CSSProperties; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
+  // Where the press started: a drag that ends on the backdrop (selecting text) isn't a tap outside.
+  const downOnBackdrop = useRef(false);
 
   useEffect(() => {
     const d = ref.current;
@@ -59,6 +63,18 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
     };
   }, [open]);
 
+  // A link inside the card to another page replaces the card's history entry,
+  // so Back from that page returns to the list (not to a dead "card open" step).
+  const onLinkClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as Element).closest?.("a[href]");
+    const href = a?.getAttribute("href");
+    if (!a || !href?.startsWith("/") || href.startsWith("//") || ((a as HTMLAnchorElement).target && (a as HTMLAnchorElement).target !== "_self")) return;
+    if (!history.state?.popCard) return;
+    e.preventDefault();
+    router.replace(href);
+  };
+
   return (
     <dialog
       ref={ref}
@@ -66,8 +82,10 @@ export function PopCard({ open, onClose, label, style, children }: { open: boole
       aria-label={label}
       style={style}
       onClose={onClose}
-      // A click on the backdrop (the dialog itself, outside its panel) closes it.
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClickCapture={onLinkClick}
+      // A tap on the backdrop (the dialog itself, outside its panel) closes it.
+      onPointerDown={(e) => (downOnBackdrop.current = e.target === e.currentTarget)}
+      onClick={(e) => e.target === e.currentTarget && downOnBackdrop.current && onClose()}
     >
       <div className="pop-panel">
         <button type="button" className="pop-x" onClick={onClose} aria-label="Close">

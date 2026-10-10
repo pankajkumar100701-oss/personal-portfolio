@@ -7,8 +7,8 @@ export function templateSource(slug: string) {
   return readFileSync(path.join(process.cwd(), "data/templates", `${slug}.html`), "utf8");
 }
 
-// Inside a srcdoc iframe, links resolve against *this* site's URL, so a
-// template's href="#" or "Sign in" would load the portfolio inside the
+// Served from /templates/<slug>/preview, links resolve against *this* site,
+// so a template's "Sign in" or "/pricing" would load the portfolio inside the
 // preview (and a preview of a template page inside itself). This guard keeps
 // every click in the preview: "#section" links scroll, the rest do nothing,
 // and forms never submit anywhere.

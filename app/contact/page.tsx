@@ -4,11 +4,9 @@ import type { CSSProperties } from "react";
 import ContactBuilder from "@/components/ContactBuilder";
 import SiteMenu from "@/components/SiteMenu";
 import { profile } from "@/data/profile";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: `Customise your website plan — ${profile.name}`,
-  description: "Tell me what you need: pick your type, the ideas you want and send it on WhatsApp or email.",
-};
+export const metadata: Metadata = pageMeta(`Customise your website plan — ${profile.name}`, "Tell me what you need: pick your type, the ideas you want and send it on WhatsApp or email.", "/contact");
 
 // Its own page, away from the home page's scroll: the visitor writes their
 // message to me step by step (see ContactBuilder).

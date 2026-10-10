@@ -4,13 +4,10 @@ import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
 import TemplateList from "@/components/TemplateList";
 import { profile } from "@/data/profile";
+import { pageMeta } from "@/lib/site";
 import { templates } from "@/data/templates";
-import { previewSource } from "@/lib/templates";
 
-export const metadata: Metadata = {
-  title: `Templates — ${profile.name}`,
-  description: "Free 3D page templates — see them live, copy the code. No libraries needed.",
-};
+export const metadata: Metadata = pageMeta(`Templates — ${profile.name}`, "Free 3D page templates — see them live, copy the code. No libraries needed.", "/templates");
 
 // Every template as a card with a live, scaled-down preview (sortable,
 // filterable, small or large; see TemplateList). Reached from the menu.
@@ -40,7 +37,7 @@ export default function TemplatesPage() {
         </header>
 
         <div className="mt-12">
-          <TemplateList items={templates.map((t) => ({ ...t, preview: previewSource(t.slug) }))} />
+          <TemplateList items={templates} />
         </div>
       </article>
     </main>

@@ -5,8 +5,9 @@ import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
 import TemplateViewer from "@/components/TemplateViewer";
 import { profile } from "@/data/profile";
+import { pageMeta } from "@/lib/site";
 import { findTemplate, templates } from "@/data/templates";
-import { previewSource, templateSource } from "@/lib/templates";
+import { templateSource } from "@/lib/templates";
 
 export const dynamicParams = false;
 
@@ -17,7 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/templates/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const t = findTemplate(slug);
-  return t ? { title: `${t.title} — Templates — ${profile.name}`, description: t.blurb } : {};
+  return t ? pageMeta(`${t.title} — Templates — ${profile.name}`, t.blurb, `/templates/${t.slug}`) : {};
 }
 
 export default async function TemplatePage({ params }: PageProps<"/templates/[slug]">) {
@@ -63,7 +64,7 @@ export default async function TemplatePage({ params }: PageProps<"/templates/[sl
         </header>
 
         <div className="mt-10">
-          <TemplateViewer slug={t.slug} title={t.title} code={templateSource(t.slug)} preview={previewSource(t.slug)} />
+          <TemplateViewer slug={t.slug} title={t.title} code={templateSource(t.slug)} />
         </div>
 
         <ol className="t-steps">

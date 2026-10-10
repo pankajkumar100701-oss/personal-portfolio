@@ -8,6 +8,7 @@ import { Heading, Hero } from "@/components/multitudes/ui";
 import SiteMenu from "@/components/SiteMenu";
 import { allTypes, profile } from "@/data/profile";
 import { kinds } from "@/data/multitudes";
+import { pageMeta } from "@/lib/site";
 
 // Every website type has a page: the 12 trending ones, then the rest.
 const multitudes = allTypes;
@@ -21,7 +22,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/multitudes/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const m = multitudes.find((x) => x.slug === slug);
-  return m ? { title: `${m.title} — ${profile.name}`, description: m.intro } : {};
+  return m ? pageMeta(`${m.title} — ${profile.name}`, m.intro, `/multitudes/${m.slug}`) : {};
 }
 
 export default async function MultitudePage({ params }: PageProps<"/multitudes/[slug]">) {

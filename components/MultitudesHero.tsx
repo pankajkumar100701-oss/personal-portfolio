@@ -337,6 +337,7 @@ export default function MultitudesHero() {
       }
     };
 
+    let alive = true;
     const fit = () => {
       fitDot(dot.parentElement!, dot);
       onResize();
@@ -345,7 +346,7 @@ export default function MultitudesHero() {
     onModeChange();
     // Web fonts can shift the glyphs after first paint; re-fit once settled,
     // and re-measure once the intro animations have moved the title into place.
-    document.fonts?.ready.then(fit);
+    document.fonts?.ready.then(() => alive && fit());
     // The title is sized in rem: the "Large text" setting moves the dot
     // without a window resize, so re-fit whenever the copy block changes size.
     const ro = new ResizeObserver(fit);
@@ -360,6 +361,7 @@ export default function MultitudesHero() {
     wide.addEventListener("change", onModeChange);
     window.addEventListener(PREFS_EVENT, onModeChange);
     return () => {
+      alive = false;
       cancelAnimationFrame(frame);
       ro.disconnect();
       world.removeEventListener("animationend", onAnimEnd);

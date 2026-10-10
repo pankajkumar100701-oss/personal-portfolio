@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { SizeSwitch, readSize, saveSize } from "@/components/PopCard";
 import { SortFilter } from "@/components/SortFilter";
@@ -19,10 +19,52 @@ const sizes = [
 type Size = (typeof sizes)[number]["value"];
 const SIZE_KEY = "templates-size";
 
-// /templates: every template as a card with a live, scaled-down preview
-// (`preview` is its HTML with the link guard), behind one "Sort & filter"
-// button and a small / large switch. Each card opens /templates/<slug>.
-export default function TemplateList({ items }: { items: (Template & { preview: string })[] }) {
+// A card's live preview (/templates/<slug>/preview). The frame is only
+// created once the card comes near the screen, so the page doesn't boot
+// twenty animated pages at once, and fades in when it has loaded.
+function Thumb({ slug, title }: { slug: string; title: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="t-thumb" data-loaded={loaded || undefined}>
+      {near && (
+        <iframe
+          title={`${title} preview`}
+          src={`/templates/${slug}/preview`}
+          sandbox="allow-scripts"
+          scrolling="no"
+          tabIndex={-1}
+          aria-hidden
+          inert
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </div>
+  );
+}
+
+// /templates: every template as a card with a live, scaled-down preview,
+// behind one "Sort & filter" button and a small / large switch. Each card
+// opens /templates/<slug>.
+export default function TemplateList({ items }: { items: Template[] }) {
   const [sort, setSort] = useState<(typeof sorts)[number]["value"]>("new");
   const [kind, setKind] = useState("all");
   const [size, setSize] = useState<Size>("large");
@@ -76,8 +118,8 @@ export default function TemplateList({ items }: { items: (Template & { preview: 
         {list.map((t, i) => (
           <li key={t.slug} className="m-rise" style={{ animationDelay: `${0.05 + Math.min(i, 8) * 0.06}s` }}>
             <Link href={`/templates/${t.slug}`} className="t-card m-card m-lift" data-size={size} style={{ "--c": t.color } as CSSProperties}>
-              <div className="t-thumb">
-                <iframe title={`${t.title} preview`} srcDoc={t.preview} sandbox="allow-scripts" loading="lazy" tabIndex={-1} aria-hidden />
+              <div className="relative">
+                <Thumb slug={t.slug} title={t.title} />
                 <span className="t-tier">{t.tier}</span>
               </div>
               <div className={small ? "p-3 sm:p-4" : "p-5 sm:p-6"}>

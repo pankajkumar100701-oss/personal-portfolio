@@ -5,9 +5,9 @@ import { highlight } from "@/lib/highlight";
 
 // A template's page body: Preview (the template running in a sandboxed
 // iframe) and Code (that same HTML, numbered), with copy, download and
-// full-screen actions. What's copied is exactly what's previewed (`preview`
-// is the same file with a guard that keeps its links inside the frame).
-export default function TemplateViewer({ slug, title, code, preview }: { slug: string; title: string; code: string; preview: string }) {
+// full-screen actions. What's copied is exactly what's previewed (the preview
+// route serves the same file with a guard that keeps its links inside the frame).
+export default function TemplateViewer({ slug, title, code }: { slug: string; title: string; code: string }) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
 
@@ -23,26 +23,28 @@ export default function TemplateViewer({ slug, title, code, preview }: { slug: s
       setCopied(true);
     } catch {}
   };
-  const blobUrl = () => URL.createObjectURL(new Blob([code], { type: "text/html" }));
   const download = () => {
     const a = document.createElement("a");
-    a.href = blobUrl();
+    a.href = URL.createObjectURL(new Blob([code], { type: "text/html" }));
     a.download = `${slug}.html`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
-  const fullScreen = () => window.open(blobUrl(), "_blank", "noopener");
+  const fullScreen = () => window.open(`/templates/${slug}/preview`, "_blank", "noopener");
 
-  const lines = useMemo(() => highlight(code), [code]);
+  // Only tokenised once the Code tab is first opened.
+  const [codeSeen, setCodeSeen] = useState(false);
+  if (tab === "code" && !codeSeen) setCodeSeen(true);
+  const lines = useMemo(() => (codeSeen ? highlight(code) : []), [code, codeSeen]);
 
   return (
     <div className="t-viewer m-rise">
       <div className="t-bar">
         <div className="t-tabs" role="tablist" aria-label="View">
-          <button type="button" role="tab" aria-selected={tab === "preview"} onClick={() => setTab("preview")}>
+          <button type="button" role="tab" id="t-tab-preview" aria-controls="t-panel" aria-selected={tab === "preview"} onClick={() => setTab("preview")}>
             Preview
           </button>
-          <button type="button" role="tab" aria-selected={tab === "code"} onClick={() => setTab("code")}>
+          <button type="button" role="tab" id="t-tab-code" aria-controls="t-panel" aria-selected={tab === "code"} onClick={() => setTab("code")}>
             Code
           </button>
         </div>
@@ -60,17 +62,17 @@ export default function TemplateViewer({ slug, title, code, preview }: { slug: s
       </div>
 
       {tab === "preview" ? (
-        <div className="t-stage">
+        <div className="t-stage" id="t-panel" role="tabpanel" aria-labelledby="t-tab-preview">
           <div className="m-browser-bar t-browser-bar">
             <i />
             <i />
             <i />
             <span>{slug}.html</span>
           </div>
-          <iframe title={`${title} — live preview`} srcDoc={preview} sandbox="allow-scripts allow-forms" className="t-frame" />
+          <iframe title={`${title} — live preview`} src={`/templates/${slug}/preview`} sandbox="allow-scripts allow-forms" className="t-frame" />
         </div>
       ) : (
-        <div className="t-editor">
+        <div className="t-editor" id="t-panel" role="tabpanel" aria-labelledby="t-tab-code">
           <div className="t-editor-bar" aria-hidden>
             <i />
             <i />

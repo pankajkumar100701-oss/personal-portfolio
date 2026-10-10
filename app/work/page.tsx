@@ -4,11 +4,9 @@ import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
 import WorkList from "@/components/WorkList";
 import { profile } from "@/data/profile";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: `My work — ${profile.name}`,
-  description: "Every website I've built, in one place.",
-};
+export const metadata: Metadata = pageMeta(`My work — ${profile.name}`, "Every website I've built, in one place.", "/work");
 
 // Every project from data/profile.ts on one page (the multitude pages each
 // show only their own), sortable. Reached from the menu ("My work").

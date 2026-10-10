@@ -28,6 +28,7 @@ export default function PortalTransition() {
     const root = rootRef.current!;
     const label = root.querySelector<HTMLElement>(".portal-x-label")!;
     let safety = 0;
+    let go = 0;
 
     const finish = () => {
       root.removeAttribute("data-on");
@@ -55,7 +56,8 @@ export default function PortalTransition() {
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="/multitudes/"]');
-      if (!a || (a.target && a.target !== "_self")) return;
+      // Links inside an open pop-up just navigate: the dialog would cover the disk.
+      if (!a || (a.target && a.target !== "_self") || a.closest("dialog[open]")) return;
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
       const m = allTypes.find((x) => href === `/multitudes/${x.slug}`);
       if (!m || href === location.pathname) return;
@@ -91,7 +93,8 @@ export default function PortalTransition() {
         easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
         fill: "both",
       });
-      setTimeout(() => {
+      go = window.setTimeout(() => {
+        go = 0;
         pending.current = href;
         router.push(href);
         // If the new page never shows up, don't leave the screen covered.
@@ -99,10 +102,21 @@ export default function PortalTransition() {
       }, ENTER);
     };
 
+    // Back pressed while the disk is still growing: cancel the trip.
+    const onPop = () => {
+      if (!go) return;
+      clearTimeout(go);
+      go = 0;
+      finish();
+    };
+
     document.addEventListener("click", onClick, true);
+    window.addEventListener("popstate", onPop);
     return () => {
       document.removeEventListener("click", onClick, true);
+      window.removeEventListener("popstate", onPop);
       clearTimeout(safety);
+      clearTimeout(go);
     };
   }, [router]);
 
