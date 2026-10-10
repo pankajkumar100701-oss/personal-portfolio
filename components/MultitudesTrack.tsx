@@ -184,6 +184,9 @@ export default function MultitudesTrack() {
             <Link href="/work" className="u-track-work">
               See my work <span aria-hidden>→</span>
             </Link>
+            <span className="u-track-swipe" aria-hidden>
+              Swipe to see all <span>→</span>
+            </span>
           </div>
           {types.map((m, i) => (
             // The whole card opens the multitude (a stretched link); its

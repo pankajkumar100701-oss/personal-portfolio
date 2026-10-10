@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { profile, type WebsiteType, type Project } from "@/data/profile";
 import { AddToMessage } from "@/components/MessageActions";
 import { Heading } from "./ui";
@@ -7,7 +8,7 @@ import { Heading } from "./ui";
 // Closes every multitude's page: the websites built for it (projects in
 // data/profile.ts whose `multitude` is this slug), each as a showcase — the
 // site in a browser frame beside who it's for, what's inside, tags and a
-// live link. Until there are some, a few "coming soon" slots.
+// live link. Until there are some, an invitation to be the first.
 export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string }) {
   const sites = profile.projects.filter((p) => p.multitude === m.slug);
 
@@ -16,20 +17,16 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
       <Heading n={n}>{sites.length === 0 ? "Websites" : "Websites I've built"}</Heading>
       {sites.length === 0 ? (
         <div className="m-workshop-empty rounded-2xl p-6 sm:p-10">
-          <p className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-ink">
-            <i className="u-live" aria-hidden /> On the workbench
-          </p>
-          <p className="mt-4 max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">{m.title} websites are on the way.</p>
-          <p className="mt-3 text-muted">Each one lands here with a live link as it ships.</p>
-          <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3" aria-hidden>
-            {[1, 2, 3].map((n, i) => (
-              <li key={n} className={`m-slot rounded-xl p-4 ${n === 3 ? "hidden sm:block" : ""}`} style={{ "--k": i } as CSSProperties}>
-                <span className="font-mono text-[0.625rem] text-ink">{String(n).padStart(2, "0")}</span>
-                <p className="mt-2 font-semibold">Website</p>
-                <span className="m-slot-soon">Coming soon</span>
-              </li>
-            ))}
-          </ul>
+          <p className="max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Yours could be the first {m.title} site here.</p>
+          <p className="mt-3 max-w-xl text-muted">Meanwhile, see how I build for others — the same care goes into yours.</p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <Link href={`/contact?type=${m.slug}`} className="m-cta m-cta-sm">
+              Customise your website plan <span aria-hidden>→</span>
+            </Link>
+            <Link href="/work" className="x-share">
+              See my work
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="space-y-6">
@@ -115,7 +112,7 @@ export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: P
             ))}
           </ul>
         )}
-        <div className={`mt-3 flex-wrap gap-1.5 ${small ? "hidden" : "flex"}`}>
+        <div className={`m-show-tags mt-3 flex-wrap gap-1.5 ${small ? "hidden" : "flex"}`}>
           {p.tags.map((t) => (
             <span key={t} className="m-tag">
               {t}

@@ -1618,6 +1618,17 @@ body {
   :root[data-motion="reduce"] .u-track-intro h2 { font-size: 2.75rem; }
   :root[data-motion="reduce"] .u-card { width: min(78vw, 21rem); height: auto; min-height: 24rem; scroll-snap-align: center; will-change: auto; }
   :root[data-motion="reduce"] .u-track-meter { display: none; }
+/* Phones: the intro sits on top (pinned while the row swipes under it) and
+   the cards make a full row below, with a hint to swipe. */
+.u-track-swipe { display: none; }
+@media (max-width: 799px) {
+  :root .u-track .u-track-row { display: grid; grid-template-rows: auto auto; grid-auto-flow: column; grid-auto-columns: min(78vw, 21rem); align-items: stretch; padding-top: 0; }
+  :root .u-track .u-track-intro { position: sticky; left: 0; grid-row: 1; grid-column: 1; width: calc(100vw - 32px); margin: 0 0 0.5rem; scroll-snap-align: none; }
+  :root .u-track .u-card { grid-row: 2; width: auto; }
+  .u-track-swipe { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.25rem; margin-left: 1.25rem; font-family: var(--font-sans); font-size: 0.75rem; color: var(--u-muted); }
+  .u-track-swipe span { animation: u-swipe 1.6s ease-in-out infinite; }
+  @keyframes u-swipe { 50% { translate: 0.35rem 0; } }
+}
 
 /* ---------- About + Contact below the track (components/AboutSection.tsx, ContactSection.tsx) ---------- */
 .h-sec { position: relative; padding: clamp(4rem, 12vh, 8rem) 0; color: var(--u-fg); }
@@ -1783,6 +1794,8 @@ body {
   .m-show[data-size="small"] > div:last-child { padding: 0.75rem; }
   .m-show[data-size="small"] p:first-child { font-size: 0.5625rem; letter-spacing: 0.1em; }
   .m-show[data-size="small"] p:first-child > span + span { display: none; }
+  /* The tech tags repeat what the highlights already say: phones skip them. */
+  .m-show-tags { display: none !important; }
   /* Too small to read on a two-across card: the address and the Concept tag. */
   .m-show[data-size="small"] .m-browser-bar span,
   .m-show[data-size="small"] .m-concept { display: none; }
@@ -1798,7 +1811,8 @@ body {
 .x-mini .x-type-icon { flex: none; width: 2.5rem; height: 2.5rem; }
 .x-mini b { display: block; font-family: var(--font-display); font-size: 1.3rem; font-style: italic; font-weight: 400; line-height: 1.1; }
 .x-mini small { display: block; margin-top: 0.2rem; overflow: hidden; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
-.x-mini-hot { flex: none; width: 0.5rem; height: 0.5rem; margin-left: auto; border-radius: 50%; background: var(--u-acid); box-shadow: 0 0 0 4px color-mix(in srgb, var(--u-acid) 18%, transparent); }
+.x-mini-go { flex: none; margin-left: auto; font-size: 1.5rem; font-style: normal; line-height: 1; color: var(--u-muted); transition: translate 0.2s, color 0.2s; }
+.x-mini button:hover .x-mini-go { translate: 0.2rem 0; color: var(--from); }
 /* Stacked (medium / small) showcase cards: an upright browser frame. */
 .m-show:not([data-size="large"]) .m-browser { transform: none; }
 .m-show[data-size="small"] .m-show-stage { padding: 0.75rem; }
@@ -1898,6 +1912,13 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .h-idea-seen a { color: var(--u-soft); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--u-acid) 60%, transparent); text-underline-offset: 2px; }
 .h-idea-seen a:hover { color: var(--u-acid); }
 .h-ideas .h-idea-add { margin-top: auto; }
+@media (max-width: 639px) {
+  /* Phones: tighter idea cards, so the nine don't take five screens. */
+  .h-ideas { gap: 0.75rem; margin-top: 1.75rem; }
+  .h-ideas li { gap: 0.4rem; padding: 1.1rem 1.25rem; }
+  .h-ideas b { font-size: 1.25rem; }
+  .h-ideas li > p { font-size: 0.875rem; line-height: 1.5; }
+}
 .h-ideas-foot { margin-top: 2rem; font-size: 0.9375rem; color: var(--u-muted); }
 .h-ideas-foot a { font-weight: 600; color: var(--u-acid); }
 .h-ideas-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }

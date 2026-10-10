@@ -118,7 +118,9 @@ export default function ExploreTypes() {
                     <b>{t.title}</b>
                     <small>{t.sub}</small>
                   </span>
-                  {trending.has(t.slug) && <i className="x-mini-hot" aria-label="Trending" />}
+                  <i className="x-mini-go" aria-hidden>
+                    ›
+                  </i>
                 </button>
               </li>
             ) : (

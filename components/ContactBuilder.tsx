@@ -68,7 +68,8 @@ export default function ContactBuilder() {
     lines.push(`Budget: ${budget}`, `Timeline: ${timeline}`);
     if (notes.trim()) lines.push("", "About my idea:", notes.trim());
     lines.push("", "Could you share a plan and a price? Thanks!");
-    return lines.join("\n");
+    // Sections left empty would leave a run of blank lines: keep one.
+    return lines.join("\n").replace(/\n{3,}/g, "\n\n");
   })();
 
   const message = edited ?? generated;
