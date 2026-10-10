@@ -1730,24 +1730,59 @@ body {
 .x-sort { display: inline-flex; align-items: center; gap: 0.5rem; margin-left: auto; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--u-muted); }
 .x-sort select { padding: 0.5rem 0.9rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); color: var(--u-fg); font-size: 0.875rem; letter-spacing: normal; text-transform: none; cursor: pointer; }
 .x-sort select option { background: var(--u-bg); }
-/* /work: the ⋮ "View options" menu (card size), at the end of the bar. */
-.x-more { position: relative; }
-.x-more > button { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border: 1px solid var(--u-line); border-radius: 50%; background: var(--u-card); color: var(--u-fg); cursor: pointer; transition: border-color 0.2s; }
-.x-more > button:hover, .x-more > button[aria-expanded="true"] { border-color: var(--c, var(--u-acid)); }
-.x-more > button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-.x-more > button svg { width: 1.1rem; height: 1.1rem; }
-.x-more-panel { position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 40; width: 15rem; padding: 0.4rem; border: 1px solid var(--u-line); border-radius: 0.9rem; background: var(--panel-bg); box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.5); }
-.x-more-panel p { padding: 0.4rem 0.6rem 0.3rem; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-muted); }
-.x-more-panel button { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%; padding: 0.5rem 0.6rem; border-radius: 0.6rem; text-align: left; color: var(--u-fg); cursor: pointer; }
-.x-more-panel button:hover, .x-more-panel button:focus-visible { background: color-mix(in srgb, var(--u-fg) 7%, transparent); outline: none; }
-.x-more-panel b { display: block; font-size: 0.875rem; font-weight: 600; }
-.x-more-panel small { display: block; font-size: 0.75rem; color: var(--u-muted); }
-.x-more-panel i { font-style: normal; color: var(--c, var(--u-acid)); }
+/* Explore / Work: sort + the small / large switch, on the first row. */
+.x-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-left: auto; }
+.x-size { display: inline-flex; padding: 0.2rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); }
+.x-size button { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: var(--u-muted); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.x-size button svg { width: 0.95rem; height: 0.95rem; }
+.x-size button[aria-checked="true"] { background: var(--c, var(--u-acid)); color: var(--u-bg); }
+.x-size button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+[data-page="work"] .x-tools { order: -1; width: 100%; margin-left: 0; justify-content: space-between; }
+
+/* A card popped open over the page (components/PopCard.tsx). */
+.pop { width: min(36rem, calc(100vw - 2rem)); max-width: none; max-height: min(88svh, 52rem); margin: auto; padding: 0; overflow: visible; border: 0; background: none; color: var(--u-fg); }
+.pop::backdrop { background: rgb(0 0 0 / 0.6); backdrop-filter: blur(6px); }
+.pop[open] { animation: pop-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.pop[open]::backdrop { animation: pop-fade 0.3s ease; }
+@keyframes pop-in { from { opacity: 0; scale: 0.9; translate: 0 1.5rem; } }
+@keyframes pop-fade { from { opacity: 0; } }
+.pop-panel { --ink: var(--c); position: relative; display: flex; flex-direction: column; max-height: inherit; overflow-y: auto; overscroll-behavior: contain; padding: 1.5rem; border: 1px solid var(--u-line); border-top: 3px solid var(--c); border-radius: 1.5rem; background: var(--panel-bg, var(--u-bg)); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.7); }
+.pop-panel:has(.m-show) { padding: 0; }
+.pop-panel .m-show { border: 0; border-radius: 0; }
+.pop-x { position: absolute; z-index: 2; top: 0.75rem; right: 0.75rem; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border: 1px solid var(--u-line); border-radius: 50%; background: var(--u-card); font-size: 1.25rem; line-height: 1; color: var(--u-fg); cursor: pointer; }
+.pop-x:hover { border-color: var(--c); }
+.pop-panel .x-type-top { padding-right: 2.75rem; }
+@media (max-width: 639px) {
+  /* Phones: a sheet that rises from the bottom. */
+  .pop { width: 100vw; max-height: 90svh; margin: auto 0 0; }
+  .pop-panel { border-radius: 1.5rem 1.5rem 0 0; padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+  .pop[open] { animation: pop-up 0.35s cubic-bezier(0.2, 0.9, 0.3, 1); }
+  @keyframes pop-up { from { translate: 0 100%; } }
+  /* Small /work cards, two across: just the picture and the name. */
+  .m-show[data-size="small"] .m-show-desc,
+  .m-show[data-size="small"] .m-show-acts { display: none; }
+  .m-show[data-size="small"] .m-show-stage { padding: 0.5rem; }
+  .m-show[data-size="small"] > div:last-child { padding: 0.75rem; }
+  .m-show[data-size="small"] p:first-child { font-size: 0.5625rem; letter-spacing: 0.1em; }
+  .m-show[data-size="small"] p:first-child > span + span { display: none; }
+  .m-show[data-size="small"] .m-concept { padding: 0.15rem 0.45rem; font-size: 0.5rem; }
+}
+
+/* Explore, small cards: icon, name and line; a tap pops the details open. */
+.x-grid-small { grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: 0.625rem; }
+.x-mini button { position: relative; display: flex; align-items: center; gap: 0.875rem; width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--u-line); border-left: 3px solid var(--from); border-radius: 1rem; background: var(--u-card); text-align: left; color: var(--u-fg); cursor: pointer; transition: border-color 0.2s, translate 0.2s; }
+.x-mini button:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--to) 55%, var(--u-line)); border-left-color: var(--from); }
+.x-mini button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+.x-mini .x-type-icon { flex: none; width: 2.5rem; height: 2.5rem; }
+.x-mini b { display: block; font-family: var(--font-display); font-size: 1.3rem; font-style: italic; font-weight: 400; line-height: 1.1; }
+.x-mini small { display: block; margin-top: 0.2rem; overflow: hidden; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
+.x-mini-hot { flex: none; width: 0.5rem; height: 0.5rem; margin-left: auto; border-radius: 50%; background: var(--u-acid); box-shadow: 0 0 0 4px color-mix(in srgb, var(--u-acid) 18%, transparent); }
 /* Stacked (medium / small) showcase cards: an upright browser frame. */
 .m-show:not([data-size="large"]) .m-browser { transform: none; }
 .m-show[data-size="small"] .m-show-stage { padding: 0.75rem; }
 @media (max-width: 639px) {
   .x-sort { margin-left: 0; }
+  .x-tools { width: 100%; margin-left: 0; justify-content: space-between; }
 }
 
 /* A type's page: the websites I can build for it. */

@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage, ShareLink } from "@/components/MessageActions";
-import { allTypes, profile } from "@/data/profile";
+import { PopCard, SizeSwitch, readSize, saveSize } from "@/components/PopCard";
+import { allTypes, profile, type WebsiteType } from "@/data/profile";
 
 const trending = new Set(profile.multitudes.map((m) => m.slug));
 const examples = (slug: string) => profile.projects.filter((p) => p.multitude === slug);
@@ -20,14 +21,35 @@ const sorts = [
   { value: "az", label: "A → Z" },
   { value: "examples", label: "Most examples" },
 ] as const;
+const sizes = [
+  { value: "small", label: "Small" },
+  { value: "large", label: "Large" },
+] as const;
+type Size = (typeof sizes)[number]["value"];
+const SIZE_KEY = "explore-size";
 
 // The Explore page's body: every website type as a card, with search, a
-// filter and a sort on top. Each card opens its own page, can be added to the
-// visitor's message, or shared as a link.
+// filter, a sort and a small / large switch on top. Small cards (the default)
+// show just the name and pop open with the details; large ones show it all.
+// Each can open its own page, be added to the visitor's message, or be shared.
 export default function ExploreTypes() {
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<(typeof filters)[number]["value"]>("all");
   const [sort, setSort] = useState<(typeof sorts)[number]["value"]>("trending");
+  const [size, setSize] = useState<Size>("small");
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
+  const opened = allTypes.find((t) => t.slug === openSlug);
+
+  // The remembered size is only readable in the browser; sync it in after hydration.
+  useEffect(() => {
+    const saved = readSize(SIZE_KEY, sizes);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (saved) setSize(saved);
+  }, []);
+  const pickSize = (v: Size) => {
+    setSize(v);
+    saveSize(SIZE_KEY, v);
+  };
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -60,6 +82,7 @@ export default function ExploreTypes() {
             </button>
           ))}
         </div>
+        <div className="x-tools">
         <label className="x-sort">
           <span>Sort</span>
           <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
@@ -70,6 +93,8 @@ export default function ExploreTypes() {
             ))}
           </select>
         </label>
+        <SizeSwitch options={sizes} value={size} onChange={pickSize} />
+        </div>
       </div>
 
       <p className="mt-6 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
@@ -85,64 +110,92 @@ export default function ExploreTypes() {
           </Link>
         </div>
       ) : (
-        <ul className="x-grid">
+        <ul className={`x-grid ${size === "small" ? "x-grid-small" : ""}`}>
           {shown.map((t, i) => {
-            const live = examples(t.slug);
-            return (
-              <li key={t.slug} id={t.slug} className="x-type m-rise" style={{ "--c": t.color, ...artVars(t.slug, t.color), animationDelay: `${Math.min(i, 8) * 0.04}s` } as CSSProperties}>
-                <div className="x-type-top">
+            const style = { "--c": t.color, ...artVars(t.slug, t.color), animationDelay: `${Math.min(i, 8) * 0.04}s` } as CSSProperties;
+            return size === "small" ? (
+              <li key={t.slug} id={t.slug} className="x-mini m-rise" style={style}>
+                <button type="button" onClick={() => setOpenSlug(t.slug)} aria-haspopup="dialog">
                   <span className="x-type-icon">
                     <ArtIcon icon={artIcon(t.slug)} />
                   </span>
-                  <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{t.n}</span>
-                  {trending.has(t.slug) && <span className="x-badge">Trending</span>}
-                </div>
-                <h2 className="mt-5 font-display text-3xl italic leading-none">
-                  <Link href={`/multitudes/${t.slug}`} className="hover:underline">
-                    {t.title}
-                  </Link>
-                </h2>
-                <p className="mt-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.15em] text-muted">{t.sub}</p>
-                <p className="mt-4 text-sm leading-relaxed text-soft">{t.intro}</p>
-                <p className="mt-4 text-xs text-muted">
-                  <b className="font-semibold text-soft">For:</b> {t.idealFor}
-                </p>
-                <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Can include">
-                  {t.features.slice(0, 5).map((f) => (
-                    <li key={f} className="m-tag">
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <p className="x-type-live">
-                  {live.length > 0 ? (
-                    <>
-                      <i className="u-live" aria-hidden /> Live:{" "}
-                      {live.map((p, k) => (
-                        <span key={p.title}>
-                          {k > 0 && ", "}
-                          <a href={p.href} target="_blank" rel="noopener noreferrer">
-                            {p.title} ↗
-                          </a>
-                        </span>
-                      ))}
-                    </>
-                  ) : (
-                    <span className="text-muted">Examples on the way</span>
-                  )}
-                </p>
-                <div className="x-type-actions">
-                  <Link href={`/multitudes/${t.slug}`} className="x-open">
-                    Details <span aria-hidden>→</span>
-                  </Link>
-                  <AddToMessage kind="types" id={t.slug} />
-                  <ShareLink path={`/multitudes/${t.slug}`} title={`${t.title} websites — ${profile.name}`} />
-                </div>
+                  <span className="min-w-0">
+                    <b>{t.title}</b>
+                    <small>{t.sub}</small>
+                  </span>
+                  {trending.has(t.slug) && <i className="x-mini-hot" aria-label="Trending" />}
+                </button>
+              </li>
+            ) : (
+              <li key={t.slug} id={t.slug} className="x-type m-rise" style={style}>
+                <TypeDetails t={t} />
               </li>
             );
           })}
         </ul>
       )}
+
+      <PopCard
+        open={opened !== undefined}
+        onClose={() => setOpenSlug(null)}
+        label={opened ? `${opened.title} websites` : "Website type"}
+        style={opened ? ({ "--c": opened.color, "--ink": opened.color, ...artVars(opened.slug, opened.color) } as CSSProperties) : undefined}
+      >
+        {opened && <TypeDetails t={opened} />}
+      </PopCard>
+    </>
+  );
+}
+
+// Everything about a type: on a large card, and in the pop-up from a small one.
+function TypeDetails({ t }: { t: WebsiteType }) {
+  const live = examples(t.slug);
+  return (
+    <>
+      <div className="x-type-top">
+        <span className="x-type-icon">
+          <ArtIcon icon={artIcon(t.slug)} />
+        </span>
+        <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{t.n}</span>
+        {trending.has(t.slug) && <span className="x-badge">Trending</span>}
+      </div>
+      <h2 className="mt-5 font-display text-3xl italic leading-none">
+        <Link href={`/multitudes/${t.slug}`} className="hover:underline">
+          {t.title}
+        </Link>
+      </h2>
+      <p className="mt-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.15em] text-muted">{t.sub}</p>
+      <p className="mt-4 text-sm leading-relaxed text-soft">{t.intro}</p>
+      <p className="mt-4 text-xs text-muted">
+        <b className="font-semibold text-soft">For:</b> {t.idealFor}
+      </p>
+      <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Can include">
+        {t.features.slice(0, 5).map((f) => (
+          <li key={f} className="m-tag">
+            {f}
+          </li>
+        ))}
+      </ul>
+      {live.length > 0 && (
+        <p className="x-type-live">
+          <i className="u-live" aria-hidden /> Live:{" "}
+          {live.map((p, k) => (
+            <span key={p.title}>
+              {k > 0 && ", "}
+              <a href={p.href} target="_blank" rel="noopener noreferrer">
+                {p.title} ↗
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
+      <div className="x-type-actions">
+        <Link href={`/multitudes/${t.slug}`} className="x-open">
+          See websites <span aria-hidden>→</span>
+        </Link>
+        <AddToMessage kind="types" id={t.slug} />
+        <ShareLink path={`/multitudes/${t.slug}`} title={`${t.title} websites — ${profile.name}`} />
+      </div>
     </>
   );
 }

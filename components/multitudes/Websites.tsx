@@ -48,14 +48,29 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
 // `kicker` names the multitude it belongs to and `size` (the /work page's
 // card size) can stack it: "medium" puts the site above the details, "small"
 // also trims it to the title, one line and the buttons.
-export function ProjectShowcase({ p, i, kicker, size = "large" }: { p: Project; i: number; kicker?: ReactNode; size?: "large" | "medium" | "small" }) {
+// With `onOpen`, tapping the site's picture or title calls it (to pop the card
+// open) instead of visiting the site.
+export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: Project; i: number; kicker?: ReactNode; size?: "large" | "medium" | "small"; onOpen?: () => void }) {
   const small = size === "small";
   // Client reviews of this site (profile.reviews with `site` set to its title).
   const reviews = profile.reviews.filter((r) => r.site === p.title);
   return (
     <article className={`m-show m-rise group grid overflow-hidden rounded-2xl ${size === "large" ? "md:grid-cols-[1.3fr_1fr]" : ""}`} data-size={size} style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
       {/* The site in a little browser window that tilts toward you on hover. */}
-      <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-show-stage" aria-label={`Open ${p.title}`}>
+      <a
+        href={p.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="m-show-stage"
+        aria-label={onOpen ? `More about ${p.title}` : `Open ${p.title}`}
+        onClick={
+          onOpen &&
+          ((e) => {
+            e.preventDefault();
+            onOpen();
+          })
+        }
+      >
         <span className="m-browser">
           <span className="m-browser-bar" aria-hidden>
             <i />
@@ -80,9 +95,17 @@ export function ProjectShowcase({ p, i, kicker, size = "large" }: { p: Project; 
           <span>{String(i + 1).padStart(2, "0")} — {kicker ?? "Live"}</span>
           {p.year && <span className="text-muted">{p.year}</span>}
         </p>
-        <h3 className={`mt-3 font-display italic leading-[1.05] ${small ? "text-2xl" : "text-3xl lg:text-4xl"}`}>{p.title}</h3>
+        <h3 className={`mt-3 font-display italic leading-[1.05] ${small ? "text-xl sm:text-2xl" : "text-3xl lg:text-4xl"}`}>
+          {onOpen ? (
+            <button type="button" onClick={onOpen} className="text-left hover:underline">
+              {p.title}
+            </button>
+          ) : (
+            p.title
+          )}
+        </h3>
         {p.client && !small && <p className="mt-1.5 text-sm text-muted">for {p.client}</p>}
-        <p className={`mt-3 text-sm leading-relaxed text-soft ${small ? "line-clamp-2" : ""}`}>{p.description}</p>
+        <p className={`m-show-desc mt-3 text-sm leading-relaxed text-soft ${small ? "line-clamp-2" : ""}`}>{p.description}</p>
         {p.highlights && !small && (
           <ul className="mt-4 flex flex-wrap gap-1.5">
             {p.highlights.map((h) => (
@@ -113,7 +136,7 @@ export function ProjectShowcase({ p, i, kicker, size = "large" }: { p: Project; 
             </figcaption>
           </figure>
         ))}
-        <div className="mt-5 flex flex-wrap items-center gap-2">
+        <div className="m-show-acts mt-5 flex flex-wrap items-center gap-2">
           <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm">
             Visit the site <span aria-hidden>↗</span>
           </a>
