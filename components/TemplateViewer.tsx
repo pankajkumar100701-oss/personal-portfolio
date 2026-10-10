@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { highlight } from "@/lib/highlight";
 
 // A template's page body: Preview (the template running in a sandboxed
 // iframe) and Code (that same HTML, numbered), with copy, download and
-// full-screen actions. What's copied is exactly what's previewed.
-export default function TemplateViewer({ slug, title, code }: { slug: string; title: string; code: string }) {
+// full-screen actions. What's copied is exactly what's previewed (`preview`
+// is the same file with a guard that keeps its links inside the frame).
+export default function TemplateViewer({ slug, title, code, preview }: { slug: string; title: string; code: string; preview: string }) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
 
@@ -31,7 +33,7 @@ export default function TemplateViewer({ slug, title, code }: { slug: string; ti
   };
   const fullScreen = () => window.open(blobUrl(), "_blank", "noopener");
 
-  const lines = code.split("\n");
+  const lines = useMemo(() => highlight(code), [code]);
 
   return (
     <div className="t-viewer m-rise">
@@ -65,19 +67,37 @@ export default function TemplateViewer({ slug, title, code }: { slug: string; ti
             <i />
             <span>{slug}.html</span>
           </div>
-          <iframe title={`${title} — live preview`} srcDoc={code} sandbox="allow-scripts allow-forms" className="t-frame" />
+          <iframe title={`${title} — live preview`} srcDoc={preview} sandbox="allow-scripts allow-forms" className="t-frame" />
         </div>
       ) : (
-        <pre className="t-code" tabIndex={0} aria-label={`${title} source code`}>
-          <code>
-            {lines.map((l, i) => (
-              <span key={i} className="t-line">
-                <b aria-hidden>{i + 1}</b>
-                {l || " "}
-              </span>
-            ))}
-          </code>
-        </pre>
+        <div className="t-editor">
+          <div className="t-editor-bar" aria-hidden>
+            <i />
+            <i />
+            <i />
+            <span>{slug}.html</span>
+          </div>
+          <pre className="t-code" tabIndex={0} aria-label={`${title} source code`}>
+            <code>
+              {lines.map((l, i) => (
+                <span key={i} className="t-line">
+                  <b aria-hidden>{i + 1}</b>
+                  {l.length === 0
+                    ? " "
+                    : l.map((tok, k) =>
+                        tok.c ? (
+                          <span key={k} className={`hl-${tok.c}`}>
+                            {tok.t}
+                          </span>
+                        ) : (
+                          tok.t
+                        ),
+                      )}
+                </span>
+              ))}
+            </code>
+          </pre>
+        </div>
       )}
     </div>
   );

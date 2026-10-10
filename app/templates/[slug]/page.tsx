@@ -6,7 +6,7 @@ import SiteMenu from "@/components/SiteMenu";
 import TemplateViewer from "@/components/TemplateViewer";
 import { profile } from "@/data/profile";
 import { findTemplate, templates } from "@/data/templates";
-import { templateSource } from "@/lib/templates";
+import { previewSource, templateSource } from "@/lib/templates";
 
 export const dynamicParams = false;
 
@@ -63,7 +63,7 @@ export default async function TemplatePage({ params }: PageProps<"/templates/[sl
         </header>
 
         <div className="mt-10">
-          <TemplateViewer slug={t.slug} title={t.title} code={templateSource(t.slug)} />
+          <TemplateViewer slug={t.slug} title={t.title} code={templateSource(t.slug)} preview={previewSource(t.slug)} />
         </div>
 
         <ol className="t-steps">

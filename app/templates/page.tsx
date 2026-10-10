@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
 import { profile } from "@/data/profile";
 import { templates } from "@/data/templates";
-import { templateSource } from "@/lib/templates";
+import { previewSource } from "@/lib/templates";
 
 export const metadata: Metadata = {
   title: `Templates — ${profile.name}`,
@@ -45,7 +45,7 @@ export default function TemplatesPage() {
                 <div className="t-thumb">
                   <iframe
                     title={`${t.title} preview`}
-                    srcDoc={templateSource(t.slug)}
+                    srcDoc={previewSource(t.slug)}
                     sandbox="allow-scripts"
                     loading="lazy"
                     tabIndex={-1}
