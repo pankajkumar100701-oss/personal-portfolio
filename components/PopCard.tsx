@@ -84,7 +84,7 @@ export function SizeSwitch<T extends string>({ options, value, onChange }: { opt
   return (
     <div className="x-size" role="radiogroup" aria-label="Card size">
       {options.map((o) => (
-        <button key={o.value} type="button" role="radio" aria-checked={value === o.value} onClick={() => onChange(o.value)}>
+        <button key={o.value} type="button" role="radio" aria-checked={value === o.value} data-size={o.value} onClick={() => onChange(o.value)}>
           <SizeIcon size={o.value} />
           {o.label}
         </button>

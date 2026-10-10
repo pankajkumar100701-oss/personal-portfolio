@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage, ShareLink } from "@/components/MessageActions";
 import { PopCard, SizeSwitch, readSize, saveSize } from "@/components/PopCard";
+import { SortFilter } from "@/components/SortFilter";
 import { allTypes, profile, type WebsiteType } from "@/data/profile";
 
 const trending = new Set(profile.multitudes.map((m) => m.slug));
@@ -28,8 +29,8 @@ const sizes = [
 type Size = (typeof sizes)[number]["value"];
 const SIZE_KEY = "explore-size";
 
-// The Explore page's body: every website type as a card, with search, a
-// filter, a sort and a small / large switch on top. Small cards (the default)
+// The Explore page's body: every website type as a card, with search, one
+// "Sort & filter" button and a small / large switch on top. Small cards (the default)
 // show just the name and pop open with the details; large ones show it all.
 // Each can open its own page, be added to the visitor's message, or be shared.
 export default function ExploreTypes() {
@@ -75,25 +76,19 @@ export default function ExploreTypes() {
           </svg>
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search: salon, booking, payments…" aria-label="Search website types" />
         </label>
-        <div className="x-filters" role="group" aria-label="Show">
-          {filters.map((f) => (
-            <button key={f.value} type="button" className="m-pill" aria-pressed={filter === f.value} onClick={() => setFilter(f.value)}>
-              {f.label}
-            </button>
-          ))}
-        </div>
         <div className="x-tools">
-        <label className="x-sort">
-          <span>Sort</span>
-          <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
-            {sorts.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <SizeSwitch options={sizes} value={size} onChange={pickSize} />
+          <SortFilter
+            groups={[
+              { title: "Show", options: filters, value: filter, onChange: (v) => setFilter(v as typeof filter) },
+              { title: "Sort by", options: sorts, value: sort, onChange: (v) => setSort(v as typeof sort) },
+            ]}
+            changed={filter !== "all" || sort !== "trending"}
+            onReset={() => {
+              setFilter("all");
+              setSort("trending");
+            }}
+          />
+          <SizeSwitch options={sizes} value={size} onChange={pickSize} />
         </div>
       </div>
 

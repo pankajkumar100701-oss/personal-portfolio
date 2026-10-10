@@ -1743,7 +1743,19 @@ body {
 .x-size button svg { width: 0.95rem; height: 0.95rem; }
 .x-size button[aria-checked="true"] { background: var(--c, var(--u-acid)); color: var(--u-bg); }
 .x-size button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-[data-page="work"] .x-tools { order: -1; width: 100%; margin-left: 0; justify-content: space-between; }
+/* "Sort & filter": one button that opens every option (components/SortFilter.tsx). */
+.x-folder { position: relative; display: flex; align-items: center; gap: 0.7rem; min-width: 0; padding: 0.5rem 1.1rem 0.5rem 0.8rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); text-align: left; color: var(--u-fg); cursor: pointer; transition: border-color 0.2s; }
+.x-folder:hover { border-color: var(--c, var(--u-acid)); }
+.x-folder:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+.x-folder svg { flex: none; width: 1.2rem; height: 1.2rem; color: var(--c, var(--u-acid)); }
+.x-folder b { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.2; }
+.x-folder small { display: block; max-width: 13rem; overflow: hidden; font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
+.x-folder i { position: absolute; top: 0.2rem; right: 0.35rem; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--c, var(--u-acid)); }
+.x-folder-group { margin-top: 1.5rem; }
+.x-folder-group legend { margin-bottom: 0.75rem; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-muted); }
+.x-folder-foot { position: sticky; bottom: -1.5rem; display: flex; justify-content: space-between; gap: 0.75rem; margin: 1.75rem -1.5rem -1.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--u-line); background: var(--panel-bg, var(--u-bg)); }
+.x-folder-foot .x-share:disabled { opacity: 0.4; cursor: default; }
+[data-page="work"] .x-bar { justify-content: space-between; }
 
 /* A card popped open over the page (components/PopCard.tsx). */
 .pop { width: min(36rem, calc(100vw - 2rem)); max-width: none; max-height: min(88svh, 52rem); margin: auto; padding: 0; overflow: visible; border: 0; background: none; color: var(--u-fg); }
@@ -1771,7 +1783,11 @@ body {
   .m-show[data-size="small"] > div:last-child { padding: 0.75rem; }
   .m-show[data-size="small"] p:first-child { font-size: 0.5625rem; letter-spacing: 0.1em; }
   .m-show[data-size="small"] p:first-child > span + span { display: none; }
-  .m-show[data-size="small"] .m-concept { padding: 0.15rem 0.45rem; font-size: 0.5rem; }
+  /* Too small to read on a two-across card: the address and the Concept tag. */
+  .m-show[data-size="small"] .m-browser-bar span,
+  .m-show[data-size="small"] .m-concept { display: none; }
+  .m-show[data-size="small"] .m-browser-bar { padding: 0.45rem 0.6rem; gap: 0.25rem; }
+  .m-show[data-size="small"] .m-browser-bar i { width: 0.45rem; height: 0.45rem; }
 }
 
 /* Explore, small cards: icon, name and line; a tap pops the details open. */
@@ -1788,7 +1804,14 @@ body {
 .m-show[data-size="small"] .m-show-stage { padding: 0.75rem; }
 @media (max-width: 639px) {
   .x-sort { margin-left: 0; }
-  .x-tools { width: 100%; margin-left: 0; justify-content: space-between; }
+  .x-tools { width: 100%; margin-left: 0; justify-content: space-between; flex-wrap: nowrap; }
+  /* Phones: Small and Large only, as icons; the folder takes the rest. */
+  .x-size button[data-size="medium"] { display: none; }
+  .x-size button { padding: 0.5rem 0.7rem; font-size: 0; gap: 0; }
+  .x-size button svg { width: 1.1rem; height: 1.1rem; }
+  .x-bar .x-folder { flex: 1; }
+  .x-bar .x-folder small { max-width: none; }
+  [data-page="work"] .x-bar { flex-wrap: nowrap; }
 }
 
 /* A type's page: the websites I can build for it. */

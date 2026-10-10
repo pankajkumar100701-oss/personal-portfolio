@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ProjectShowcase } from "@/components/multitudes/Websites";
 import { PopCard, SizeSwitch, readSize, saveSize } from "@/components/PopCard";
+import { SortFilter } from "@/components/SortFilter";
 import { findType, profile } from "@/data/profile";
 
 const sorts = [
@@ -27,9 +28,10 @@ const gridFor: Record<Size, string> = {
   small: "grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3",
 };
 
-// The /work page's list of websites, with a sort and a card-size switch
-// (remembered per browser) on top, then a type filter. Small and medium
-// cards pop open into the full card on a tap.
+// The /work page's list of websites, with one "Sort & filter" button (sort
+// and type in a single card) and a card-size switch (remembered per browser;
+// phones get just Small and Large). Small and medium cards pop open into the
+// full card on a tap.
 // (profile.projects is in the order they were built, so its end is newest.)
 export default function WorkList() {
   const { projects } = profile;
@@ -41,8 +43,10 @@ export default function WorkList() {
   // The remembered size is only readable in the browser; sync it in after hydration.
   useEffect(() => {
     const saved = readSize(SIZE_KEY, sizes);
+    // Phones have no Medium (it's one card a row there anyway): show Small.
+    const phone = matchMedia("(max-width: 639px)").matches;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (saved) setSize(saved);
+    if (saved) setSize(phone && saved === "medium" ? "small" : saved);
   }, []);
 
   const pickSize = (s: Size) => {
@@ -62,32 +66,30 @@ export default function WorkList() {
   return (
     <>
       <div className="x-bar m-rise">
-        <div className="x-tools">
-          <label className="x-sort">
-            <span>Sort</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
-              {sorts.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <SizeSwitch options={sizes} value={size} onChange={pickSize} />
-        </div>
-        <div className="x-filters" role="group" aria-label="Show">
-          <button type="button" className="m-pill" aria-pressed={type === "all"} onClick={() => setType("all")}>
-            All · {projects.length}
-          </button>
-          {usedTypes.map((slug) => (
-            <button key={slug} type="button" className="m-pill" aria-pressed={type === slug} onClick={() => setType(slug)}>
-              {typeOf(slug)}
-            </button>
-          ))}
-        </div>
+        <SortFilter
+          groups={[
+            { title: "Sort by", options: sorts, value: sort, onChange: (v) => setSort(v as typeof sort) },
+            {
+              title: "Type of website",
+              options: [{ value: "all", label: `All · ${projects.length}` }, ...usedTypes.map((slug) => ({ value: slug, label: typeOf(slug) }))],
+              value: type,
+              onChange: setType,
+            },
+          ]}
+          changed={sort !== "new" || type !== "all"}
+          onReset={() => {
+            setSort("new");
+            setType("all");
+          }}
+        />
+        <SizeSwitch options={sizes} value={size} onChange={pickSize} />
       </div>
+      <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
+        {list.length} {list.length === 1 ? "site" : "sites"}
+        {type !== "all" && <> · {typeOf(type)}</>}
+      </p>
 
-      <div className={`mt-10 ${gridFor[size]}`}>
+      <div className={`mt-5 ${gridFor[size]}`}>
         {list.map((p, i) => {
           const t = findType(p.multitude);
           return (
