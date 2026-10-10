@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toggleInBasket, useBasket, writeBasket, type Basket } from "@/lib/basket";
@@ -44,18 +44,46 @@ export function ShareLink({ path, title, className = "" }: { path: string; title
   );
 }
 
-// Floating reminder of what's in the message, on every page but Contact.
+// Floating reminder of what's in the message, on every page but Contact. The
+// "–" shrinks it to a small round badge (remembered for this visit) so it
+// doesn't cover the page; tapping the badge opens it again.
+const MINI_KEY = "basket-pill-mini";
 export function BasketPill() {
   const basket = useBasket();
   const pathname = usePathname();
+  const [mini, setMini] = useState(false);
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMini(sessionStorage.getItem(MINI_KEY) === "1");
+    } catch {}
+  }, []);
+  const shrink = (v: boolean) => {
+    setMini(v);
+    try {
+      sessionStorage.setItem(MINI_KEY, v ? "1" : "0");
+    } catch {}
+  };
   const count = basket.types.length + basket.sites.length + basket.ideas.length;
   if (count === 0 || pathname === "/contact") return null;
+  if (mini)
+    return (
+      <button type="button" className="x-pill-mini" onClick={() => shrink(false)} aria-label={`${count} in your message — show`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <b>{count}</b>
+      </button>
+    );
   return (
     <div className="x-pill" role="status">
       <Link href="/contact">
         <b>{count}</b> in your message · Customise &amp; send <span aria-hidden>→</span>
       </Link>
-      <button type="button" onClick={() => writeBasket({ types: [], sites: [], ideas: [] })} aria-label="Clear your message">
+      <button type="button" onClick={() => shrink(true)} aria-label="Make it small" title="Make it small">
+        –
+      </button>
+      <button type="button" onClick={() => writeBasket({ types: [], sites: [], ideas: [] })} aria-label="Clear your message" title="Clear">
         ×
       </button>
     </div>

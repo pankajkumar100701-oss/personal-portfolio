@@ -19,7 +19,7 @@ export default function ContactSection() {
         </p>
         <div className="h-cta">
           <Link href="/contact" className="u-cta-primary">
-            Customise your website <span aria-hidden>→</span>
+            Customise your website plan <span aria-hidden>→</span>
           </Link>
           <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
             Chat on WhatsApp <span aria-hidden>→</span>

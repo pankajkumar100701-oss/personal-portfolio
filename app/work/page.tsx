@@ -48,7 +48,7 @@ export default function WorkPage() {
           <p className="mt-3 text-muted">Tell me what you do — I&apos;ll reply with a plan and a price.</p>
           <div className="h-cta" style={{ justifyContent: "flex-start" }}>
             <Link href="/contact" className="u-cta-primary">
-              Customise your website <span aria-hidden>→</span>
+              Customise your website plan <span aria-hidden>→</span>
             </Link>
             <Link href="/explore" className="u-cta-ghost">
               Explore your type

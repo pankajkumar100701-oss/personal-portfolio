@@ -106,7 +106,7 @@ export default function ExploreTypes() {
           <p className="font-display text-3xl italic">Not listed? I can still build it.</p>
           <p className="mt-2 text-muted">Tell me what you have in mind on the Contact page.</p>
           <Link href="/contact" className="u-cta-primary x-btn mt-6">
-            Customise your website <span aria-hidden>→</span>
+            Customise your website plan <span aria-hidden>→</span>
           </Link>
         </div>
       ) : (

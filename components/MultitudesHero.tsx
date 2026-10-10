@@ -549,7 +549,7 @@ export default function MultitudesHero() {
                   ("Explore your type" is already under the title). */}
               <div className="u-mobile-cta">
                 <Link href="/contact" className="u-cta-primary">
-                  Customise your website <span aria-hidden>→</span>
+                  Customise your website plan <span aria-hidden>→</span>
                 </Link>
                 <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
                   <i className="u-live" aria-hidden /> Open for projects

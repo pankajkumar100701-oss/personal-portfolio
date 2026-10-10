@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { allTypes, findType, profile, whatsappLink } from "@/data/profile";
@@ -31,6 +31,7 @@ export default function ContactBuilder() {
   // Their own edits to the written-out message; null while it's generated.
   const [edited, setEdited] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   // The long lists start short (the trending types, the first ideas): on a
   // phone the whole lot is several screens of chips.
   const [allTypesShown, setAllTypesShown] = useState(false);
@@ -71,6 +72,14 @@ export default function ContactBuilder() {
   })();
 
   const message = edited ?? generated;
+
+  // The message box grows with the message (no scrolling inside a small box).
+  useLayoutEffect(() => {
+    const el = messageRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight + 2}px`;
+  }, [message]);
   const ready = name.trim() !== "" && (phone.trim() !== "" || email.trim() !== "");
   const subject = `Website enquiry — ${name || "from your portfolio"}${business ? ` (${business})` : ""}`;
 
@@ -188,7 +197,7 @@ export default function ContactBuilder() {
               </button>
             )}
           </div>
-          <textarea className="c-input c-message" value={message} onChange={(e) => setEdited(e.target.value)} aria-label="Your message (you can edit it)" />
+          <textarea ref={messageRef} rows={8} className="c-input c-message" value={message} onChange={(e) => setEdited(e.target.value)} aria-label="Your message (you can edit it)" />
           <p className="mt-2 text-xs text-muted">{edited === null ? "Written from your answers. Type in it to change anything." : "Edited by you. Changes above won't update it now."}</p>
 
           {!ready && <p className="c-need">Add your name and a phone or email to send.</p>}
