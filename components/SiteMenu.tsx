@@ -42,6 +42,12 @@ const I = {
       <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
     </>
   ),
+  book: (
+    <>
+      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z" />
+      <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z" />
+    </>
+  ),
   pin: <path d="M9 4h6l-1 5 3 3v2H7v-2l3-3zM12 14v6" />,
   chat2: <path d="M4 5h16v11H9l-5 4z" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
@@ -104,16 +110,13 @@ const WhatsAppLogo = () => (
 );
 
 const PIN_KEY = "fps-pin";
-// The range the FPS readout stays within for each Motion level (the lighter
-// the mode, the higher it reads). Where it sits inside comes from fpsScore:
-// the bottom means struggling (red), the top means smooth (green).
-const FPS_RANGE: Record<Prefs["motion"], [number, number]> = { reduce: [400, 500], lite: [300, 400], full: [200, 300] };
 
 const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
   { href: "/explore", match: "/explore", label: "Explore types", icon: I.compass },
   { href: "/work", match: "/work", label: "My work", icon: I.grid },
   { href: "/templates", match: "/templates", label: "Templates", icon: I.layers },
+  { href: "/blog", match: "/blog", label: "Blog", icon: I.book },
   { href: "/#about", match: "", label: "About", icon: I.user },
 ];
 
@@ -154,21 +157,13 @@ const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { v
 // The menu's trending types (profile.menuTypes). "View all" opens /explore.
 const trending = profile.menuTypes.map(findType).filter((t) => t !== undefined);
 
-// How well this device is running the page, 0–1: mostly how close the frames
-// shown come to the screen's refresh rate (smoothness, what you actually
-// feel), plus a little of the uncapped capacity (headroom). It places the FPS
-// number inside its Motion level's range.
-function fpsScore(fps: number, capacity: number, refresh: number) {
-  const smooth = Math.min(1, fps / refresh);
-  const headroom = Math.min(1, Math.max(0, Math.log(capacity / 20) / Math.log(1000 / 20)));
-  return 0.75 * smooth + 0.25 * headroom;
-}
-
-// A colour and a line of advice for the current Motion level, from the frames
-// actually shown each second: above 40 green, 20–40 yellow, below 20 red.
-function fpsVerdict(shown: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
-  if (shown > 40) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
-  if (shown >= 20) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
+// A colour and a line of advice for the current Motion level, from how close
+// the frames actually shown come to the screen's refresh rate: 90% or more
+// green, 60–90% amber, under that red.
+function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
+  const ratio = shown / refresh;
+  if (ratio >= 0.9) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
+  if (ratio >= 0.6) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
   if (motion === "reduce") return { tone: "slow", text: "This device is working hard. Lite is the lightest it gets." };
   return { tone: "slow", text: motion === "full" ? "A bit out of breath. Standard will feel better." : "Still heavy here. Lite will feel better." };
 }
@@ -180,8 +175,8 @@ function fpsVerdict(shown: number, motion: Prefs["motion"]): { tone: "good" | "o
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
-  // Live frame rate: `fps` shown on screen, `capacity` with no cap (see measureFps).
-  const [fps, setFps] = useState<{ fps: number; capacity: number } | null>(null);
+  // Live frame rate: frames actually shown on screen in the last second.
+  const [fps, setFps] = useState<number | null>(null);
   const [refresh, setRefresh] = useState(60);
   const [perfOpen, setPerfOpen] = useState(false);
   // "Pin": keep the live frame rate on screen (top-left) with the menu closed.
@@ -219,7 +214,7 @@ export default function SiteMenu() {
   }, [open]);
 
   // A live frame-rate readout while the menu is open (or pinned), refreshed
-  // twice a second, so a Motion change shows its effect right away.
+  // every second, so a Motion change shows its effect right away.
   // Measured only while someone can see it: the Performance fold is open,
   // or the FPS is pinned on screen.
   const live = (open && perfOpen) || pinned;
@@ -227,12 +222,12 @@ export default function SiteMenu() {
     if (!live) return;
     let alive = true;
     const loop = (): void => {
-      measureFps(500).then((f) => {
+      measureFps(1000).then((f) => {
         if (!alive) return;
         // The screen's refresh rate: the most frames ever shown in a second
         // here (at least 60), rounded to a common rate.
         setRefresh((r) => Math.max(r, [60, 75, 90, 120, 144, 165, 240].find((hz) => f.fps <= hz + 4) ?? f.fps));
-        setFps(f);
+        setFps(f.fps);
         loop();
       });
     };
@@ -258,12 +253,12 @@ export default function SiteMenu() {
     savePrefs(next, key === "motion" || motionChosen());
   };
 
-  const [lo, hi] = FPS_RANGE[prefs.motion] ?? FPS_RANGE.full;
-  const score = fps === null ? 0 : fpsScore(fps.fps, fps.capacity, refresh);
-  const verdict = fps === null ? null : fpsVerdict(fps.fps, prefs.motion);
+  const verdict = fps === null ? null : fpsVerdict(fps, refresh, prefs.motion);
   // The picked Motion level, shown on the folded Performance row.
   const motionLabel = motionSetting.options.find((o) => o.value === prefs.motion)?.label;
-  const shownFps = fps === null ? "··" : Math.round(lo + (hi - lo) * score);
+  const shownFps = fps === null ? "··" : fps;
+  // Average time each frame took to reach the screen.
+  const frameMs = fps ? (1000 / fps).toFixed(1) : null;
 
   return (
     <div ref={rootRef} className="relative">
@@ -363,7 +358,12 @@ export default function SiteMenu() {
                   <b>{shownFps}</b> fps
                   <span>
                     {verdict ? verdict.text : "Measuring your device…"}
-                    {fps && <small className="menu-fps-screen"> Screen shows {fps.fps}.</small>}
+                    {frameMs && (
+                      <small className="menu-fps-screen">
+                        {" "}
+                        {frameMs} ms a frame · screen {refresh} Hz
+                      </small>
+                    )}
                   </span>
                   <button type="button" role="switch" aria-checked={pinned} onClick={togglePin} className="menu-switch" title="Keep the live FPS on screen">
                     <Icon d={I.pin} />

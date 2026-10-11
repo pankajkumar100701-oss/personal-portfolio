@@ -54,7 +54,7 @@ function CodeWindow() {
         <code>
           <span className="c-kw">const</span> pankaj = {"{"}
           {"\n  "}
-          {k("role")}: {s("Web developer")},{"\n  "}
+          {k("role")}: {s("UI Designer / Website Developer")},{"\n  "}
           {k("from")}: {s("India")},{"\n  "}
           {k("builds")}: [{s("stores")}, {s("portfolios")}, {s("landing pages")}],{"\n  "}
           {k("stack")}: [{s("Next.js")}, {s("React")}, {s("TypeScript")}],{"\n  "}

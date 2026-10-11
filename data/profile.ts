@@ -11,7 +11,6 @@ export type WebsiteType = {
   points: string[];
   features: string[]; // what a site like this can have; pickable on the Contact page
   idealFor: string; // who it's for, comma-separated
-  link?: { label: string; href: string };
 };
 
 // One of the 12 trending types: also a floating card in the hero.
@@ -45,9 +44,10 @@ export type Project = {
   href: string; // the live site
   color: string; // accent, and the card's backdrop when there's no screenshot
   multitude: string; // slug of the option it belongs to, e.g. "rental"; it shows on that page
+  also?: string[]; // more type slugs it fits, e.g. a shop that is also a brand; it shows on those pages too
   image?: string; // screenshot in public/, e.g. "/work/my-site.jpg"
   year?: string;
-  concept?: boolean; // not for a real client: shows a "Concept" label
+  concept?: boolean; // a sample design, not for a real client: shows a "Sample design" label
   client?: string; // who it was built for
   highlights?: string[]; // what's inside, a few words each
 };
@@ -55,7 +55,7 @@ export type Project = {
 export const profile = {
   name: "Pankaj Kumar",
   brand: "Pankaj Studio", // the site's name: page titles, share cards, footer
-  role: "Web Developer & UI Designer",
+  role: "UI Designer / Website Developer",
   tagline: "I build fast, playful and beautifully crafted web experiences.",
   location: "India",
   hero: {
@@ -75,7 +75,6 @@ export const profile = {
       points: ["Catalogues, carts and checkouts that convert", "UPI, card and cash-on-delivery payments", "Orders and stock that stay in sync"],
       features: ["Product catalogue", "Cart & checkout", "UPI / card payments", "Cash on delivery", "Order updates on WhatsApp", "Discount codes", "Admin panel"],
       idealFor: "Boutiques, D2C brands, handmade goods, local shops",
-      link: { label: "Browse the stores", href: "#websites" },
     },
     {
       n: "02", slug: "painting-art", title: "Art & Artists", sub: "Galleries / Studios / Artists", x: 69, y: 13, depth: 0.92, color: "var(--m-coral)",
@@ -139,7 +138,6 @@ export const profile = {
       points: ["Services and work that explain you in seconds", "Trust: clients, numbers, reviews", "Enquiries that land on your WhatsApp and email"],
       features: ["Services pages", "About & team", "Client logos", "Case studies", "Enquiry form", "Blog"],
       idealFor: "Agencies, manufacturers, consultants, local services",
-      link: { label: "Get in touch", href: `mailto:${email}` },
     },
     {
       n: "11", slug: "medical", title: "Clinic / Doctor", sub: "Clinics / Doctors / Labs", x: 21, y: 6, depth: 1.02, color: "var(--m-coral)",
@@ -224,8 +222,8 @@ export const profile = {
     },
   ] as WebsiteType[],
   about: [
-    "I'm a web developer from India. I design and build websites for shops, artists, gyms, restaurants, schools — anyone with something worth putting online.",
-    "No templates: every site is made for you, loads fast and looks great on a phone. Tell me what you need, and I'll take care of everything from the first sketch to the day it goes live.",
+    "I'm a UI designer and website developer from India. I design and build websites for shops, artists, gyms, restaurants, schools — anyone with something worth putting online.",
+    "No copy-paste sites: every site is made for your business, loads fast and works well on a phone. Tell me what you need, and I'll take care of everything from the first sketch to the day it goes live.",
   ],
   // The "What I build" list in the About section.
   services: [
@@ -233,17 +231,6 @@ export const profile = {
     { title: "Online stores", text: "Products, cart and checkout — ready to start selling." },
     { title: "Portfolios", text: "For artists, creators and professionals who want to stand out." },
     { title: "Landing pages", text: "One sharp page for a launch, an event or an offer." },
-  ],
-  // The "now" list in the About section.
-  now: [
-    { label: "Building", value: "this portfolio, one website at a time" },
-    { label: "Learning", value: "motion design & 3D on the web" },
-    { label: "Open to", value: "freelance websites & collaborations" },
-  ],
-  skills: [
-    { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js", "Framer Motion"] },
-    { group: "Backend", items: ["Node.js", "REST APIs", "PostgreSQL", "MongoDB", "Prisma"] },
-    { group: "Tools", items: ["Git", "Figma", "Vercel", "Docker", "Linux"] },
   ],
   // Websites you've built: each shows in the "Websites" section of its
   // multitude's page, and all of them in the hero ("Websites I've built",
@@ -273,7 +260,7 @@ export const profile = {
       image: "/work/saffron-hearth.webp",
       year: "2026",
       concept: true,
-      client: "a fictional restaurant in Bengaluru",
+      client: "a restaurant in Bengaluru",
       highlights: ["Menu · 4 sections", "Veg-only filter", "Table booking", "Experiences", "Review slider"],
     },
     {
@@ -283,6 +270,7 @@ export const profile = {
       href: "https://himwoollen.vercel.app/",
       color: "#a8322c",
       multitude: "business",
+      also: ["store"],
       image: "/work/him-woollen.webp",
       year: "2026",
       client: "Him Woollen · Himachal Pradesh",
@@ -309,7 +297,7 @@ export const profile = {
       image: "/work/ironforge-fitness.webp",
       year: "2026",
       concept: true,
-      client: "a fictional gym in Noida",
+      client: "a gym in Noida",
       highlights: ["Programs · 6 types", "Trainer profiles", "Class schedule", "BMI calculator", "Transformations", "FAQ"],
     },
     {
@@ -322,7 +310,7 @@ export const profile = {
       image: "/work/aangan-estates.webp",
       year: "2026",
       concept: true,
-      client: "a fictional real-estate agency in Delhi NCR",
+      client: "a real-estate agency in Delhi NCR",
       highlights: ["Property search", "Featured listings", "Localities", "EMI calculator", "Advisors", "Site visit booking"],
     },
     {
@@ -335,7 +323,7 @@ export const profile = {
       image: "/work/still-waters-therapy.webp",
       year: "2026",
       concept: true,
-      client: "a fictional counselling practice",
+      client: "a counselling practice",
       highlights: ["Therapies · 18", "Category filter", "Our approach", "About", "FAQ", "Free consultation"],
     },
     {
@@ -348,7 +336,7 @@ export const profile = {
       image: "/work/waypoint-stays.webp",
       year: "2026",
       concept: true,
-      client: "a fictional homestay platform",
+      client: "a homestay platform",
       highlights: ["Stay search", "8 stay types", "Popular destinations", "13 listings", "Wishlist", "Become a host"],
     },
     {
@@ -361,7 +349,7 @@ export const profile = {
       image: "/work/aurelia-salon.webp",
       year: "2026",
       concept: true,
-      client: "a fictional salon in Gurugram",
+      client: "a salon in Gurugram",
       highlights: ["Service menu · 6 types", "Stylist profiles", "Bridal", "Lookbook", "FAQ", "Appointment booking"],
     },
     {
@@ -374,7 +362,7 @@ export const profile = {
       image: "/work/threads-tradition.webp",
       year: "2026",
       concept: true,
-      client: "a fictional Himachali wear rental",
+      client: "a Himachali wear rental",
       highlights: ["Collections · 6", "Shop by occasion", "Rental dates", "Outfit builder", "Studio trial", "Journal"],
     },
     {
@@ -387,7 +375,7 @@ export const profile = {
       image: "/work/safarnama-journeys.webp",
       year: "2026",
       concept: true,
-      client: "a fictional tour company",
+      client: "a tour company",
       highlights: ["Destinations · 5", "Packages", "60-second trip finder", "When-to-go planner", "Compare packages", "FAQ"],
     },
     {
@@ -400,19 +388,19 @@ export const profile = {
       image: "/work/bazaarify.webp",
       year: "2026",
       concept: true,
-      client: "a fictional online marketplace",
+      client: "an online marketplace",
       highlights: ["Categories · 9", "Deals of the day", "Search", "Wishlist & cart", "Offers & coupons", "Bestsellers"],
     },
   ] as Project[],
-  // The trending websites shown in the hero (max 5): titles from `projects`
-  // above, in order. Swap any title here to change what the hero shows; the
-  // rest stay one click away on /work.
   // The home page's row of big cards (max 10, by slug from the types above):
   // the most in-demand kinds right now, then a "See all categories" card
   // that opens /explore. Swap slugs here to change what the row shows.
   trackTypes: ["store", "restaurants", "fitness", "salon", "medical", "education", "real-estate", "stay", "business", "travel"],
   // The menu's "Trending websites" grid (6, by slug).
   menuTypes: ["store", "restaurants", "fitness", "salon", "medical", "stay"],
+  // The trending websites shown in the hero (max 5): titles from `projects`
+  // above, in order. Swap any title here to change what the hero shows; the
+  // rest stay one click away on /work.
   trendingSites: ["IronForge Fitness", "Aangan Estates", "Waypoint", "Saffron Hearth", "Art by the Passenger"],
   // Suggestions on the home page ("Ideas for your website"): add, remove or
   // reorder freely. Each one can be added to the visitor's message.
@@ -452,6 +440,8 @@ export const profile = {
 // Every website type: the 12 trending ones first, then the rest.
 export const allTypes: WebsiteType[] = [...profile.multitudes, ...profile.moreTypes];
 export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);
+// Does this project belong on that type's page (its own type, or one of `also`)?
+export const inType = (p: Project, slug: string) => p.multitude === slug || (p.also ?? []).includes(slug);
 
 // Names that point at other entries (trendingSites, trackTypes, menuTypes, ideas'
 // seenIn, reviews' site, projects' multitude) are plain strings, so a typo
@@ -465,7 +455,7 @@ export const findType = (slug: string) => allTypes.find((t) => t.slug === slug);
     ...profile.menuTypes.filter((s) => !slugs.has(s)).map((s) => `menuTypes: "${s}"`),
     ...profile.ideas.flatMap((i) => (i.seenIn ?? []).filter((t) => !titles.has(t)).map((t) => `ideas "${i.name}" seenIn: "${t}"`)),
     ...profile.reviews.filter((r) => r.site && !titles.has(r.site)).map((r) => `reviews (${r.name}) site: "${r.site}"`),
-    ...profile.projects.filter((p) => !slugs.has(p.multitude)).map((p) => `projects "${p.title}" multitude: "${p.multitude}"`),
+    ...profile.projects.flatMap((p) => [p.multitude, ...(p.also ?? [])].filter((m) => !slugs.has(m)).map((m) => `projects "${p.title}" multitude: "${m}"`)),
   ];
   if (bad.length) throw new Error(`data/profile.ts: these names don't match anything:\n  ${bad.join("\n  ")}`);
 }

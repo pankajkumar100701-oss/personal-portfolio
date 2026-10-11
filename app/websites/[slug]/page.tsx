@@ -63,38 +63,57 @@ export default async function MultitudePage({ params }: PageProps<"/websites/[sl
           </div>
         </Hero>
 
-        {/* The different websites I can build for this kind of business. */}
-        <section id="what-i-build" className="mt-20 scroll-mt-10">
+        {/* The different websites I can build for this kind of business:
+            folded to a row of names (so the websites below are a scroll
+            away), opening into the full cards. */}
+        <section id="what-i-build" className="mt-16 scroll-mt-10">
           <Heading n="01">{m.title} websites I can build</Heading>
-          {list.length > 0 && (
-            <ul className="k-grid">
-              {list.map((k, i) => (
-                <li key={k.title} className="k-card m-rise" style={{ animationDelay: `${Math.min(i, 6) * 0.05}s` }}>
-                  <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-2 font-display text-2xl italic leading-tight">{k.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-soft">{k.text}</p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Includes">
-                    {k.has.map((h) => (
-                      <li key={h} className="m-tag">
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                  <AddToMessage kind="ideas" id={k.title} label="I want this" addedLabel="Added to message" className="k-add" />
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="k-extras">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Any of them can have</p>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {m.features.map((f) => (
-                <li key={f}>
-                  <AddToMessage kind="ideas" id={f} label={f} addedLabel={f} className="k-chip" />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <details className="k-fold">
+            <summary>
+              <span className="k-fold-names">
+                {list.map((k) => (
+                  <span key={k.title}>{k.title}</span>
+                ))}
+                {list.length === 0 && <span>What any {m.title} site can have</span>}
+              </span>
+              <span className="k-fold-toggle">
+                <span className="k-fold-more">See details</span>
+                <span className="k-fold-less">Hide</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </span>
+            </summary>
+            {list.length > 0 && (
+              <ul className="k-grid">
+                {list.map((k, i) => (
+                  <li key={k.title} className="k-card">
+                    <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="mt-2 font-display text-2xl italic leading-tight">{k.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-soft">{k.text}</p>
+                    <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Includes">
+                      {k.has.map((h) => (
+                        <li key={h} className="m-tag">
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                    <AddToMessage kind="ideas" id={k.title} label="I want this" addedLabel="Added to message" className="k-add" />
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="k-extras">
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Any of them can have</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {m.features.map((f) => (
+                  <li key={f}>
+                    <AddToMessage kind="ideas" id={f} label={f} addedLabel={f} className="k-chip" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
         </section>
 
         <Websites m={m} n="02" />

@@ -1,20 +1,46 @@
-import type { CSSProperties, ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { profile, type WebsiteType, type Project } from "@/data/profile";
+import { inType, profile, type WebsiteType, type Project } from "@/data/profile";
 import { AddToMessage } from "@/components/MessageActions";
+import { SizeSwitch, readSize, saveSize } from "@/components/PopCard";
 import { Heading } from "./ui";
+
+const sizes = [
+  { value: "small", label: "Small" },
+  { value: "large", label: "Large" },
+] as const;
+type Size = (typeof sizes)[number]["value"];
+const SIZE_KEY = "type-sites-size";
 
 // Closes every multitude's page: the websites built for it (projects in
 // data/profile.ts whose `multitude` is this slug), each as a showcase — the
 // site in a browser frame beside who it's for, what's inside, tags and a
-// live link. Until there are some, an invitation to be the first.
+// live link. A small / large switch shrinks them to compact cards with a
+// direct "Visit" button. Until there are some, an invitation to be the first.
 export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string }) {
-  const sites = profile.projects.filter((p) => p.multitude === m.slug);
+  const sites = profile.projects.filter((p) => inType(p, m.slug));
+  const [size, setSize] = useState<Size>("large");
+
+  // The remembered size is only readable in the browser; sync it in after hydration.
+  useEffect(() => {
+    const saved = readSize(SIZE_KEY, sizes);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (saved) setSize(saved);
+  }, []);
+  const pickSize = (v: Size) => {
+    setSize(v);
+    saveSize(SIZE_KEY, v);
+  };
 
   return (
     <section id="websites" className="mt-24 scroll-mt-10">
-      <Heading n={n}>{sites.length === 0 ? "Websites" : "Websites I've built"}</Heading>
+      <div className="x-sites-head">
+        <Heading n={n}>{sites.length === 0 ? "Websites" : "Websites I've built"}</Heading>
+        {sites.length > 0 && <SizeSwitch options={sizes} value={size} onChange={pickSize} />}
+      </div>
       {sites.length === 0 ? (
         <div className="m-workshop-empty rounded-2xl p-6 sm:p-10">
           <p className="max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Yours could be the first {m.title} site here.</p>
@@ -29,9 +55,9 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
           </div>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className={size === "small" ? "grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3" : "space-y-6"}>
           {sites.map((p, i) => (
-            <ProjectShowcase key={p.title} p={p} i={i} />
+            <ProjectShowcase key={p.title} p={p} i={i} size={size} direct />
           ))}
         </div>
       )}
@@ -46,13 +72,14 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
 // card size) can stack it: "medium" puts the site above the details, "small"
 // also trims it to the title, one line and the buttons.
 // With `onOpen`, tapping the site's picture or title calls it (to pop the card
-// open) instead of visiting the site.
-export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: Project; i: number; kicker?: ReactNode; size?: "large" | "medium" | "small"; onOpen?: () => void }) {
+// open) instead of visiting the site. `direct` keeps a "Visit" button on
+// small cards, even on phones (where small cards otherwise drop the buttons).
+export function ProjectShowcase({ p, i, kicker, size = "large", onOpen, direct }: { p: Project; i: number; kicker?: ReactNode; size?: "large" | "medium" | "small"; onOpen?: () => void; direct?: boolean }) {
   const small = size === "small";
   // Client reviews of this site (profile.reviews with `site` set to its title).
   const reviews = profile.reviews.filter((r) => r.site === p.title);
   return (
-    <article className={`m-show m-rise group grid overflow-hidden rounded-2xl ${size === "large" ? "md:grid-cols-[1.3fr_1fr]" : ""}`} data-size={size} style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
+    <article className={`m-show m-rise group grid overflow-hidden rounded-2xl ${size === "large" ? "md:grid-cols-[1.3fr_1fr]" : ""}`} data-size={size} data-direct={(direct && small) || undefined} style={{ "--p": p.color, animationDelay: `${i * 0.1}s` } as CSSProperties}>
       {/* The site in a little browser window that tilts toward you on hover. */}
       <a
         href={p.href}
@@ -83,13 +110,13 @@ export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: P
                 {p.title}
               </span>
             )}
-            {p.concept && <span className="m-concept">Concept</span>}
+            {p.concept && <span className="m-concept">Sample design</span>}
           </span>
         </span>
       </a>
       <div className={`flex flex-col justify-center ${size === "large" ? "p-5 sm:p-8 lg:px-12" : small ? "p-4 sm:p-5" : "p-5 sm:p-7"}`}>
         <p className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
-          <span>{String(i + 1).padStart(2, "0")} — {kicker ?? "Live"}</span>
+          <span>{String(i + 1).padStart(2, "0")} — {kicker ?? (p.concept ? "Sample design" : "Live")}</span>
           {p.year && <span className="text-muted">{p.year}</span>}
         </p>
         <h3 className={`mt-3 font-display italic leading-[1.05] ${small ? "text-xl sm:text-2xl" : "text-3xl lg:text-4xl"}`}>
@@ -101,7 +128,7 @@ export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: P
             p.title
           )}
         </h3>
-        {p.client && !small && <p className="mt-1.5 text-sm text-muted">for {p.client}</p>}
+        {p.client && !small && <p className="mt-1.5 text-sm text-muted">{p.concept ? "Sample design for" : "for"} {p.client}</p>}
         <p className={`m-show-desc mt-3 text-sm leading-relaxed text-soft ${small ? "line-clamp-2" : ""}`}>{p.description}</p>
         {p.highlights && !small && (
           <ul className="mt-4 flex flex-wrap gap-1.5">
@@ -135,9 +162,9 @@ export function ProjectShowcase({ p, i, kicker, size = "large", onOpen }: { p: P
         ))}
         <div className="m-show-acts mt-5 flex flex-wrap items-center gap-2">
           <a href={p.href} target="_blank" rel="noopener noreferrer" className="m-cta m-cta-sm">
-            Visit the site <span aria-hidden>↗</span>
+            {direct && small ? "Visit" : "Visit the site"} <span aria-hidden>↗</span>
           </a>
-          <AddToMessage kind="sites" id={p.title} label="I want one like this" />
+          {!(direct && small) && <AddToMessage kind="sites" id={p.title} label="I want one like this" />}
         </div>
       </div>
     </article>

@@ -6,10 +6,12 @@ import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
+const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+const numberWord = (n: number) => NUMBER_WORDS[n] ?? String(n);
+
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => v * v * (3 - 2 * v);
 
-const DOT_DROP = 0.045; // em
 const PORTAL_STEP = Math.log(1.08); // the dive's ring is re-drawn every 8% of growth
 
 // Places the dot exactly where the rendered font draws its tittle. The serif
@@ -68,9 +70,9 @@ function fitDot(span: HTMLElement, dot: HTMLElement) {
   const size = Math.max(maxX - minX, maxY - minY) + 1;
   const cx = (minX + maxX + 1) / 2 - x0;
   const cy = (minY + maxY + 1) / 2 - (y0 - ascent);
+  // Exactly where the font draws its own tittle, so it reads as a plain "i".
   dot.style.left = `${(cx - size / 2) / S}em`;
-  // Sit the dot a touch lower than the font's own tittle, snug on the stem.
-  dot.style.top = `${(cy - size / 2) / S + DOT_DROP}em`;
+  dot.style.top = `${(cy - size / 2) / S}em`;
   dot.style.width = dot.style.height = `${size / S}em`;
 }
 
@@ -91,7 +93,6 @@ export default function MultitudesHero() {
   const dotRef = useRef<HTMLElement>(null);
   const portalRef = useRef<HTMLDivElement>(null);
   const readoutRef = useRef<HTMLSpanElement>(null);
-  const spotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current!;
@@ -249,8 +250,11 @@ export default function MultitudesHero() {
           const on = inside >= at;
           if (on !== shownIn[i]) el.toggleAttribute("data-in", (shownIn[i] = on));
         });
-        // Gates the arrival's idle loops and makes its chips clickable.
-        stage.toggleAttribute("data-arrived", inside > 0.6);
+        // Makes the arrival's chips and buttons clickable, and reachable by
+        // keyboard and screen readers (inert until then).
+        const arrived = inside > 0.6;
+        stage.toggleAttribute("data-arrived", arrived);
+        arrive.inert = !arrived;
       }
       const text = `Zoom ${zoom < 10 ? zoom.toFixed(2) : zoom.toFixed(0)}×`;
       if (text !== shownReadout) readout.textContent = shownReadout = text;
@@ -280,8 +284,8 @@ export default function MultitudesHero() {
         shownIn[i] = false;
       });
       stage.removeAttribute("data-arrived");
+      arrive.inert = true;
       shownInside = -1;
-      section.removeAttribute("data-zooming");
     };
 
     // Time-based easing so the glide feels the same at 60Hz and 120Hz+, and a
@@ -293,11 +297,6 @@ export default function MultitudesHero() {
       cur += (target - cur) * (1 - Math.exp(-dt / 170));
       if (Math.abs(target - cur) < 0.0002) cur = target;
       apply();
-      // Backdrop blur re-samples every frame under a moving transform; drop it
-      // mid-dive (it's invisible over the dark stage anyway).
-      // (Only on change: re-setting it every frame re-matched its selectors.)
-      const zooming = cur > 0.001;
-      if (zooming !== section.hasAttribute("data-zooming")) section.toggleAttribute("data-zooming", zooming);
       if (cur === target) {
         frame = 0;
         last = 0;
@@ -351,10 +350,7 @@ export default function MultitudesHero() {
     // without a window resize, so re-fit whenever the copy block changes size.
     const ro = new ResizeObserver(fit);
     ro.observe(world.querySelector(".u-copy")!);
-    // (The title's periodic sheen ends here too; it doesn't move anything.)
-    const onAnimEnd = (e: AnimationEvent) => {
-      if (e.animationName !== "u-sheen") onResize();
-    };
+    const onAnimEnd = () => onResize();
     world.addEventListener("animationend", onAnimEnd);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
@@ -370,84 +366,6 @@ export default function MultitudesHero() {
       wide.removeEventListener("change", onModeChange);
       window.removeEventListener(PREFS_EVENT, onModeChange);
       clipCosmos("");
-    };
-  }, []);
-
-  // Pointer polish (fine pointers only): a stage spotlight, plus each card's
-  // glow position and a spring tilt toward the cursor.
-  useEffect(() => {
-    const stage = stageRef.current!;
-    const spot = spotRef.current!;
-    const cards = [...stage.querySelectorAll<HTMLElement>(".u-node > *")];
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-    
-    const onStageMove = (e: PointerEvent) => {
-      if (!fine.matches) return;
-      const r = stage.getBoundingClientRect();
-      spot.style.translate = `${e.clientX - r.left}px ${e.clientY - r.top}px`;
-    };
-    const onCardMove = (e: PointerEvent) => {
-      if (!fine.matches) return;
-      const card = e.currentTarget as HTMLElement;
-      const r = card.getBoundingClientRect();
-      const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-      const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-      card.style.setProperty("--mx", `${x * 100}%`);
-      card.style.setProperty("--my", `${y * 100}%`);
-      if (motionReduced()) return;
-      card.style.setProperty("--rx", `${(0.5 - y) * 16}deg`);
-      card.style.setProperty("--ry", `${(x - 0.5) * 14}deg`);
-    };
-    const onCardLeave = (e: PointerEvent) => {
-      const card = e.currentTarget as HTMLElement;
-      card.style.removeProperty("--rx");
-      card.style.removeProperty("--ry");
-    };
-
-    stage.addEventListener("pointermove", onStageMove);
-    for (const c of cards) {
-      c.addEventListener("pointermove", onCardMove);
-      c.addEventListener("pointerleave", onCardLeave);
-    }
-    return () => {
-      stage.removeEventListener("pointermove", onStageMove);
-      for (const c of cards) {
-        c.removeEventListener("pointermove", onCardMove);
-        c.removeEventListener("pointerleave", onCardLeave);
-      }
-    };
-  }, []);
-
-  // Idle upkeep: pause the hero's loops while it's scrolled out of view, and
-  // run the title's sheen as one sweep every few seconds rather than an
-  // endless animation (see the CSS for why).
-  useEffect(() => {
-    const section = sectionRef.current!;
-    const em = section.querySelector<HTMLElement>(".u-copy h1 em");
-    let visible = true;
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      section.toggleAttribute("data-offscreen", !visible);
-    });
-    io.observe(section);
-    const sweep = () => {
-      if (!em || !visible || motionReduced() || section.hasAttribute("data-zooming")) return;
-      em.setAttribute("data-sheen", "");
-    };
-    const onEnd = (e: AnimationEvent) => {
-      if (e.animationName === "u-sheen") em?.removeAttribute("data-sheen");
-    };
-    em?.addEventListener("animationend", onEnd);
-    let timer = 0;
-    const first = window.setTimeout(() => {
-      sweep();
-      timer = window.setInterval(sweep, 7000);
-    }, 5450);
-    return () => {
-      io.disconnect();
-      em?.removeEventListener("animationend", onEnd);
-      clearTimeout(first);
-      clearInterval(timer);
     };
   }, []);
 
@@ -489,13 +407,7 @@ export default function MultitudesHero() {
   return (
     <section ref={sectionRef} className="u-section" aria-label="Introduction">
       <div ref={stageRef} className="u-stage">
-        <div ref={spotRef} className="u-spot" aria-hidden />
         <div ref={sceneRef} className="u-scene">
-          <div className="u-grain" aria-hidden />
-          <div className="u-orb u-orb-a" aria-hidden />
-          <div className="u-orb u-orb-b" aria-hidden />
-          <div className="u-orb u-orb-c" aria-hidden />
-
           <div className="u-camera">
             <div ref={worldRef} className="u-world">
               <div className="u-halo" aria-hidden />
@@ -506,21 +418,28 @@ export default function MultitudesHero() {
               <div className="u-copy">
                 <p className="u-eyebrow">{hero.eyebrow}</p>
                 <h1>
-                  {hero.first}
-                  <br />
-                  <em>
-                    {iAt < 0 ? (
-                      hero.accent
-                    ) : (
-                      <>
-                        {hero.accent.slice(0, iAt)}
-                        <span className="u-i">
-                          ı<i ref={dotRef} className="u-dot" aria-hidden />
-                        </span>
-                        {hero.accent.slice(iAt + 1)}
-                      </>
-                    )}
-                  </em>
+                  {/* What Google and screen readers get: the visual title spells
+                      "Studio" with a dotless ı plus a separate dot element. */}
+                  <span className="sr-only">
+                    {hero.first} {hero.accent}
+                  </span>
+                  <span aria-hidden>
+                    {hero.first}
+                    <br />
+                    <em>
+                      {iAt < 0 ? (
+                        hero.accent
+                      ) : (
+                        <>
+                          {hero.accent.slice(0, iAt)}
+                          <span className="u-i">
+                            ı<i ref={dotRef} className="u-dot" aria-hidden />
+                          </span>
+                          {hero.accent.slice(iAt + 1)}
+                        </>
+                      )}
+                    </em>
+                  </span>
                 </h1>
                 <p className="u-subline">{hero.subline}</p>
                 {/* Phones: my websites and "Explore your type" sit under the title (desktop has them in the bottom bar). */}
@@ -554,8 +473,14 @@ export default function MultitudesHero() {
                   Customise your website plan <span aria-hidden>→</span>
                 </Link>
                 <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
-                  <i className="u-live" aria-hidden /> Open for projects
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+                  </svg> Email me
                 </a>
+                <p className="u-open">
+                  <i className="u-live" aria-hidden /> Open for new projects
+                </p>
               </div>
 
               <span className="u-micro u-m1" aria-hidden>CREATIVE</span>
@@ -566,13 +491,9 @@ export default function MultitudesHero() {
         </div>
 
         <div ref={portalRef} className="u-portal" aria-hidden />
-        <div className="u-arrive" aria-hidden>
+        <div className="u-arrive" inert>
           <div className="u-portal-copy">
-            <div className="u-arrive-rings" aria-hidden>
-              <i />
-              <i />
-              <i />
-            </div>
+            <div className="u-arrive-rings" aria-hidden />
             <span className="u-arrive-kicker">You just dived into the i.</span>
             <p className="u-arrive-title">
               {(() => {
@@ -593,24 +514,30 @@ export default function MultitudesHero() {
               })()}
             </p>
             <p className="u-arrive-sub">
-              <span>{profile.brand}</span> builds websites for all twelve of these:
+              <span>{profile.brand}</span> builds websites for all {numberWord(multitudes.length)} of these:
             </p>
             <ul className="u-arrive-chips">
               {multitudes.map((m, i) => (
                 <li key={m.n} style={{ "--c": m.color, "--k": i } as CSSProperties}>
-                  <Link href={`/websites/${m.slug}`} tabIndex={-1}>
+                  <Link href={`/websites/${m.slug}`}>
                     <b>{m.n}</b> {m.title}
                   </Link>
                 </li>
               ))}
             </ul>
             <div className="u-arrive-cta">
-              <Link href="/explore" tabIndex={-1} className="u-cta-primary">
+              <Link href="/explore" className="u-cta-primary">
                 Explore your type <span aria-hidden>→</span>
               </Link>
-              <a href={`mailto:${profile.contact.email}`} tabIndex={-1} className="u-cta-ghost">
-                <i className="u-live" aria-hidden /> Open for projects
+              <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+                </svg> Email me
               </a>
+              <p className="u-open">
+                <i className="u-live" aria-hidden /> Open for new projects
+              </p>
             </div>
           </div>
         </div>

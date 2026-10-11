@@ -21,17 +21,3 @@ export function Heading({ n, children }: { n: string; children: ReactNode }) {
     </h2>
   );
 }
-
-export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`m-card rounded-2xl p-6 ${className}`}>{children}</div>;
-}
-
-export function Cta({ m }: { m: WebsiteType }) {
-  if (!m.link) return null;
-  const external = m.link.href.startsWith("http");
-  return (
-    <a href={m.link.href} className="m-cta" {...(external && { target: "_blank", rel: "noopener noreferrer" })}>
-      {m.link.label} <span aria-hidden>→</span>
-    </a>
-  );
-}

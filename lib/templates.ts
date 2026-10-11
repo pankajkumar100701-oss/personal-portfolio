@@ -14,9 +14,16 @@ export function templateSource(slug: string) {
 // and forms never submit anywhere.
 const GUARD = `<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a)return;e.preventDefault();var h=a.getAttribute("href")||"";if(h.length>1&&h[0]==="#"){var t=document.getElementById(h.slice(1));if(t)t.scrollIntoView({behavior:"smooth"})}else if(h==="#")window.scrollTo({top:0,behavior:"smooth"})},true);document.addEventListener("submit",function(e){e.preventDefault()},true)})()</script>`;
 
-// The template as shown in a preview: the same file plus the guard above
+// For the /templates cards (opened as …/preview#still): the template draws
+// its first moments, then freezes, so a page of cards isn't thirty animations
+// at once. The card sends "tpl:play" while it's hovered (or centred on a
+// phone) and "tpl:pause" after. Freezing holds requestAnimationFrame callbacks
+// and pauses CSS animations; the full-size preview never freezes.
+const STILL = `<script>(function(){if(!/still/.test(location.hash))return;var raf=window.requestAnimationFrame.bind(window),q=[],paused=false,st=document.createElement("style");st.textContent="*,*::before,*::after{animation-play-state:paused!important}";window.requestAnimationFrame=function(cb){if(!paused)return raf(cb);q.push(cb);return 0};function set(p){if(p===paused)return;paused=p;if(p){(document.head||document.documentElement).appendChild(st)}else{st.remove();var c=q;q=[];c.forEach(function(f){raf(f)})}}var first=setTimeout(function(){set(true)},900);addEventListener("message",function(e){if(e.data==="tpl:play"){clearTimeout(first);set(false)}else if(e.data==="tpl:pause")set(true)})})()</script>`;
+
+// The template as shown in a preview: the same file plus the guards above
 // (the code tab and downloads still hand out the untouched file).
 export function previewSource(slug: string) {
   const html = templateSource(slug);
-  return html.includes("<head>") ? html.replace("<head>", `<head>${GUARD}`) : GUARD + html;
+  return html.includes("<head>") ? html.replace("<head>", `<head>${GUARD}${STILL}`) : GUARD + STILL + html;
 }

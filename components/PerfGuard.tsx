@@ -8,10 +8,9 @@ const MAX_PROBES = 6;
 
 // Watches the frame rate for a moment after load and while scrolling (when the
 // dive and the card row are animating). If this machine can't keep up, it
-// sets <html data-lite>, which switches off the purely decorative idle loops
-// (drifting glows, floating cards, grain, cursor light; see globals.css) so
-// the scroll animations get the whole frame budget. Layout and the animations
-// themselves stay the same. Remembered for the tab's session.
+// sets <html data-lite>, which drops the panel blurs and hover lifts (see
+// globals.css) so the scroll animations get the whole frame budget. Layout
+// and the animations themselves stay the same. Remembered for the tab's session.
 export default function PerfGuard() {
   useEffect(() => {
     const html = document.documentElement;

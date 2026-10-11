@@ -6,15 +6,15 @@ import { ArtIcon, DEFAULT_ART, MULTITUDE_ART } from "@/components/MultitudeArt";
 import { allTypes } from "@/data/profile";
 import { motionReduced } from "@/lib/prefs";
 
-const ENTER = 720; // ms: the disk floods the screen
-const EXIT = 850; // ms: the new page opens out of its centre
+const ENTER = 320; // ms: the cover fades in
+const EXIT = 380; // ms: and out again over the new page
 
-// The page-to-page version of the hero's dive. Clicking any link to a
-// multitude grows a disk in that multitude's own gradient out of the click
-// (its "dot"), draws its icon and names the page, navigates underneath, then hollows out from the
-// centre into an ever-wider ring that opens onto the new page. Lives in the
-// root layout so it survives the navigation. Skipped for reduced motion,
-// modified clicks and back/forward.
+// Clicking any link to a website type fades in a cover in that type's own
+// gradient, names the page, navigates underneath, then fades away onto the
+// new page. Only opacity animates, so it runs on the compositor (the old
+// clip-path / mask "ring" repainted the whole screen every frame). Lives in
+// the root layout so it survives the navigation. Skipped on phones, for
+// reduced motion, modified clicks and back/forward.
 export default function PortalTransition() {
   const router = useRouter();
   const pathname = usePathname();
@@ -39,17 +39,8 @@ export default function PortalTransition() {
 
     exitRef.current = () => {
       clearTimeout(safety);
-      const d = Math.hypot(innerWidth, innerHeight) + 4;
-      label.animate([{ opacity: 1 }, { opacity: 0, transform: "scale(1.06)" }], { duration: 260, fill: "forwards", easing: "ease-in" });
-      // A full-screen layer minus a circle (mask exclude) whose size grows:
-      // the colour hollows into a ring that sweeps off the edges.
       root
-        .animate([{ maskSize: "0px 0px, 100% 100%" }, { maskSize: `${d}px ${d}px, 100% 100%` }], {
-          duration: EXIT,
-          delay: 140,
-          easing: "cubic-bezier(0.65, 0, 0.2, 1)",
-          fill: "forwards",
-        })
+        .animate([{ opacity: 1 }, { opacity: 0 }], { duration: EXIT, delay: 80, easing: "ease-out", fill: "forwards" })
         .finished.then(finish, finish);
     };
 
@@ -61,20 +52,10 @@ export default function PortalTransition() {
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
       const m = allTypes.find((x) => href === `/websites/${x.slug}`);
       if (!m || href === location.pathname) return;
-      if (motionReduced()) return;
+      if (motionReduced() || !window.matchMedia("(min-width: 800px)").matches) return;
       e.preventDefault();
       if (busy.current) return;
       busy.current = true;
-
-      // Grow from the click; keyboard "clicks" have no pointer, so use the link.
-      let x = e.clientX;
-      let y = e.clientY;
-      if (!e.detail) {
-        const r = a.getBoundingClientRect();
-        x = r.left + r.width / 2;
-        y = r.top + r.height / 2;
-      }
-      const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 2;
 
       const art = MULTITUDE_ART[m.slug];
       root.style.setProperty("--from", art?.from ?? m.color);
@@ -82,14 +63,10 @@ export default function PortalTransition() {
       root.style.setProperty("--art-ink", (art ?? DEFAULT_ART).ink);
       setSlug(m.slug);
       root.setAttribute("data-on", "");
-      root.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${reach}px at ${x}px ${y}px)` }], {
-        duration: ENTER,
-        easing: "cubic-bezier(0.7, 0, 0.25, 1)",
-        fill: "forwards",
-      });
-      label.animate([{ opacity: 0, transform: "translateY(1.5rem) scale(0.96)" }, { opacity: 1, transform: "none" }], {
-        duration: 480,
-        delay: ENTER * 0.45,
+      root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ENTER, easing: "ease-out", fill: "forwards" });
+      label.animate([{ opacity: 0, transform: "translateY(0.75rem)" }, { opacity: 1, transform: "none" }], {
+        duration: 300,
+        delay: ENTER * 0.4,
         easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
         fill: "both",
       });
@@ -131,7 +108,7 @@ export default function PortalTransition() {
   const icon = slug ? (MULTITUDE_ART[slug] ?? DEFAULT_ART).icon : null;
   return (
     <div ref={rootRef} className="portal-x" aria-hidden>
-      {/* A huge, faint, slowly turning copy of the icon behind everything. */}
+      {/* A huge, faint copy of the icon behind everything. */}
       {icon && <ArtIcon key={`mark-${slug}`} icon={icon} className="portal-x-mark" />}
       <div className="portal-x-label">
         {icon && (

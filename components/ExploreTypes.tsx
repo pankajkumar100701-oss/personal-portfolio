@@ -5,11 +5,12 @@ import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { AddToMessage, ShareLink } from "@/components/MessageActions";
 import { PopCard, SizeSwitch, readSize, saveSize } from "@/components/PopCard";
-import { SortFilter } from "@/components/SortFilter";
-import { allTypes, profile, type WebsiteType } from "@/data/profile";
+import { SearchBox, SortFilter, flash } from "@/components/SortFilter";
+import { allTypes, inType, profile, type WebsiteType } from "@/data/profile";
+import { search } from "@/lib/search";
 
 const trending = new Set(profile.multitudes.map((m) => m.slug));
-const examples = (slug: string) => profile.projects.filter((p) => p.multitude === slug);
+const examples = (slug: string) => profile.projects.filter((p) => inType(p, slug));
 
 const filters = [
   { value: "all", label: "All" },
@@ -52,30 +53,24 @@ export default function ExploreTypes() {
     saveSize(SIZE_KEY, v);
   };
 
-  const shown = useMemo(() => {
-    const needle = q.trim().toLowerCase();
-    const list = allTypes.filter((t) => {
+  const { shown, related } = useMemo(() => {
+    let list = allTypes.filter((t) => {
       if (filter === "trending" && !trending.has(t.slug)) return false;
       if (filter === "more" && trending.has(t.slug)) return false;
       if (filter === "live" && examples(t.slug).length === 0) return false;
-      if (!needle) return true;
-      return [t.title, t.sub, t.idealFor, ...t.features].some((s) => s.toLowerCase().includes(needle));
+      return true;
     });
-    if (sort === "az") return [...list].sort((a, b) => a.title.localeCompare(b.title));
-    if (sort === "examples") return [...list].sort((a, b) => examples(b.slug).length - examples(a.slug).length);
-    return list;
+    if (sort === "az") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
+    if (sort === "examples") list = [...list].sort((a, b) => examples(b.slug).length - examples(a.slug).length);
+    // Typos and related words match too ("hotel" finds homestays); the closest come first.
+    const hits = search(list, q, (t) => [t.title, t.sub, t.idealFor, t.intro, ...t.features].join(" "));
+    return { shown: hits.map((h) => h.item), related: new Set(q.trim() ? hits.filter((h) => h.related).map((h) => h.item.slug) : []) };
   }, [q, filter, sort]);
 
   return (
     <>
       <div className="x-bar m-rise">
-        <label className="x-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </svg>
-          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search: salon, booking, payments…" aria-label="Search website types" />
-        </label>
+        <SearchBox value={q} onChange={setQ} placeholder="Search: salon, booking, payments…" label="Search website types" />
         <div className="x-tools">
           <SortFilter
             groups={[
@@ -94,12 +89,13 @@ export default function ExploreTypes() {
 
       <p className="mt-6 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
         {shown.length} {shown.length === 1 ? "type" : "types"}
+        {q.trim() && <> · “{q.trim()}”</>}
       </p>
 
       {shown.length === 0 ? (
         <div className="m-card mt-6 rounded-2xl p-8 text-center">
-          <p className="font-display text-3xl italic">Not listed? I can still build it.</p>
-          <p className="mt-2 text-muted">Tell me what you have in mind on the Contact page.</p>
+          <p className="font-display text-3xl italic">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Not listed? I can still build it."}</p>
+          <p className="mt-2 text-muted">I can still build it. Tell me what you have in mind on the Contact page.</p>
           <Link href="/contact" className="u-cta-primary x-btn mt-6">
             Customise your website plan <span aria-hidden>→</span>
           </Link>
@@ -109,7 +105,7 @@ export default function ExploreTypes() {
           {shown.map((t, i) => {
             const style = { "--c": t.color, ...artVars(t.slug, t.color), animationDelay: `${Math.min(i, 8) * 0.04}s` } as CSSProperties;
             return size === "small" ? (
-              <li key={t.slug} id={t.slug} className="x-mini m-rise" style={style}>
+              <li key={t.slug} id={t.slug} className="x-mini m-rise x-hit" style={style} data-flash={flash(q)} data-related={related.has(t.slug) || undefined}>
                 <button type="button" onClick={() => setOpenSlug(t.slug)} aria-haspopup="dialog">
                   <span className="x-type-icon">
                     <ArtIcon icon={artIcon(t.slug)} />
@@ -124,7 +120,7 @@ export default function ExploreTypes() {
                 </button>
               </li>
             ) : (
-              <li key={t.slug} id={t.slug} className="x-type m-rise" style={style}>
+              <li key={t.slug} id={t.slug} className="x-type m-rise x-hit" style={style} data-flash={flash(q)} data-related={related.has(t.slug) || undefined}>
                 <TypeDetails t={t} />
               </li>
             );

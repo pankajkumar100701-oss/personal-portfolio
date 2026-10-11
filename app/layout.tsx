@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
+import HelpButton from "@/components/HelpButton";
 import { BasketPill } from "@/components/MessageActions";
 import PerfGuard from "@/components/PerfGuard";
 import PortalTransition from "@/components/PortalTransition";
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <PerfGuard />
         {children}
         <BasketPill />
+        <HelpButton />
         <PortalTransition />
       </body>
     </html>
