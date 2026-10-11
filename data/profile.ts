@@ -1,6 +1,6 @@
 // Edit this file to personalise the portfolio — every section reads from here.
 
-// A kind of website I build. Each has its own page (/multitudes/<slug>).
+// A kind of website I build. Each has its own page (/websites/<slug>).
 export type WebsiteType = {
   n: string;
   slug: string;
@@ -54,12 +54,13 @@ export type Project = {
 
 export const profile = {
   name: "Pankaj Kumar",
+  brand: "Pankaj Studio", // the site's name: page titles, share cards, footer
   role: "Web Developer & UI Designer",
   tagline: "I build fast, playful and beautifully crafted web experiences.",
   location: "India",
   hero: {
     first: "Pankaj",
-    accent: "Multitudes",
+    accent: "Studio",
     eyebrow: "UI Designer / Website Developer",
     subline: "I design & build websites — for shops, gyms, artists, restaurants & more",
   },
@@ -235,7 +236,7 @@ export const profile = {
   ],
   // The "now" list in the About section.
   now: [
-    { label: "Building", value: "this portfolio, one multitude at a time" },
+    { label: "Building", value: "this portfolio, one website at a time" },
     { label: "Learning", value: "motion design & 3D on the web" },
     { label: "Open to", value: "freelance websites & collaborations" },
   ],

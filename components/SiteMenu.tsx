@@ -325,7 +325,7 @@ export default function SiteMenu() {
             {trending.map((t) => (
               <li key={t.slug}>
                 <Link
-                  href={`/multitudes/${t.slug}`}
+                  href={`/websites/${t.slug}`}
                   className="menu-type"
                   style={{ "--c": t.color, ...artVars(t.slug, t.color) } as CSSProperties}
                   onClick={() => setOpen(false)}

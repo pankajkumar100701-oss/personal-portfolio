@@ -18,7 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/templates/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const t = findTemplate(slug);
-  return t ? pageMeta(`${t.title} — Templates — ${profile.name}`, t.blurb, `/templates/${t.slug}`) : {};
+  return t ? pageMeta(`${t.title} — Templates — ${profile.brand}`, t.blurb, `/templates/${t.slug}`) : {};
 }
 
 export default async function TemplatePage({ params }: PageProps<"/templates/[slug]">) {

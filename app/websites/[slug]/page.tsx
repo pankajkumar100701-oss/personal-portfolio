@@ -19,13 +19,13 @@ export function generateStaticParams() {
   return multitudes.map((m) => ({ slug: m.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/multitudes/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/websites/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const m = multitudes.find((x) => x.slug === slug);
-  return m ? pageMeta(`${m.title} — ${profile.name}`, m.intro, `/multitudes/${m.slug}`) : {};
+  return m ? pageMeta(`${m.title} — ${profile.brand}`, m.intro, `/websites/${m.slug}`) : {};
 }
 
-export default async function MultitudePage({ params }: PageProps<"/multitudes/[slug]">) {
+export default async function MultitudePage({ params }: PageProps<"/websites/[slug]">) {
   const { slug } = await params;
   const index = multitudes.findIndex((x) => x.slug === slug);
   if (index === -1) notFound();
@@ -59,7 +59,7 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
               Customise yours <span aria-hidden>→</span>
             </Link>
             <AddToMessage kind="types" id={m.slug} />
-            <ShareLink path={`/multitudes/${m.slug}`} title={`${m.title} websites — ${profile.name}`} />
+            <ShareLink path={`/websites/${m.slug}`} title={`${m.title} websites — ${profile.brand}`} />
           </div>
         </Hero>
 
@@ -101,11 +101,11 @@ export default async function MultitudePage({ params }: PageProps<"/multitudes/[
       </article>
 
       <nav className="u-detail-pager" aria-label="Other website types">
-        <Link href={`/multitudes/${prev.slug}`}>
+        <Link href={`/websites/${prev.slug}`}>
           <small>← Previous</small>
           {prev.title}
         </Link>
-        <Link href={`/multitudes/${next.slug}`}>
+        <Link href={`/websites/${next.slug}`}>
           <small>Next →</small>
           {next.title}
         </Link>

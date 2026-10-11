@@ -7,7 +7,7 @@ import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 import { templates } from "@/data/templates";
 
-export const metadata: Metadata = pageMeta(`Templates — ${profile.name}`, "Free 3D page templates — see them live, copy the code. No libraries needed.", "/templates");
+export const metadata: Metadata = pageMeta(`Templates — ${profile.brand}`, "Free 3D page templates — see them live, copy the code. No libraries needed.", "/templates");
 
 // Every template as a card with a live, scaled-down preview (sortable,
 // filterable, small or large; see TemplateList). Reached from the menu.

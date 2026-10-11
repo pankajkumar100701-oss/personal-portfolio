@@ -157,7 +157,7 @@ function TypeDetails({ t }: { t: WebsiteType }) {
         {trending.has(t.slug) && <span className="x-badge">Trending</span>}
       </div>
       <h2 className="mt-5 font-display text-3xl italic leading-none">
-        <Link href={`/multitudes/${t.slug}`} className="hover:underline">
+        <Link href={`/websites/${t.slug}`} className="hover:underline">
           {t.title}
         </Link>
       </h2>
@@ -187,11 +187,11 @@ function TypeDetails({ t }: { t: WebsiteType }) {
         </p>
       )}
       <div className="x-type-actions">
-        <Link href={`/multitudes/${t.slug}`} className="x-open">
+        <Link href={`/websites/${t.slug}`} className="x-open">
           See websites <span aria-hidden>→</span>
         </Link>
         <AddToMessage kind="types" id={t.slug} />
-        <ShareLink path={`/multitudes/${t.slug}`} title={`${t.title} websites — ${profile.name}`} />
+        <ShareLink path={`/websites/${t.slug}`} title={`${t.title} websites — ${profile.brand}`} />
       </div>
     </>
   );

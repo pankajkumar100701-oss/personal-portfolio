@@ -14,11 +14,11 @@ export const siteUrl = (
 // that sets no `openGraph` would share with the homepage's title and text).
 // Setting it replaces the inherited one, so the site's card image is repeated.
 export function pageMeta(title: string, description: string, path: string) {
-  const images = [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${profile.name} — ${profile.role}` }];
+  const images = [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${profile.brand} — ${profile.role}` }];
   return {
     title,
     description,
-    openGraph: { type: "website" as const, siteName: profile.name, title, description, url: path, images },
+    openGraph: { type: "website" as const, siteName: profile.brand, title, description, url: path, images },
     twitter: { card: "summary_large_image" as const, images },
   };
 }

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { profile } from "@/data/profile";
 
 // The preview card shown when the site's link is shared (WhatsApp, X, LinkedIn…).
-export const alt = `${profile.name} — ${profile.role}`;
+export const alt = `${profile.brand} — ${profile.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

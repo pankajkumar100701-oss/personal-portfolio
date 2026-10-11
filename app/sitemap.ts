@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     { url: `${siteUrl}/contact`, changeFrequency: "yearly", priority: 0.6 },
     ...allTypes.map((m) => ({
-      url: `${siteUrl}/multitudes/${m.slug}`,
+      url: `${siteUrl}/websites/${m.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),

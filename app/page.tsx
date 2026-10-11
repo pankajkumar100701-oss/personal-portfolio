@@ -32,7 +32,7 @@ export default function Home() {
 
         <footer className="pointer-events-none absolute inset-x-0 bottom-3 z-30 px-4 text-center text-xs text-fg/50">
           <p>
-            © {new Date().getFullYear()} {profile.name} · {profile.location}
+            © {new Date().getFullYear()} {profile.brand} · {profile.location}
             {/* Light theme's wallpaper photo is CC BY 2.0, which requires this credit. */}
             <span className="hidden [[data-theme=light]_&]:inline">
               {" · "}Paper photo by{" "}

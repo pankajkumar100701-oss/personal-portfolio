@@ -29,12 +29,12 @@ const serif = Source_Serif_4({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${profile.name} — ${profile.role}`,
+  title: `${profile.brand} — ${profile.role}`,
   description: profile.tagline,
   openGraph: {
     type: "website",
-    siteName: profile.name,
-    title: `${profile.name} — ${profile.role}`,
+    siteName: profile.brand,
+    title: `${profile.brand} — ${profile.role}`,
     description: profile.tagline,
   },
   twitter: { card: "summary_large_image" },

@@ -168,7 +168,7 @@ export default function MultitudesTrack() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="multitudes" className="u-track" aria-label="The multitudes">
+    <section ref={sectionRef} id="multitudes" className="u-track" aria-label="Website types">
       <div className="u-track-stage">
         <div ref={rowRef} className="u-track-row">
           <div className="u-track-intro">
@@ -195,7 +195,7 @@ export default function MultitudesTrack() {
               {/* Hover (or, on phones, the snapped card) floods it with its gradient. */}
               <span className="u-card-flood" aria-hidden />
               <ArtIcon icon={artIcon(m.slug)} className="u-card-mark" />
-              <Link href={`/multitudes/${m.slug}`} className="u-card-link" aria-label={`${m.title}: open`} />
+              <Link href={`/websites/${m.slug}`} className="u-card-link" aria-label={`${m.title}: open`} />
               <span className="u-card-top">
                 <b>{num(i)}</b>
                 <span className="u-card-icon">

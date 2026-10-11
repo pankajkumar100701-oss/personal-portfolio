@@ -55,11 +55,11 @@ export default function PortalTransition() {
 
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="/multitudes/"]');
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="/websites/"]');
       // Links inside an open pop-up just navigate: the dialog would cover the disk.
       if (!a || (a.target && a.target !== "_self") || a.closest("dialog[open]")) return;
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
-      const m = allTypes.find((x) => href === `/multitudes/${x.slug}`);
+      const m = allTypes.find((x) => href === `/websites/${x.slug}`);
       if (!m || href === location.pathname) return;
       if (motionReduced()) return;
       e.preventDefault();

@@ -6,7 +6,7 @@ import SiteMenu from "@/components/SiteMenu";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = pageMeta(`Explore your type — ${profile.name}`, "Every kind of website I build — find yours, see live examples and add it to your message.", "/explore");
+export const metadata: Metadata = pageMeta(`Explore your type — ${profile.brand}`, "Every kind of website I build — find yours, see live examples and add it to your message.", "/explore");
 
 // Every website type (the 12 trending ones and the rest), searchable and
 // sortable. Reached from the hero's "Explore your type".

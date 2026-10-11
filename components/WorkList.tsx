@@ -97,7 +97,7 @@ export default function WorkList() {
               key={`${sort}-${type}-${p.title}`}
               p={p}
               i={i}
-              kicker={t ? <Link href={`/multitudes/${t.slug}`} className="hover:underline">{t.title}</Link> : "Live"}
+              kicker={t ? <Link href={`/websites/${t.slug}`} className="hover:underline">{t.title}</Link> : "Live"}
               size={size}
               onOpen={size === "large" ? undefined : () => setOpenTitle(p.title)}
             />

@@ -1,4 +1,4 @@
-// What each website type's page (/multitudes/<slug>) offers: the different
+// What each website type's page (/websites/<slug>) offers: the different
 // websites I can build for that kind of business, each with a line on what it
 // does and what it includes. Visitors can add any of them to their message.
 // Edit freely; a type missing here just shows its features and websites.

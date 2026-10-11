@@ -6,7 +6,7 @@ import WorkList from "@/components/WorkList";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = pageMeta(`My work — ${profile.name}`, "Every website I've built, in one place.", "/work");
+export const metadata: Metadata = pageMeta(`My work — ${profile.brand}`, "Every website I've built, in one place.", "/work");
 
 // Every project from data/profile.ts on one page (the multitude pages each
 // show only their own), sortable. Reached from the menu ("My work").

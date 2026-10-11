@@ -532,7 +532,7 @@ export default function MultitudesHero() {
                   const style = { "--x": `${m.x}%`, "--y": `${m.y}%`, "--c": m.color, "--i": i, ...artVars(m.slug, m.color) } as CSSProperties;
                   return (
                     <li key={m.n} className="u-node" style={style}>
-                      <Link href={`/multitudes/${m.slug}`}>
+                      <Link href={`/websites/${m.slug}`}>
                         {/* Hover floods the card with its gradient and draws its icon. */}
                         <span className="u-node-flood" aria-hidden />
                         <span className="u-node-icon" aria-hidden>
@@ -573,14 +573,14 @@ export default function MultitudesHero() {
               <i />
               <i />
             </div>
-            <span className="u-arrive-kicker">Do I contradict myself? Very well then.</span>
+            <span className="u-arrive-kicker">You just dived into the i.</span>
             <p className="u-arrive-title">
               {(() => {
                 let k = 0;
-                return "I am large, | I contain multitudes.".split(" | ").map((line, l) => (
+                return "Welcome to | the studio.".split(" | ").map((line, l) => (
                   <span key={l} className="u-arrive-line">
                     {line.split(" ").map((word) => (
-                      <span key={word} className={word.startsWith("multitudes") ? "u-arrive-accent" : undefined}>
+                      <span key={word} className={word.startsWith("studio") ? "u-arrive-accent" : undefined}>
                         {[...word].map((ch) => (
                           <span key={k} style={{ "--k": k++ } as CSSProperties}>
                             {ch}
@@ -593,12 +593,12 @@ export default function MultitudesHero() {
               })()}
             </p>
             <p className="u-arrive-sub">
-              <span>— Walt Whitman</span> and I build websites for all twelve of them:
+              <span>{profile.brand}</span> builds websites for all twelve of these:
             </p>
             <ul className="u-arrive-chips">
               {multitudes.map((m, i) => (
                 <li key={m.n} style={{ "--c": m.color, "--k": i } as CSSProperties}>
-                  <Link href={`/multitudes/${m.slug}`} tabIndex={-1}>
+                  <Link href={`/websites/${m.slug}`} tabIndex={-1}>
                     <b>{m.n}</b> {m.title}
                   </Link>
                 </li>
