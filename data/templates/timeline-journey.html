@@ -156,8 +156,10 @@
     .hud strong { font-size: 1.6rem; }
     .hud div + div { display: none; }
     .bar { left: 16px; right: 16px; }
-    .bar button { font-size: 0; gap: 0; }
-    .bar button.cur { font-size: 0.62rem; gap: 9px; }
+    /* non-current labels stay 11px but are clipped to the dot, so no sub-10px text */
+    .bar button { font-size: 11px; letter-spacing: 0.1em; }
+    .bar button:not(.cur) { width: 23px; height: 23px; grid-template-columns: 23px; gap: 0; overflow: clip; overflow-clip-margin: 8px; color: transparent; }
+    .bar button.cur { gap: 9px; }
   }
   @media (max-width: 820px) and (max-height: 700px) { .card .hi { display: none; } }
 

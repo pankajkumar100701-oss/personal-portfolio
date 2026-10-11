@@ -270,6 +270,7 @@ export default function SiteMenu() {
         onClick={() => setOpen((o) => !o)}
         className="menu-trigger"
       >
+        <span className="menu-mark" aria-hidden />
         <span className="whitespace-nowrap text-lg font-semibold tracking-[-0.02em] sm:text-xl" style={{ fontFamily: "var(--font-serif), Georgia, serif" }}>
           {profile.hero.first} <span className="font-normal italic">{profile.hero.accent}</span>
         </span>

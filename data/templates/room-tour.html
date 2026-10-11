@@ -164,7 +164,10 @@
     nav .btn { padding: 9px 15px; font-size: .82rem; }
     .styles { left: 12px; right: 12px; top: 12px; justify-content: space-between; }
     .styles button { padding: 7px 10px; font-size: .74rem; }
-    .info { left: 12px; right: 12px; bottom: 12px; width: auto; }
+    .info { left: 12px; right: 12px; bottom: 52px; width: auto; padding: 14px 16px 12px; border-radius: 16px; }
+    .info h3 { font-size: 1.05rem; padding-right: 26px; }
+    .info p { font-size: .8rem; margin: 4px 0 8px; }
+    .info .x { width: 36px; height: 36px; right: 6px; top: 4px; }
     .hint { display: none; }
     .steps { grid-template-columns: 1fr; }
     section { padding: 64px 0; }
@@ -461,6 +464,8 @@
     return best;
   };
 
+  // on phones the card would sit over the intro copy, so the idle tour never auto-opens it there
+  const small = matchMedia('(max-width: 520px)');
   let raf = 0, last = 0, firstCard = 900;
   const frame = (now) => {
     const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
@@ -469,7 +474,7 @@
       if (now - lastUser > CONFIG.idleAfter && !reduced.matches) {
         yaw += CONFIG.pan * dt; pitch += (CONFIG.start[1] - pitch) * .02;
         const f = facing();
-        if (now > firstCard && f !== current && (f >= 0 || current >= 0)) open(f);
+        if (now > firstCard && !small.matches && f !== current && (f >= 0 || current >= 0)) open(f);
       }
     }
     world.style.transform = `translateZ(${P}px) rotateX(${pitch}deg) rotateY(${yaw}deg) translateZ(${-CONFIG.eye}px)`;
@@ -480,7 +485,7 @@
   const start = () => { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  if (reduced.matches) open(1);
+  if (reduced.matches && !small.matches) open(1);
   start();
 
   $('form').addEventListener('submit', (e) => { e.preventDefault(); $('ok').textContent = 'Thank you — a designer will be in touch within one working day.'; e.target.reset(); });

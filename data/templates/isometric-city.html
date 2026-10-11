@@ -178,6 +178,14 @@
     .kpis { gap: 22px; }
     section { padding: 64px 0; }
     blockquote { padding: 26px; }
+    /* phone: tighter hero so the city starts on the first screen; info card sits below the city, not on it */
+    .hero .wrap { padding-top: 22px; gap: 0; }
+    h1 { margin: 16px 0 14px; }
+    .cta { margin: 22px 0 22px; gap: 10px; }
+    .kpis { padding-top: 16px; }
+    .stage { margin-bottom: 118px; }
+    .tip, .tip.side { left: 50% !important; top: calc(100% + 2px) !important; transform: translateX(-50%); width: min(300px, 100%); }
+    .tip::after, .tip.side::after { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

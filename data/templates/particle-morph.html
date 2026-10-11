@@ -99,10 +99,10 @@
   .steps b { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font: 600 13px ui-monospace, Menlo, monospace; background: rgb(255 255 255 / .05); border: 1px solid var(--line); color: var(--c2); }
   .steps strong { display: block; font-size: 16px; }
   .steps span { color: var(--muted); font-size: 15px; }
-  .code { border-radius: 18px; background: #0b0b1a; border: 1px solid var(--line); box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--c1) 50%, transparent); overflow: hidden; }
+  .code { min-width: 0; max-width: 100%; border-radius: 18px; background: #0b0b1a; border: 1px solid var(--line); box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--c1) 50%, transparent); overflow: hidden; }
   .code-top { display: flex; gap: 6px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
   .code-top i { width: 10px; height: 10px; border-radius: 50%; background: rgb(255 255 255 / .14); }
-  .code pre { padding: 20px; overflow-x: auto; font: 13.5px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #c8cbe8; }
+  .code pre { padding: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; max-width: 100%; font: 13.5px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #c8cbe8; }
   .code .k { color: var(--c3); } .code .s { color: var(--c2); } .code .c { color: rgb(255 255 255 / .35); } .code .f { color: #b9a6ff; }
 
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 48px; background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
@@ -143,7 +143,11 @@
   }
   @media (max-width: 420px) {
     .ctas .btn { flex: 1 1 100%; }
-    .stage { height: 380px; }
+    .stage { height: 380px; margin-top: -28px; }
+    .hero-grid { padding-block: 24px 24px; }
+    .ctas { margin-top: 24px; }
+    .proof { margin-top: 22px; }
+    .code pre { padding: 16px; font-size: 12px; }
     .switch button { padding: 8px 10px; font-size: 12px; }
     .proof { flex-direction: column; gap: 8px; }
     .bar .btn { display: none; }

@@ -129,19 +129,165 @@
     .panel .tag i { animation: none; }
     .btn { transition: none; }
   }
+
+  /* ---------- Landing sections ---------- */
+  html { scroll-behavior: smooth; }
+  .top { position: sticky; top: 0; z-index: 50; transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
+  .top.scrolled { background: rgb(5 7 13 / 0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-color: var(--line); }
+  .menu { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: rgb(255 255 255 / 0.04); color: var(--fg); cursor: pointer; margin-left: auto; }
+  .menu span, .menu span::before, .menu span::after { display: block; width: 16px; height: 2px; margin: 0 auto; background: currentColor; border-radius: 2px; position: relative; }
+  .menu span::before, .menu span::after { content: ""; position: absolute; left: 0; }
+  .menu span::before { top: -5px; } .menu span::after { top: 5px; }
+  .wrap { width: min(1192px, 100% - 48px); margin-inline: auto; }
+  section { padding: 104px 0; scroll-margin-top: 70px; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  h2 { margin: 14px 0 16px; font-size: clamp(30px, 4vw, 50px); line-height: 1.05; letter-spacing: -0.035em; max-width: 18ch; }
+  .lead { max-width: 38em; color: var(--muted); font-size: 17px; line-height: 1.6; }
+  .card { border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.015)); }
+
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+  .metrics .card { padding: 24px; }
+  .metrics strong { display: block; font-size: 36px; letter-spacing: -0.03em; }
+  .metrics span { font-size: 14px; color: var(--muted); }
+  .regions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+  .region { padding: 22px 24px; }
+  .region h3 { font-size: 17px; display: flex; justify-content: space-between; gap: 8px; }
+  .region h3 small { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--accent); }
+  .region p { margin: 8px 0 14px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .modes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .modes b { font: 500 12px var(--mono); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+
+  .track { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .tform { display: flex; gap: 10px; margin: 28px 0 10px; flex-wrap: wrap; }
+  input, select, textarea { font: inherit; font-size: 15px; color: var(--fg); background: rgb(255 255 255 / 0.04); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%; min-width: 0; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid rgb(61 245 196 / 0.5); outline-offset: 1px; }
+  select option { background: #0b101b; }
+  .tform input { flex: 1 1 200px; width: auto; font-family: var(--mono); }
+  button.btn { cursor: pointer; font-family: inherit; }
+  .note { min-height: 20px; font-size: 13px; color: var(--accent); }
+  .timeline { list-style: none; margin-top: 18px; padding: 20px 22px; }
+  .timeline li { position: relative; padding: 0 0 18px 26px; font-size: 14px; }
+  .timeline li:last-child { padding-bottom: 0; }
+  .timeline li::before { content: ""; position: absolute; left: 0; top: 4px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--dot); background: var(--bg); }
+  .timeline li::after { content: ""; position: absolute; left: 5px; top: 16px; bottom: 0; width: 1px; background: var(--line); }
+  .timeline li:last-child::after { display: none; }
+  .timeline li.done::before { border-color: var(--accent); background: var(--accent); }
+  .timeline li.now::before { border-color: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .timeline span { display: block; font: 12px var(--mono); color: var(--muted); margin-top: 3px; }
+
+  /* 3D shipping container (CSS preserve-3d) */
+  .scene { position: relative; height: 380px; perspective: 1100px; display: grid; place-items: center; }
+  .scene::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: 40px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgb(61 245 196 / 0.22), transparent); }
+  .box { --w: 300px; --h: 124px; --d: 124px; position: relative; width: var(--w); height: var(--h); transform-style: preserve-3d; transform: rotateX(-18deg) rotateY(-32deg); animation: turn 22s linear infinite; z-index: 1; }
+  .box div { position: absolute; left: 50%; top: 50%; border: 1px solid rgb(61 245 196 / 0.55);
+  background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.07) 0 3px, transparent 3px 14px), linear-gradient(160deg, #173252, #0a1526); }
+  .box .f, .box .bk { width: var(--w); height: var(--h); margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2); }
+  .box .l, .box .r { width: var(--d); height: var(--h); margin: calc(var(--h) / -2) 0 0 calc(var(--d) / -2); background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.1) 0 2px, transparent 2px 31px), linear-gradient(160deg, #1d3d63, #0c1a2f); }
+  .box .t, .box .b { width: var(--w); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--w) / -2); background: linear-gradient(135deg, #22466f, #0e1d33); }
+  .box .f { transform: translateZ(calc(var(--d) / 2)); display: grid; place-items: center; font: 700 26px var(--font); letter-spacing: .3em; color: rgb(238 242 251 / 0.85); }
+  .box .bk { transform: rotateY(180deg) translateZ(calc(var(--d) / 2)); }
+  .box .r { transform: rotateY(90deg) translateZ(calc(var(--w) / 2)); }
+  .box .l { transform: rotateY(-90deg) translateZ(calc(var(--w) / 2)); }
+  .box .t { transform: rotateX(90deg) translateZ(calc(var(--h) / 2)); }
+  .box .b { transform: rotateX(-90deg) translateZ(calc(var(--h) / 2)); background: #050a14; }
+  .box .f small { position: absolute; left: 14px; bottom: 10px; font: 500 11px var(--mono); letter-spacing: .08em; color: var(--accent); }
+  .chip { position: absolute; z-index: 2; padding: 10px 14px; border-radius: 12px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font: 12px var(--mono); color: var(--muted); }
+  .chip b { display: block; font: 600 15px var(--font); color: var(--fg); margin-top: 2px; }
+  .chip.c1 { left: 0; top: 30px; } .chip.c2 { right: 0; bottom: 30px; }
+  @keyframes turn { to { transform: rotateX(-18deg) rotateY(328deg); } }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; counter-reset: s; }
+  .step { padding: 28px; }
+  .step::before { counter-increment: s; content: "0" counter(s); font: 600 13px var(--mono); color: var(--accent); }
+  .step h3 { margin: 18px 0 8px; font-size: 20px; letter-spacing: -0.02em; }
+  .step p { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; align-items: stretch; perspective: 1200px; }
+  .plan { padding: 30px 28px; display: flex; flex-direction: column; transition: transform .35s, border-color .35s; }
+  .plan:hover { transform: rotateX(4deg) translateY(-6px); border-color: rgb(61 245 196 / 0.4); }
+  .plan.hot { border-color: rgb(61 245 196 / 0.5); box-shadow: 0 0 60px rgb(61 245 196 / 0.10); }
+  .plan h3 { font-size: 18px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .plan h3 small { font: 600 11px var(--mono); padding: 3px 8px; border-radius: 999px; background: rgb(61 245 196 / 0.14); color: var(--accent); }
+  .price { margin: 18px 0 4px; font-size: 44px; font-weight: 700; letter-spacing: -0.04em; }
+  .price span { font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .plan > p { color: var(--muted); font-size: 14px; }
+  .plan ul { list-style: none; margin: 22px 0 28px; display: grid; gap: 10px; font-size: 14px; flex: 1; }
+  .plan li::before { content: "✓"; color: var(--accent); margin-right: 10px; }
+  .plan .btn { justify-content: center; }
+
+  .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .quotes figure { padding: 26px; display: flex; flex-direction: column; gap: 20px; }
+  .quotes blockquote { font-size: 16px; line-height: 1.6; flex: 1; }
+  .quotes figcaption { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  .quotes figcaption i { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font: 700 13px var(--font); font-style: normal; color: #04110d; background: linear-gradient(135deg, var(--accent), #8fb8ff); }
+  .quotes figcaption span { display: block; color: var(--muted); font-size: 13px; }
+  .about { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+  .about div { padding: 20px 22px; font-size: 14px; color: var(--muted); }
+  .about b { display: block; font-size: 22px; color: var(--fg); margin-bottom: 4px; }
+
+  .quote { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; padding: 48px; align-items: start; background: radial-gradient(80% 90% at 0% 0%, rgb(61 245 196 / 0.10), transparent 60%), linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.015)); }
+  .qform { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .qform label { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+  .qform .full { grid-column: 1 / -1; }
+  .qform .btn { justify-content: center; }
+  .perks { list-style: none; margin-top: 26px; display: grid; gap: 12px; font-size: 15px; color: var(--muted); }
+  .perks li::before { content: "→"; color: var(--accent); margin-right: 10px; }
+
+  footer { border-top: 1px solid var(--line); padding: 56px 0 40px; font-size: 14px; color: var(--muted); }
+  footer .wrap { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; }
+  footer h4 { color: var(--fg); font-size: 14px; margin-bottom: 12px; }
+  footer .wrap > div > a:not(.logo) { display: block; margin: 8px 0; }
+  footer .logo { color: var(--fg); }
+  footer a:hover { color: var(--fg); }
+  footer .legal { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.6; }
+
+  @media (max-width: 960px) {
+  .menu { display: grid; place-items: center; }
+  .links.open { display: flex; position: absolute; left: 16px; right: 16px; top: calc(100% + 6px); flex-direction: column; gap: 0; padding: 8px; border-radius: 16px; background: rgb(10 14 24 / 0.97); border: 1px solid var(--line); }
+  .links.open a { padding: 12px 14px; font-size: 16px; color: var(--fg); }
+  nav { position: relative; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .regions, .steps, .plans, .quotes { grid-template-columns: 1fr; }
+  .about { grid-template-columns: repeat(2, 1fr); }
+  .track, .quote { grid-template-columns: 1fr; gap: 32px; }
+  .quote { padding: 32px; }
+  footer .wrap { grid-template-columns: 1fr 1fr; }
+  footer .wrap > div:first-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+  .wrap { width: calc(100% - 32px); }
+  section { padding: 72px 0; }
+  .metrics strong { font-size: 28px; }
+  .metrics .card { padding: 18px; }
+  .scene { height: 300px; }
+  .box { --w: 210px; --h: 92px; --d: 92px; }
+  .box .f { font-size: 18px; }
+  .quote { padding: 24px 18px; }
+  .qform { grid-template-columns: 1fr; }
+  .chip.c1 { top: 8px; } .chip.c2 { bottom: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .box { animation: none; }
+  .plan, .top { transition: none; }
+  .plan:hover { transform: none; }
+  }
 </style>
 </head>
 <body>
+  <header class="top" id="top">
   <nav>
-    <a class="logo" href="#"><i></i>Wayline</a>
+    <a class="logo" href="#top"><i></i>Wayline</a>
     <div class="links">
       <a href="#network">Network</a>
       <a href="#tracking">Tracking</a>
       <a href="#pricing">Pricing</a>
       <a href="#company">Company</a>
     </div>
+    <button class="menu" type="button" aria-label="Menu" aria-expanded="false"><span></span></button>
     <a class="btn primary" href="#quote">Get a quote</a>
   </nav>
+  </header>
 
   <main class="hero">
     <div>
@@ -170,6 +316,121 @@
       </div>
     </div>
   </main>
+
+<section id="network">
+<div class="wrap">
+<p class="kicker">The network</p>
+<h2>One map for every mode of freight.</h2>
+<p class="lead">Air lanes, ocean services and last-mile road partners stitched into a single booking. Wayline picks the fastest or cheapest path across 640 hubs and re-routes automatically when weather or ports get in the way.</p>
+<div class="metrics">
+<div class="card"><strong>640</strong><span>owned &amp; partner hubs</span></div>
+<div class="card"><strong>92</strong><span>daily air lanes</span></div>
+<div class="card"><strong>38</strong><span>ocean services weekly</span></div>
+<div class="card"><strong>14 min</strong><span>avg. quote-to-booking</span></div>
+</div>
+<div class="regions">
+<div class="card region"><h3>Asia–Pacific <small>210 hubs</small></h3><p>Same-week air from Shenzhen, Singapore and Mumbai into every major consumer market.</p><div class="modes"><b>AIR</b><b>SEA</b><b>ROAD</b></div></div>
+<div class="card region"><h3>Europe &amp; Middle East <small>246 hubs</small></h3><p>Bonded warehouses in Rotterdam and Dubai with pan-EU road delivery in 48 hours.</p><div class="modes"><b>AIR</b><b>SEA</b><b>RAIL</b><b>ROAD</b></div></div>
+<div class="card region"><h3>The Americas <small>184 hubs</small></h3><p>Cross-border trucking from Mexico to Canada and direct ocean into Santos and Long Beach.</p><div class="modes"><b>AIR</b><b>SEA</b><b>ROAD</b></div></div>
+</div>
+</div>
+</section>
+
+<section id="tracking">
+<div class="wrap track">
+<div>
+<p class="kicker">Live tracking</p>
+<h2>Know where it is. To the minute.</h2>
+<p class="lead">Every container carries a Wayline beacon that reports position, temperature and shock. Try a sample number below.</p>
+<form class="tform" id="tform">
+<input id="tnum" value="WL-4157" aria-label="Tracking number" autocomplete="off" spellcheck="false">
+<button class="btn primary" type="submit">Track</button>
+</form>
+<p class="note" id="tnote" aria-live="polite"></p>
+<ol class="timeline card" id="tline"></ol>
+</div>
+<div class="scene" aria-hidden="true">
+<div class="chip c1">TEMP<b>4.2 °C · stable</b></div>
+<div class="box"><div class="f">WAYLINE<small id="boxid">WLNU 415 7</small></div><div class="bk"></div><div class="l"></div><div class="r"></div><div class="t"></div><div class="b"></div></div>
+<div class="chip c2">ETA<b id="teta">Thu, 14:20</b></div>
+</div>
+</div>
+</section>
+
+<section id="how" style="padding-top:0">
+<div class="wrap">
+<p class="kicker">How it works</p>
+<h2>From quote to doorstep in three steps.</h2>
+<div class="steps">
+<div class="card step"><h3>Get an instant quote</h3><p>Tell us what, where and when. We compare 400+ carriers and show transparent all-in prices in seconds.</p></div>
+<div class="card step"><h3>Book &amp; hand over</h3><p>Print one label or schedule a pickup. Customs paperwork is generated and filed for you.</p></div>
+<div class="card step"><h3>Watch it arrive</h3><p>Follow the shipment live on the globe, share a tracking link, and get alerts before anything slips.</p></div>
+</div>
+</div>
+</section>
+
+<section id="pricing" style="padding-top:0">
+<div class="wrap">
+<p class="kicker">Pricing</p>
+<h2>Simple plans. No surprise surcharges.</h2>
+<div class="plans">
+<div class="card plan"><h3>Starter</h3><div class="price">$0<span> / month</span></div><p>Pay per shipment, ideal for occasional senders.</p><ul><li>Instant multi-carrier quotes</li><li>Live tracking links</li><li>Email support</li></ul><a class="btn ghost" href="#quote">Start free</a></div>
+<div class="card plan hot"><h3>Growth <small>POPULAR</small></h3><div class="price">$149<span> / month</span></div><p>For brands shipping weekly across borders.</p><ul><li>Up to 18% lower lane rates</li><li>Customs automation</li><li>Temperature &amp; shock alerts</li><li>Priority chat support</li></ul><a class="btn primary" href="#quote">Choose Growth</a></div>
+<div class="card plan"><h3>Enterprise</h3><div class="price">Custom</div><p>Dedicated capacity and an account team.</p><ul><li>Contracted space on key lanes</li><li>API &amp; ERP integrations</li><li>99.5% on-time SLA</li><li>24/7 control tower</li></ul><a class="btn ghost" href="#quote">Talk to sales</a></div>
+</div>
+</div>
+</section>
+
+<section id="company" style="padding-top:0">
+<div class="wrap">
+<p class="kicker">Company</p>
+<h2>Trusted by teams that can't afford late.</h2>
+<div class="quotes">
+<figure class="card"><blockquote>“We cut our Asia-to-EU transit by four days and finally stopped emailing forwarders for updates.”</blockquote><figcaption><i>AK</i><div>Anika Kapoor<span>Ops Lead, Loomhaus</span></div></figcaption></figure>
+<figure class="card"><blockquote>“The temperature alerts saved a full reefer of vaccines in Dubai. That alone paid for the year.”</blockquote><figcaption><i>OM</i><div>Omar Mansour<span>Supply Chain, Cerevia Health</span></div></figcaption></figure>
+<figure class="card"><blockquote>“Quotes in minutes, customs handled, one invoice. It feels like the internet finally reached freight.”</blockquote><figcaption><i>LR</i><div>Lucía Romero<span>Founder, Ostra Coffee</span></div></figcaption></figure>
+</div>
+<div class="about">
+<div class="card"><b>2017</b>Founded in Singapore</div>
+<div class="card"><b>1,900</b>People in 31 offices</div>
+<div class="card"><b>12k+</b>Businesses shipping</div>
+<div class="card"><b>−31%</b>CO₂ per kg since 2021</div>
+</div>
+</div>
+</section>
+
+<section id="quote" style="padding-top:0">
+<div class="wrap">
+<div class="card quote">
+<div>
+<p class="kicker">Get a quote</p>
+<h2>Ship your first load this week.</h2>
+<p class="lead">Share a few details and a freight specialist replies within one business hour with live rates.</p>
+<ul class="perks"><li>No contracts on Starter</li><li>Door-to-door, all-in pricing</li><li>Insurance up to $250k included</li></ul>
+</div>
+<form class="qform" id="qform">
+<label>From<input required placeholder="City or port" autocomplete="off"></label>
+<label>To<input required placeholder="City or port" autocomplete="off"></label>
+<label>Mode<select><option>Any — fastest</option><option>Air freight</option><option>Ocean freight</option><option>Road</option></select></label>
+<label>Weight (kg)<input type="number" min="1" placeholder="e.g. 450"></label>
+<label class="full">Work email<input type="email" required placeholder="you@company.com" autocomplete="email"></label>
+<button class="btn primary full" type="submit">Request my quote →</button>
+<p class="note full" id="qnote" aria-live="polite"></p>
+</form>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+<div><a class="logo" href="#top"><i></i>Wayline</a><p style="margin-top:12px;max-width:30ch">Air, sea and road freight on one living network.</p></div>
+<div><h4>Product</h4><a href="#network">Network</a><a href="#tracking">Tracking</a><a href="#pricing">Pricing</a></div>
+<div><h4>Company</h4><a href="#company">Customers</a><a href="#how">How it works</a><a href="#company">About</a></div>
+<div><h4>Get started</h4><a href="#quote">Request a quote</a><a href="#tracking">Track a shipment</a><a href="#pricing">Compare plans</a></div>
+<p class="legal">Wayline is a fictional logistics company created for this template. Figures, customers and routes are illustrative. © 2026 Wayline Freight Pte. Ltd.</p>
+</div>
+</footer>
+
 
 <script>
 (() => {
@@ -422,12 +683,49 @@
     setInterval(() => { if (!document.hidden) { launch(0); still(); } }, 5000);
     still();
   } else {
-    raf = requestAnimationFrame(frame);
-    document.addEventListener('visibilitychange', () => {
-      cancelAnimationFrame(raf);
-      if (!document.hidden) { last = 0; raf = requestAnimationFrame(frame); }
-    });
+    // Run only while the tab is visible and the globe is on screen.
+    let onScreen = true;
+    const sync = () => {
+      cancelAnimationFrame(raf); raf = 0;
+      if (!document.hidden && onScreen) { last = 0; raf = requestAnimationFrame(frame); }
+    };
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
+    document.addEventListener('visibilitychange', sync);
+    sync();
   }
+})();
+</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const top = document.querySelector('.top'), links = document.querySelector('.links'), menu = document.querySelector('.menu');
+  const onScroll = () => top.classList.toggle('scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  menu.addEventListener('click', () => menu.setAttribute('aria-expanded', links.classList.toggle('open')));
+  links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); menu.setAttribute('aria-expanded', false); } });
+
+  const LEGS = [['Singapore', 'Shenzhen', 'Rotterdam'], ['Mumbai', 'Dubai', 'London'], ['Los Angeles', 'Tokyo', 'Sydney'], ['São Paulo', 'New York', 'Toronto']];
+  const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const track = num => {
+    const h = [...num].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+    const [a, b, c] = LEGS[h % LEGS.length], stage = 2 + h % 3;
+    const ev = [['Picked up', a + ' depot'], ['Departed hub', a + ' gateway'], ['In transit', 'Over ' + b + ' · on schedule'], ['Customs cleared', c + ' port'], ['Out for delivery', c]];
+    $('tline').innerHTML = ev.map((e, i) => `<li class="${i < stage ? 'done' : i === stage ? 'now' : ''}">${e[0]}<span>${e[1]} · ${i <= stage ? DAYS[(h + i) % 7] + ' ' + String(6 + (h >> i) % 14).padStart(2, '0') + ':' + String((h >> (i + 3)) % 60).padStart(2, '0') : 'pending'}</span></li>`).join('');
+    $('teta').textContent = DAYS[(h + 5) % 7] + ', ' + String(9 + h % 9) + ':' + String(h % 6) + '0';
+    $('boxid').textContent = 'WLNU ' + String(h % 1000).padStart(3, '0') + ' ' + h % 10;
+  };
+  track('WL-4157');
+  $('tform').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = $('tnum').value.trim().toUpperCase() || 'WL-4157';
+    track(v);
+    $('tnote').textContent = 'Thanks — showing the latest scans for ' + v.slice(0, 20) + '.';
+  });
+  $('qform').addEventListener('submit', e => {
+    e.preventDefault();
+    $('qnote').textContent = 'Thank you! A Wayline specialist will email your rates within one business hour.';
+    e.target.reset();
+  });
 })();
 </script>
 </body>

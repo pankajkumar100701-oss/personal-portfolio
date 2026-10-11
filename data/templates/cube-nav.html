@@ -30,9 +30,9 @@
     --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--bg); color: var(--ink); }
+  html, body { background: var(--bg); color: var(--ink); overflow-x: clip; }
   body {
-    font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; line-height: 1.5;
+    font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.5;
     background:
       radial-gradient(50% 45% at 72% 42%, rgba(139, 123, 255, .13), transparent 70%),
       radial-gradient(40% 40% at 88% 80%, rgba(255, 122, 89, .09), transparent 70%),
@@ -175,6 +175,12 @@
     .face { padding: 1.5em; }
     .tabs { grid-template-columns: repeat(2, 1fr); }
     nav .btn { padding: 9px 14px; font-size: .82rem; }
+    /* keep the small face copy legible (>= 11px) on phones */
+    .tab small, .hint { font-size: .7rem; }
+    .fhead, .stats span, .work-list small, .work-list em, .svc span, .avail, .socials { font-size: max(11px, .72em); }
+    .face .btn { font-size: max(11px, .9em) !important; }
+    .svc div { padding: .9em; }
+    .svc span { line-height: 1.3; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }

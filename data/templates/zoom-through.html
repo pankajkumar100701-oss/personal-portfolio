@@ -46,7 +46,7 @@
 
   /* Pinned zoom: .stage sticks while .reel scrolls past it */
   .reel { position: relative; height: 340vh; }
-  .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--ink); }
+  .stage { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; background: var(--ink); }
   .stage > * { position: absolute; }
   #sky { inset: 0; width: 100%; height: 100%; display: block; }
   .dim { inset: 0; background: radial-gradient(60% 60% at 50% 48%, rgb(20 8 30 / 0.55), rgb(8 4 14 / 0.9)); opacity: 0; pointer-events: none; }
@@ -64,6 +64,8 @@
   .bars::before, .bars::after { content: ""; position: absolute; left: 0; right: 0; height: 9vh; background: #000; transform: scaleY(var(--lb, 0)); }
   .bars::before { top: 0; transform-origin: top; }
   .bars::after { bottom: 0; transform-origin: bottom; }
+  /* Letterbox bars only on landscape screens; on portrait phones the scene stays full-bleed */
+  @media (max-aspect-ratio: 1/1) { .bars { display: none; } }
 
   /* Hero copy, positioned around the word (JS sets --wy and --wh) */
   .over { left: 0; right: 0; text-align: center; padding: 0 20px; will-change: opacity, transform; }

@@ -314,6 +314,16 @@ export const templates: Template[] = [
     features: ["Text-mask zoom", "Procedural canvas sunset", "Film grain & light leaks"],
     added: "2026-10-10",
   },
+  {
+    slug: "gold-dust",
+    title: "Gold Dust",
+    kind: "WebGL",
+    tier: "Free",
+    color: "var(--m-coral)",
+    blurb: "A luxury-watch maison where 64,000 glittering specks of gold dust form an hourglass with falling sand, then become a watch dial, a wordmark and a galaxy as you scroll.",
+    features: ["WebGL gold dust", "Scroll-driven morphs", "Magnetic button & dust cursor"],
+    added: "2026-10-11",
+  },
 ];
 
 export const findTemplate = (slug: string) => templates.find((t) => t.slug === slug);

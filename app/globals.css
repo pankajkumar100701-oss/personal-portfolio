@@ -205,6 +205,9 @@ body {
 .menu-trigger:hover,
 .menu-trigger[aria-expanded="true"] { background: color-mix(in srgb, var(--foreground) 8%, transparent); }
 .menu-trigger:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+/* The Pankaj Studio mark in front of the name (same files as the hero's). */
+.menu-mark { flex: none; width: 1.55rem; height: 2rem; margin-right: -0.2rem; background: url("/brand/ps-mark.webp") center / contain no-repeat; }
+[data-theme="light"] .menu-mark { background-image: url("/brand/ps-mark-light.webp"); }
 /* A small two-line glyph that folds into an × when the menu is open. */
 .menu-caret {
   position: relative;
@@ -261,13 +264,12 @@ body {
   transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .menu-panel > section:last-of-type { border-bottom: 0; padding-bottom: 0; }
-/* Dark theme: the menu sits on a dusk mountain photo (CC0, "Mountain
-   silhouette at dusk" by arvin febry, via Wikimedia Commons), darkened so
-   the text stays readable. */
+/* Dark theme: the menu sits on the studio photo (the brand image, logo taken
+   out; public/wallpapers/studio-sm.webp), darkened so the text stays readable. */
 :root:not([data-theme="light"]) .menu-panel {
   background:
     linear-gradient(180deg, rgb(10 11 16 / 0.9) 0%, rgb(10 11 16 / 0.82) 45%, rgb(10 11 16 / 0.55) 100%),
-    url("/wallpapers/menu-mountains.webp") center bottom / cover no-repeat,
+    url("/wallpapers/studio-sm.webp") 70% center / cover no-repeat,
     var(--panel-bg);
   border-color: color-mix(in srgb, #f59e0b 30%, rgb(255 255 255 / 0.12));
   box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6), 0 0 40px -18px rgb(245 158 11 / 0.45);
@@ -275,7 +277,7 @@ body {
 :root:not([data-theme="light"]) .menu-contact-card {
   background:
     linear-gradient(90deg, rgb(10 11 16 / 0.88) 35%, rgb(10 11 16 / 0.35)),
-    url("/wallpapers/menu-mountains.webp") 60% 55% / 180% no-repeat;
+    url("/wallpapers/studio-sm.webp") 85% 35% / 200% no-repeat;
 }
 /* The panel scrolls when it's taller than the screen; its parts keep their size. */
 .menu-panel > * { flex-shrink: 0; }
@@ -576,6 +578,29 @@ body {
 }
 .u-eyebrow { margin-bottom: 1rem; font-family: var(--font-sans); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--u-acid); }
 .u-copy h1 { font-family: var(--u-serif); font-size: clamp(3.875rem, 9vw, 9rem); font-weight: 500; line-height: 0.95; letter-spacing: -0.02em; }
+/* The Pankaj Studio mark (public/brand), in front of the two-line name. */
+.u-copy h1 { display: flex; align-items: center; justify-content: center; gap: 0.2em; }
+.u-mark {
+  flex: none;
+  width: 1.36em;
+  height: 1.75em;
+  background: url("/brand/ps-mark.webp") center / contain no-repeat;
+  filter: drop-shadow(0 0.06em 0.2em rgb(0 0 0 / 0.45));
+}
+[data-theme="light"] .u-mark { background-image: url("/brand/ps-mark-light.webp"); filter: none; }
+/* Dark theme: the hero sits in the studio (public/wallpapers/studio.webp, the
+   brand photo with the logo taken out), dimmed so the title stays crisp. It
+   clears out with the cards when the dive starts. */
+.u-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgb(9 8 8 / 0.62), rgb(9 8 8 / 0.82) 70%),
+    url("/wallpapers/studio.webp") center 40% / cover no-repeat;
+}
+[data-theme="light"] .u-photo { display: none; }
 .u-copy h1 em {
   font-family: var(--u-serif);
   font-weight: 400;

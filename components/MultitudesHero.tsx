@@ -122,7 +122,9 @@ export default function MultitudesHero() {
     const shownIn = reveals.map(() => false);
     // Everything that clears out early (cards, glow, orbits, micro labels):
     // once invisible it's hidden too, so it isn't re-rastered at huge scale.
-    const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro")];
+    // The logo mark and the studio photo behind the hero go with them, so the
+    // hole opens onto the cosmos (and the mark isn't rastered at 100×).
+    const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro, .u-mark"), ...scene.querySelectorAll<HTMLElement>(".u-photo")];
     // The fixed backdrop layer behind the page (Cosmos). The dive's hole is
     // this layer clipped to a circle; the hero itself has no backdrop here.
     // Looked up on use, not captured: the layer can be re-created (e.g. by a
@@ -497,6 +499,7 @@ export default function MultitudesHero() {
       <div ref={stageRef} className="u-stage">
         <div ref={spotRef} className="u-spot" aria-hidden />
         <div ref={sceneRef} className="u-scene">
+          <div className="u-photo" aria-hidden />
           <div className="u-grain" aria-hidden />
           <div className="u-orb u-orb-a" aria-hidden />
           <div className="u-orb u-orb-b" aria-hidden />
@@ -517,6 +520,8 @@ export default function MultitudesHero() {
                   <span className="sr-only">
                     {hero.first} {hero.accent}
                   </span>
+                  {/* The Pankaj Studio mark, in front of the name. */}
+                  <span className="u-mark" aria-hidden />
                   <span aria-hidden>
                     {hero.first}
                     <br />

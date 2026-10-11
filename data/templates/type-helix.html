@@ -223,11 +223,14 @@
     stream.push([' ', '']); stream.push(['✦', 'var(--a)']); stream.push([' ', '']);
   }
 
-  let letters = [], R = 200;
+  let letters = [], R = 200, narrow = false;
   const build = () => {
     const w = wrap.clientWidth, h = wrap.clientHeight;
-    R = Math.max(110, Math.min(w * 0.34, h * 0.34, 240));
-    const fs = Math.round(R * 0.27), lineH = fs * 1.18;
+    // Phones: a slimmer cylinder and smaller type so whole words fit on the front face with side margin,
+    // and letters fade out as they turn around the edge instead of reading as clipped.
+    narrow = w < 600;
+    R = narrow ? Math.max(80, Math.min(w * 0.3, h * 0.34)) : Math.max(110, Math.min(w * 0.34, h * 0.34, 240));
+    const fs = Math.round(R * (narrow ? 0.24 : 0.27)), lineH = fs * 1.18;
     const rows = Math.max(3, Math.floor((h - fs * 2.4) / lineH));
     helix.style.setProperty('--fs', fs + 'px');
     helix.textContent = '';
@@ -264,7 +267,8 @@
     for (const L of letters) {
       const a = L.a + rot, r = a * RAD, cz = Math.cos(r);
       L.el.style.transform = `translate3d(${(Math.sin(r) * R).toFixed(1)}px,${L.y.toFixed(1)}px,${(cz * R).toFixed(1)}px) rotateY(${a.toFixed(2)}deg)`;
-      L.el.style.opacity = (0.28 + 0.72 * Math.max(0, cz)).toFixed(2);
+      if (narrow) { const t = Math.min(1, Math.max(0, (cz - 0.08) / 0.5)); L.el.style.opacity = (0.16 + 0.84 * t * t * (3 - 2 * t)).toFixed(2); }
+      else L.el.style.opacity = (0.28 + 0.72 * Math.max(0, cz)).toFixed(2);
       const back = cz < -0.05;
       if (back !== L.back) { L.back = back; L.el.classList.toggle('back', back); }
     }
