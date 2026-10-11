@@ -70,3 +70,14 @@ button.c-step-head { cursor: pointer; align-items: center; }
 @media (prefers-reduced-motion: reduce) {
   .c-hit, .c-hit > button, .c-type[data-match="strong"], .m-pill[data-match="strong"] { animation: none; }
 }
+
+/* The type step's search box, above the list. */
+.x-search.c-type-search { flex: none; margin-bottom: 0.875rem; }
+/* Phones: types as a tidy two-column list (name on top, price under it)
+   instead of a wrap of pills of every width. */
+@media (max-width: 1023px) {
+  .c-type-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .c-type-list .c-type { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 0.5rem; row-gap: 0.125rem; width: 100%; height: 100%; padding: 0.625rem 0.75rem; border-radius: 0.875rem; text-align: left; font-size: 0.8125rem; line-height: 1.25; }
+  .c-type-list .c-type svg { grid-row: span 2; }
+  .c-type-list .c-type-price { margin: 0; font-size: 0.6875rem; }
+}

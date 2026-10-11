@@ -37,15 +37,17 @@ export const faqs: Faq[] = [
   {
     q: "What do I need to give you?",
     a: [
-      "Your business name and logo (if you have one), a few good photos, your phone number, address and timings, and a rough idea of what you want people to do on the site: call you, book, buy or visit.",
+      "Your business name and logo (if you have one), a few good photos, your phone number and address, and a rough idea of what you want people to do on the site: call you, book, buy or visit.",
       "Don't have a logo or good photos? That's fine. I can help with a simple logo and use quality stock photos to start with.",
     ],
   },
   {
     q: "What happens after the site goes live?",
     a: [
-      `I'm still around. Small fixes in the first month are free. After that, maintenance is ${money(maintenance.from)} to ${money(maintenance.to)} a month, depending on how often things change.`,
-      "That covers updating text, prices and photos, keeping the site fast and secure, checking it works on new phones, and fixing anything that breaks. You can also skip the monthly plan and just pay when you need a change.",
+      `I'm still around. Small fixes in the first month are free. After that, maintenance starts at ${money(maintenance.from)} a month and goes up to ${money(maintenance.to)}, depending on what your site needs:`,
+      `${money(maintenance.small.from)} to ${money(maintenance.small.to)} a month for small changes: updating text, prices and photos, plus keeping the site fast, secure and working on new phones.`,
+      `${money(maintenance.big.from)} to ${money(maintenance.big.to)} a month for bigger work: adding new pages, changing whole sections, or a big update to the design.`,
+      "Don't want a monthly plan? That's fine too. Just pay when you need a change.",
     ],
   },
   {
@@ -92,7 +94,8 @@ export const faqs: Faq[] = [
   {
     q: "Do you work with clients outside India?",
     a: [
-      `Yes. Everything happens over WhatsApp, email and video calls, so where you live doesn't matter. The Contact page shows prices in your own currency, starting from ${money(cheapest, "USD")}.`,
+      "Yes, happily. I already talk to clients on WhatsApp, email and video calls, so we can work together from anywhere, and I'll fit calls around your time zone.",
+      `On the Contact page you can pick your currency to see rough prices (sites start at about ${money(cheapest, "USD")}). You can pay by PayPal or bank transfer.`,
     ],
   },
 ];

@@ -7,7 +7,8 @@ import { ContactSearch, type SearchOption } from "@/components/ContactSearch";
 import { allTypes, findType, profile, whatsappLink } from "@/data/profile";
 import { currencies, money, prices, type CurrencyCode } from "@/data/pricing";
 import { addToBasket, toggleInBasket, useBasket, writeBasket } from "@/lib/basket";
-import { score } from "@/lib/search";
+import { score, search } from "@/lib/search";
+import { SearchBox } from "@/components/SortFilter";
 
 // Ideas that fit any kind of site, offered next to the chosen types' own.
 const EXTRAS = ["WhatsApp chat button", "Google Maps & SEO", "Hindi + English", "Reviews section", "Blog & articles", "Admin panel to edit content", "Domain & hosting setup"];
@@ -146,6 +147,8 @@ export default function ContactBuilder() {
   // The long lists start short (the trending types, the first ideas): on a
   // phone the whole lot is several screens of chips.
   const [allTypesShown, setAllTypesShown] = useState(false);
+  // The type step's own search box (searches all types, not just the trending ones).
+  const [typeQ, setTypeQ] = useState("");
   const [allIdeasShown, setAllIdeasShown] = useState(false);
 
   // /contact?type=salon (e.g. from a type's page) adds that type to the message.
@@ -266,6 +269,9 @@ export default function ContactBuilder() {
   };
   const typeText = (t: (typeof allTypes)[number]) => `${t.title} ${t.sub} ${t.idealFor} ${t.features.join(" ")}`;
   const shownTypes = allTypes.filter((t) => allTypesShown || trending.has(t.slug) || basket.types.includes(t.slug) || matchOf(typeText(t)));
+  const typeHits = typeQ.trim() ? search(allTypes, typeQ, typeText) : null;
+  const listTypes = typeHits ? typeHits.map((h) => h.item) : shownTypes;
+  const typeMatch = (t: (typeof allTypes)[number]) => (typeHits ? (typeHits.find((h) => h.item === t)?.related ? "related" : "strong") : matchOf(typeText(t)));
   const shownIdeas = ideaOptions.filter((f, i) => allIdeasShown || i < IDEAS_SHOWN || ideas.includes(f) || matchOf(f));
   const waHref = whatsappLink(message);
 
@@ -352,12 +358,14 @@ export default function ContactBuilder() {
           "What kind of website?",
           types.length ? types.map((t) => t.title).join(", ") : "Pick one or more",
           <>
-            <ul className="flex flex-wrap gap-2">
-              {shownTypes.map((t) => {
+            <SearchBox value={typeQ} onChange={setTypeQ} placeholder="Search: salon, gym, shop, hotel…" label="Search website types" className="c-type-search" />
+            {typeHits?.length === 0 && <p className="mt-3 text-sm text-muted">Nothing like that yet. Pick the closest one, or describe it under &ldquo;Anything else?&rdquo;</p>}
+            <ul className="c-type-list flex flex-wrap gap-2">
+              {listTypes.map((t) => {
                 const p = prices[t.slug];
                 return (
                   <li key={t.slug} style={{ "--c": t.color, ...artVars(t.slug, t.color) } as CSSProperties}>
-                    <button type="button" className="c-type" data-match={matchOf(typeText(t))} aria-pressed={basket.types.includes(t.slug)} onClick={() => toggleInBasket("types", t.slug)}>
+                    <button type="button" className="c-type" data-match={typeMatch(t)} aria-pressed={basket.types.includes(t.slug)} onClick={() => toggleInBasket("types", t.slug)}>
                       <ArtIcon icon={artIcon(t.slug)} />
                       {t.title}
                       {p && <small className="c-type-price">from {money(p.from, currency)}</small>}
@@ -366,7 +374,7 @@ export default function ContactBuilder() {
                 );
               })}
             </ul>
-            {allTypes.length > trending.size && (
+            {!typeHits && allTypes.length > trending.size && (
               <button type="button" className="c-more" onClick={() => setAllTypesShown((v) => !v)}>
                 {allTypesShown ? "Show trending only" : `+ ${allTypes.length - shownTypes.length} more types`}
               </button>

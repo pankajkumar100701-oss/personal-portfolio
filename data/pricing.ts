@@ -28,8 +28,9 @@ export const prices: Record<string, Price> = {
   recipes: { from: 10000, days: "2 weeks" },
 };
 
-// Keeping a site running after it's live, a month.
-export const maintenance = { from: 1000, to: 3000 };
+// Keeping a site running after it's live, a month: small changes (text,
+// prices, photos) cost less; new pages and big changes, more.
+export const maintenance = { from: 500, to: 3000, small: { from: 500, to: 1000 }, big: { from: 1000, to: 3000 } };
 // A domain name and hosting, a year (paid to the provider, not to me).
 export const domainHosting = { from: 800, to: 3000 };
 

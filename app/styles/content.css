@@ -35,20 +35,6 @@
    right. On the Contact page's phone layout it rises above the send bar. */
 .f-help { position: fixed; z-index: 55; left: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); }
 .f-help-label { font-style: normal; }
-/* Phones: just the round "?" so it covers as little of the page as possible
-   (the label is still read out by screen readers). */
-@media (max-width: 799px) {
-  .f-help-btn { padding: 0.35rem; }
-  .f-help-btn > span { width: 2rem; height: 2rem; font-size: 1rem; }
-  .f-help-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-}
-/* Desktop: bottom-right, clear of the hero's "Scroll to dive" hint; on the
-   home page it sits above the hero's bottom bar (zoom readout). */
-@media (min-width: 800px) {
-  .f-help { left: auto; right: 1.25rem; bottom: 1.25rem; }
-  .f-help-panel { left: auto; right: 0; }
-  body:has(.u-section) .f-help { bottom: 4.75rem; }
-}
 @media (max-width: 1023px) {
   body:has([data-page="contact"]) .f-help { bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
 }
@@ -84,3 +70,19 @@
 .f-post-body ul { margin-top: 1rem; display: grid; gap: 0.6rem; padding-left: 1.25rem; list-style: disc; }
 .f-post-body li { font-size: 1.0625rem; line-height: 1.7; color: var(--u-muted); }
 .f-post-body li::marker { color: var(--c); }
+
+/* Placement overrides: last in the file so they win over the base rules above. */
+/* Phones: just the round "?" so it covers as little of the page as possible
+   (the label is still read out by screen readers). */
+@media (max-width: 799px) {
+  .f-help-btn { padding: 0.35rem; }
+  .f-help-btn > span { width: 2rem; height: 2rem; font-size: 1rem; }
+  .f-help-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+/* Desktop: bottom-right, clear of the hero's "Scroll to dive" hint; on the
+   home page it sits above the hero's bottom bar (zoom readout). */
+@media (min-width: 800px) {
+  .f-help { left: auto; right: 1.25rem; bottom: 1.25rem; }
+  .f-help-panel { left: auto; right: 0; }
+  body:has(.u-section) .f-help { bottom: 4.75rem; }
+}
