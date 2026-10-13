@@ -563,6 +563,18 @@ export default function MultitudesHero() {
                     </li>
                   );
                 })}
+                {/* Not a business type: my 3D / WebGL demos, under Coaching / Education. */}
+                <li className="u-node u-node-3d" style={{ "--x": "4%", "--y": "82%", "--c": "var(--m-blue)", "--i": multitudes.length, ...artVars("3d", "var(--m-blue)") } as CSSProperties}>
+                  <Link href="/templates">
+                    <span className="u-node-flood" aria-hidden />
+                    <span className="u-node-icon" aria-hidden>
+                      <ArtIcon icon={artIcon("3d")} />
+                    </span>
+                    <b>13</b>
+                    <strong>3D Websites</strong>
+                    <small>WebGL / Motion / Live demos</small>
+                  </Link>
+                </li>
               </ul>
 
               {/* Phones skip the dive, so the arrival's call to action lives here

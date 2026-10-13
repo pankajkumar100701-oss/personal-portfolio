@@ -1321,6 +1321,7 @@ body {
   .u-nodes { position: relative; inset: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 48px; }
   .u-node { position: relative; left: auto; top: auto; transform: none !important; animation: none; }
   .u-node > * { width: auto; height: 100%; padding: 0.875rem 0.875rem 0.9375rem; backdrop-filter: none; background: var(--u-card); }
+  .u-node-3d { grid-column: 1 / -1; }
   .u-node small { font-size: 0.625rem; line-height: 1.5; }
   .u-mobile-cta {
     display: flex;
@@ -1391,6 +1392,7 @@ body {
   :root[data-motion="reduce"] .u-mobile-cta { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.75rem; font-family: var(--font-sans); }
   :root[data-motion="reduce"] .u-nodes { position: relative; inset: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 3.5rem; }
   :root[data-motion="reduce"] .u-node { position: relative; left: auto; top: auto; transform: none !important; animation: none; }
+  :root[data-motion="reduce"] .u-node-3d { grid-column: 1 / -1; }
   :root[data-motion="reduce"] .u-node > * { width: auto; min-width: 0; height: 100%; padding: 1rem 1.1rem; backdrop-filter: none; background: var(--u-card); }
   :root[data-motion="reduce"] .u-node strong, :root[data-motion="reduce"] .u-node small { white-space: normal; }
   :root[data-motion="reduce"] .u-node > *::before, :root[data-motion="reduce"] .u-node > *::after { display: none; }
