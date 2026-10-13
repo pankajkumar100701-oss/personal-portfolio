@@ -13,6 +13,8 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const SPEED = 0.85;
 // Share of the pinned scroll spent holding still at each end.
 const HOLD = 0.06;
+// How long a card's hover preview stays before closing on its own (ms).
+const AUTO_CLOSE = 4000;
 
 // The cards in the row: profile.trackTypes (max 10), numbered in row order.
 const types = profile.trackTypes
@@ -47,7 +49,7 @@ function Preview({ type, side, open, onKeep, onLeave }: { type: WebsiteType | nu
       {site ? (
         <div key={type.slug} className="u-peek-in">
           <a href={site.href} target="_blank" rel="noopener noreferrer" className="u-peek-shot" tabIndex={open ? 0 : -1}>
-            {site.image ? <Image src={site.image} alt={`${site.title}, home page`} fill unoptimized sizes="44vw" className="object-cover object-top" /> : <span className="u-peek-blank">{site.title}</span>}
+            {site.image ? <Image src={site.image} alt={`${site.title}, home page`} fill unoptimized loading="eager" sizes="44vw" className="object-cover object-top" /> : <span className="u-peek-blank">{site.title}</span>}
           </a>
           <div className="u-peek-body">
             <p className="u-peek-kicker">
@@ -99,12 +101,17 @@ export default function MultitudesTrack() {
   const [peek, setPeek] = useState<{ type: WebsiteType; side: "left" | "right" } | null>(null);
   const [peekOpen, setPeekOpen] = useState(false);
   const hideTimer = useRef(0);
+  const autoTimer = useRef(0);
   const preloaded = useRef(false);
 
   // Mouse only, and only where the row is a wide strip (phones and touch
   // screens get the plain row with no preview).
   const canPeek = (e: PointerEvent) => e.pointerType === "mouse" && matchMedia("(min-width: 800px) and (hover: hover)").matches;
-  const keepPeek = () => clearTimeout(hideTimer.current);
+  // Clear both: the leave grace period and the auto-close below.
+  const keepPeek = () => {
+    clearTimeout(hideTimer.current);
+    clearTimeout(autoTimer.current);
+  };
   const leavePeek = () => {
     clearTimeout(hideTimer.current);
     // A short grace period, so the mouse can travel from the card to the preview's links.
@@ -116,11 +123,19 @@ export default function MultitudesTrack() {
     const r = e.currentTarget.getBoundingClientRect();
     setPeek({ type, side: r.left + r.width / 2 > window.innerWidth / 2 ? "left" : "right" });
     setPeekOpen(true);
+    // A short look, then it slides back out the way it came (unless the
+    // mouse has moved onto the preview itself).
+    autoTimer.current = window.setTimeout(() => setPeekOpen(false), AUTO_CLOSE);
   };
   const nearRow = (e: PointerEvent) => {
     if (preloaded.current || !canPeek(e)) return;
     preloaded.current = true;
-    for (const src of previewImages) new window.Image().src = src;
+    // Decoded too, not just downloaded, so switching cards shows the picture at once.
+    for (const src of previewImages) {
+      const img = new window.Image();
+      img.src = src;
+      img.decode().catch(() => {});
+    }
   };
 
   // The row slides as the page scrolls, so a preview would end up beside the
@@ -131,7 +146,10 @@ export default function MultitudesTrack() {
     window.addEventListener("scroll", close, { passive: true, once: true });
     return () => window.removeEventListener("scroll", close);
   }, [peekOpen]);
-  useEffect(() => () => clearTimeout(hideTimer.current), []);
+  useEffect(() => () => {
+    clearTimeout(hideTimer.current);
+    clearTimeout(autoTimer.current);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current!;
