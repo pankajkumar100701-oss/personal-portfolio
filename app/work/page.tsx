@@ -29,8 +29,8 @@ export default function WorkPage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">My work</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">Every site, one place.</h1>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">My work</p>
+          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] tracking-[-0.04em]">Every site, one place.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
             All the websites I&apos;ve built, live and clickable. Sort them your way, and tap “I want one like this” on any you like.
           </p>
@@ -41,8 +41,8 @@ export default function WorkPage() {
         </div>
 
         <section className="m-card mt-20 rounded-2xl p-6 sm:p-10">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Next could be yours</p>
-          <p className="mt-4 max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Want a website like these?</p>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Next could be yours</p>
+          <p className="mt-4 max-w-xl font-display text-3xl leading-tight sm:text-4xl">Want a website like these?</p>
           <p className="mt-3 text-muted">Tell me what you do — I&apos;ll reply with a plan and a price.</p>
           <div className="h-cta" style={{ justifyContent: "flex-start" }}>
             <Link href="/contact" className="u-cta-primary">

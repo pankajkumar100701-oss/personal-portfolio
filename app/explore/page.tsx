@@ -30,8 +30,8 @@ export default function ExplorePage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Explore your type · every kind</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Explore your type · every kind</p>
+          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] tracking-[-0.04em]">
             Find the website
             <br />
             that fits you.

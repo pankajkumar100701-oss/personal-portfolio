@@ -29,8 +29,8 @@ export default function TemplatesPage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Templates · free</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">See it live. Copy the code.</h1>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Templates · free</p>
+          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] tracking-[-0.04em]">See it live. Copy the code.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
             3D, WebGL and scroll-animated pages you can play with — globes, carousels, terrains and more. Each one is a single HTML file: no libraries, nothing to install. Paste it, open it, make it yours.
           </p>

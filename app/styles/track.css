@@ -33,13 +33,13 @@
 .u-peek-shot { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: color-mix(in srgb, var(--c) 20%, #000); }
 .u-peek-shot img { transition: transform 1.2s cubic-bezier(0.2, 0.9, 0.25, 1); }
 .u-peek-shot:hover img { transform: scale(1.03); }
-.u-peek-blank { display: grid; place-items: center; height: 100%; font-family: var(--font-display); font-size: 2rem; font-style: italic; color: #fff; }
+.u-peek-blank { display: grid; place-items: center; height: 100%; font-family: var(--font-display); font-size: 2rem; color: #fff; }
 
 .u-peek-body { padding: 1.25rem 1.5rem 1.5rem; }
 .u-peek-none { position: relative; padding: 2rem 1.75rem 1.75rem; }
 .u-peek-mark { position: absolute; top: 1.25rem; right: 1.25rem; width: 4.5rem; height: 4.5rem; color: var(--ink, var(--c)); opacity: 0.35; }
 .u-peek-kicker { font-family: var(--font-sans); font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink, var(--c)); }
-.u-peek-title { margin-top: 0.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 2.6vw, 2.5rem); font-style: italic; line-height: 1.05; letter-spacing: -0.02em; color: var(--u-fg); }
+.u-peek-title { margin-top: 0.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 2.6vw, 2.5rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--u-fg); }
 .u-peek-none .u-peek-title { max-width: 80%; }
 .u-peek-text { margin-top: 0.625rem; font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.6; color: var(--u-soft); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .u-peek-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-top: 1.125rem; font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 600; }

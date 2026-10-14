@@ -16,7 +16,7 @@ export default function ReviewsSection() {
 
         {reviews.length === 0 ? (
           <div className="h-review-empty">
-            <p className="font-display text-2xl italic leading-snug sm:text-3xl">No reviews here yet.</p>
+            <p className="font-display text-2xl leading-snug sm:text-3xl">No reviews here yet.</p>
             <p className="h-text !mt-3">I only post real ones, so they&apos;ll show up here as my clients send them in.</p>
           </div>
         ) : (

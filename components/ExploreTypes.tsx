@@ -87,14 +87,14 @@ export default function ExploreTypes() {
         </div>
       </div>
 
-      <p className="mt-6 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
+      <p className="mt-6 font-sans text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
         {shown.length} {shown.length === 1 ? "type" : "types"}
         {q.trim() && <> · “{q.trim()}”</>}
       </p>
 
       {shown.length === 0 ? (
         <div className="m-card mt-6 rounded-2xl p-8 text-center">
-          <p className="font-display text-3xl italic">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Not listed? I can still build it."}</p>
+          <p className="font-display text-3xl">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Not listed? I can still build it."}</p>
           <p className="mt-2 text-muted">I can still build it. Tell me what you have in mind on the Contact page.</p>
           <Link href="/contact" className="u-cta-primary x-btn mt-6">
             Customise your website plan <span aria-hidden>→</span>
@@ -149,15 +149,15 @@ function TypeDetails({ t }: { t: WebsiteType }) {
         <span className="x-type-icon">
           <ArtIcon icon={artIcon(t.slug)} />
         </span>
-        <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{t.n}</span>
+        <span className="font-sans text-[0.625rem] tracking-[0.15em] text-ink">{t.n}</span>
         {trending.has(t.slug) && <span className="x-badge">Trending</span>}
       </div>
-      <h2 className="mt-5 font-display text-3xl italic leading-none">
+      <h2 className="mt-5 font-display text-3xl leading-none">
         <Link href={`/websites/${t.slug}`} className="hover:underline">
           {t.title}
         </Link>
       </h2>
-      <p className="mt-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.15em] text-muted">{t.sub}</p>
+      <p className="mt-1.5 font-sans text-[0.6875rem] uppercase tracking-[0.15em] text-muted">{t.sub}</p>
       <p className="mt-4 text-sm leading-relaxed text-soft">{t.intro}</p>
       <p className="mt-4 text-xs text-muted">
         <b className="font-semibold text-soft">For:</b> {t.idealFor}

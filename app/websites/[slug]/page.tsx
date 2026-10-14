@@ -88,8 +88,8 @@ export default async function MultitudePage({ params }: PageProps<"/websites/[sl
               <ul className="k-grid">
                 {list.map((k, i) => (
                   <li key={k.title} className="k-card">
-                    <span className="font-mono text-[0.625rem] tracking-[0.15em] text-ink">{String(i + 1).padStart(2, "0")}</span>
-                    <h3 className="mt-2 font-display text-2xl italic leading-tight">{k.title}</h3>
+                    <span className="font-sans text-[0.625rem] tracking-[0.15em] text-ink">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="mt-2 font-display text-2xl leading-tight">{k.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-soft">{k.text}</p>
                     <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Includes">
                       {k.has.map((h) => (
@@ -104,7 +104,7 @@ export default async function MultitudePage({ params }: PageProps<"/websites/[sl
               </ul>
             )}
             <div className="k-extras">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Any of them can have</p>
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">Any of them can have</p>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {m.features.map((f) => (
                   <li key={f}>

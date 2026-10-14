@@ -79,7 +79,7 @@ export function SortFilter({ groups, onReset, changed }: { groups: FilterGroup[]
         }}
         label="Sort & filter"
       >
-        <p className="font-display text-3xl italic">Sort &amp; filter</p>
+        <p className="font-display text-3xl">Sort &amp; filter</p>
         {searchable && <SearchBox value={q} onChange={setQ} placeholder="Find a type: shop, gym, hotel…" label="Search the options" className="x-folder-search" />}
         {groups.map((g) => {
           const hits = g.searchable && q.trim() ? search(g.options.filter((o) => o.value !== "all"), q, (o) => `${o.label} ${o.keywords ?? ""}`) : null;

@@ -113,7 +113,7 @@ export default function WorkList() {
         <SizeSwitch options={sizes} value={size} onChange={pickSize} />
         </div>
       </div>
-      <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
+      <p className="mt-5 font-sans text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
         {list.length} {list.length === 1 ? "site" : "sites"}
         {type !== "all" && <> · {typeOf(type)}</>}
         {q.trim() && <> · “{q.trim()}”</>}
@@ -121,7 +121,7 @@ export default function WorkList() {
 
       {list.length === 0 ? (
         <div className="m-card mt-6 rounded-2xl p-8 text-center">
-          <p className="font-display text-3xl italic">No website like “{q.trim()}” yet.</p>
+          <p className="font-display text-3xl">No website like “{q.trim()}” yet.</p>
           <p className="mt-2 text-muted">I can still build it. Try another word, or tell me what you need.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <button type="button" className="x-share" onClick={() => setQ("")}>

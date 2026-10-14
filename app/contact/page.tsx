@@ -30,8 +30,8 @@ export default function ContactPage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Contact · Customise your website plan</p>
-          <h1 className="mt-4 font-display text-[clamp(2.75rem,8vw,6.5rem)] italic leading-[0.95] tracking-[-0.04em]">
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Contact · Customise your website plan</p>
+          <h1 className="mt-4 font-display text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.95] tracking-[-0.04em]">
             Your website,
             <br />
             your words.

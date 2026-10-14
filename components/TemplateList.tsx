@@ -144,7 +144,7 @@ export default function TemplateList({ items }: { items: Template[] }) {
         <SizeSwitch options={sizes} value={size} onChange={pickSize} />
         </div>
       </div>
-      <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
+      <p className="mt-5 font-sans text-xs uppercase tracking-[0.2em] text-muted" aria-live="polite">
         {list.length} {list.length === 1 ? "template" : "templates"}
         {kind !== "all" && <> · {kind}</>}
         {q.trim() && <> · “{q.trim()}”</>}
@@ -152,7 +152,7 @@ export default function TemplateList({ items }: { items: Template[] }) {
 
       {list.length === 0 && (
         <div className="m-card mt-6 rounded-2xl p-8 text-center">
-          <p className="font-display text-3xl italic">No template like “{q.trim()}” yet.</p>
+          <p className="font-display text-3xl">No template like “{q.trim()}” yet.</p>
           <p className="mt-2 text-muted">Try “3D”, “scroll” or “gallery”.</p>
           <button type="button" className="x-share mt-6" onClick={() => setQ("")}>
             Clear search
@@ -178,8 +178,8 @@ export default function TemplateList({ items }: { items: Template[] }) {
                 <span className="t-tier">{t.tier}</span>
               </div>
               <div className={small ? "p-3 sm:p-4" : "p-5 sm:p-6"}>
-                <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">{t.kind}</p>
-                <h2 className={`mt-1.5 font-display italic leading-tight ${small ? "text-lg sm:text-xl" : "text-2xl"}`}>{t.title}</h2>
+                <p className="font-sans text-[0.6875rem] uppercase tracking-[0.2em] text-ink">{t.kind}</p>
+                <h2 className={`mt-1.5 font-display leading-tight ${small ? "text-lg sm:text-xl" : "text-2xl"}`}>{t.title}</h2>
                 {!small && <p className="mt-2 text-sm leading-relaxed text-muted">{t.blurb}</p>}
                 {!small && (
                   <span className="t-open">

@@ -24,8 +24,8 @@ export default function BlogPage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Blog</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] italic leading-[0.95] tracking-[-0.04em]">Notes on websites.</h1>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Blog</p>
+          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] tracking-[-0.04em]">Notes on websites.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
             Straight answers to the questions small business owners ask me most.
           </p>

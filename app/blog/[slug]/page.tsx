@@ -41,10 +41,10 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
       <article className="u-detail-main f-post">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">
             {formatDate(post.date)} · {post.minutes} min read
           </p>
-          <h1 className="mt-4 font-display text-[clamp(2.25rem,6vw,4.5rem)] italic leading-[1.02] tracking-[-0.03em]">{post.title}</h1>
+          <h1 className="mt-4 font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02] tracking-[-0.03em]">{post.title}</h1>
         </header>
 
         <div className="f-post-body">
@@ -64,8 +64,8 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         </div>
 
         <section className="m-card mt-16 rounded-2xl p-6 sm:p-10">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">Have a question?</p>
-          <p className="mt-4 max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Tell me about your business.</p>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Have a question?</p>
+          <p className="mt-4 max-w-xl font-display text-3xl leading-tight sm:text-4xl">Tell me about your business.</p>
           <p className="mt-3 text-muted">I&apos;ll reply with a plan and a fixed price.</p>
           <div className="h-cta" style={{ justifyContent: "flex-start" }}>
             <Link href="/contact" className="u-cta-primary">

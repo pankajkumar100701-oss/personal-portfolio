@@ -495,7 +495,7 @@ export default function ContactBuilder() {
       <aside id="your-message" className="c-preview scroll-mt-4">
         <div className="m-card rounded-2xl p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink">Your message</p>
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-ink">Your message</p>
             {edited !== null && (
               <button type="button" className="text-xs text-muted underline underline-offset-2" onClick={() => setEdited(null)}>
                 Undo my edits
@@ -507,7 +507,7 @@ export default function ContactBuilder() {
 
           {roughPrices.length > 0 && (
             <div className="c-rough">
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted">Rough price · approximate</p>
+              <p className="font-sans text-[0.6875rem] uppercase tracking-[0.18em] text-muted">Rough price · approximate</p>
               <ul>
                 {roughPrices.map(({ t, p }) => (
                   <li key={t.slug}>
@@ -589,7 +589,7 @@ function Step({ id, n, title, summary, collapsible, open, onToggle, children }: 
   );
   return (
     <section id={`c-step-${id}`} className="c-step m-card rounded-2xl p-5 sm:p-6" data-open={open}>
-      <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+      <h2 className="font-sans text-xs uppercase tracking-[0.2em] text-muted">
         {collapsible ? (
           <button type="button" className="c-step-head" aria-expanded={open} aria-controls={`c-body-${id}`} onClick={onToggle}>
             {head}

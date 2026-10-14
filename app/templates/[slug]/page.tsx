@@ -49,10 +49,10 @@ export default async function TemplatePage({ params }: PageProps<"/templates/[sl
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink">
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">
             {t.kind} · <span className="m-tag">{t.tier}</span>
           </p>
-          <h1 className="mt-4 font-display text-[clamp(2.75rem,7vw,6rem)] italic leading-[0.95] tracking-[-0.04em]">{t.title}</h1>
+          <h1 className="mt-4 font-display text-[clamp(2.75rem,7vw,6rem)] leading-[0.95] tracking-[-0.04em]">{t.title}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-soft">{t.blurb}</p>
           <ul className="mt-6 flex flex-wrap gap-2">
             {[...t.features, "Zero dependencies", "Responsive"].map((f) => (

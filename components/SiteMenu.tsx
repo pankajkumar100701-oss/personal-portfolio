@@ -434,7 +434,7 @@ function Setting({ s, value, onPick }: { s: SettingDef; value: string; onPick: (
 function MenuGroup({ title, icon, action, children }: { title: string; icon?: ReactNode; action?: ReactNode; children: ReactNode }) {
   return (
     <section className="border-b border-fg/10 pb-4">
-      <h2 className="mb-2.5 flex items-center gap-2 px-1 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-fg/45">
+      <h2 className="mb-2.5 flex items-center gap-2 px-1 font-sans text-[0.65rem] uppercase tracking-[0.25em] text-fg/45">
         {icon && <ArtIcon icon={icon} className="menu-ico menu-ico-acid" />}
         {title}
         {action && <span className="ml-auto normal-case tracking-normal">{action}</span>}

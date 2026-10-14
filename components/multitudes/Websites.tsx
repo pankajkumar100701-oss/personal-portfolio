@@ -43,7 +43,7 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
       </div>
       {sites.length === 0 ? (
         <div className="m-workshop-empty rounded-2xl p-6 sm:p-10">
-          <p className="max-w-xl font-display text-3xl italic leading-tight sm:text-4xl">Yours could be the first {m.title} site here.</p>
+          <p className="max-w-xl font-display text-3xl leading-tight sm:text-4xl">Yours could be the first {m.title} site here.</p>
           <p className="mt-3 max-w-xl text-muted">Meanwhile, see how I build for others — the same care goes into yours.</p>
           <div className="mt-6 flex flex-wrap gap-2">
             <Link href={`/contact?type=${m.slug}`} className="m-cta m-cta-sm">
@@ -115,11 +115,11 @@ export function ProjectShowcase({ p, i, kicker, size = "large", onOpen, direct }
         </span>
       </a>
       <div className={`flex flex-col justify-center ${size === "large" ? "p-5 sm:p-8 lg:px-12" : small ? "p-4 sm:p-5" : "p-5 sm:p-7"}`}>
-        <p className="flex items-center justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
+        <p className="flex items-center justify-between gap-4 font-sans text-[0.6875rem] uppercase tracking-[0.2em] text-ink">
           <span>{String(i + 1).padStart(2, "0")} — {kicker ?? (p.concept ? "Sample design" : "Live")}</span>
           {p.year && <span className="text-muted">{p.year}</span>}
         </p>
-        <h3 className={`mt-3 font-display italic leading-[1.05] ${small ? "text-xl sm:text-2xl" : "text-3xl lg:text-4xl"}`}>
+        <h3 className={`mt-3 font-display leading-[1.05] ${small ? "text-xl sm:text-2xl" : "text-3xl lg:text-4xl"}`}>
           {onOpen ? (
             <button type="button" onClick={onOpen} className="text-left hover:underline">
               {p.title}

@@ -368,7 +368,7 @@ body {
     color-mix(in srgb, var(--foreground) 4%, transparent);
 }
 .menu-contact-main { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1rem 0.8rem; }
-.menu-eyebrow { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
+.menu-eyebrow { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
 .menu-contact-main b { display: block; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; line-height: 1; }
 .menu-contact-sub { display: block; margin-top: 0.35rem; font-size: 0.75rem; line-height: 1.4; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
 .menu-contact-go { display: grid; flex: none; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--u-acid); color: var(--u-bg); transition: translate 0.2s, box-shadow 0.2s; }
@@ -1181,7 +1181,7 @@ body {
   content: "0" counter(step);
   position: absolute;
   top: 1rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--ink);
 }
@@ -1209,11 +1209,11 @@ body {
    compositor; animating border-color restyled the tiles every frame). */
 .m-slot { position: relative; border: 1px dashed var(--u-line); background: color-mix(in srgb, var(--u-card) 70%, transparent); }
 .m-slot::after { content: ""; position: absolute; inset: -1px; border: 1px dashed color-mix(in srgb, var(--c) 45%, var(--u-line)); border-radius: inherit; opacity: 0; pointer-events: none; animation: m-breathe 3.2s ease-in-out calc(var(--k) * 0.25s) infinite; }
-.m-slot-soon { display: inline-block; margin-top: 0.875rem; padding: 0.125rem 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 14%, transparent); font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); }
+.m-slot-soon { display: inline-block; margin-top: 0.875rem; padding: 0.125rem 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 14%, transparent); font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); }
 @keyframes m-breathe { 50% { opacity: 1; } }
 /* Website cards: screenshot (or a title on the project's colour), labels. */
 .m-shot { border-bottom: 1px solid var(--u-line); background: linear-gradient(135deg, color-mix(in srgb, var(--p) 55%, var(--u-bg)), var(--u-bg)); }
-.m-shot-blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); font-style: italic; text-align: center; color: var(--u-fg); opacity: 0.85; }
+.m-shot-blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); text-align: center; color: var(--u-fg); opacity: 0.85; }
 /* Website showcase: the site in a browser frame on a soft wash of its colour. */
 .m-show { border: 1px solid var(--u-line); background: var(--u-card); }
 .m-show-stage {
@@ -1247,11 +1247,11 @@ body {
 .m-show-point::before { content: ""; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--c); }
 .m-cta.m-cta-sm { padding: 0.6rem 1.15rem; font-size: 0.875rem; }
 @media (max-width: 639px) { .m-browser { transform: none; } }
-.m-concept { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: rgb(0 0 0 / 0.6); font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; backdrop-filter: blur(6px); }
+.m-concept { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: rgb(0 0 0 / 0.6); font-family: var(--font-sans); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; backdrop-filter: blur(6px); }
 
 
 /* Gym / Fitness: trainer initials */
-.m-avatar { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 50%; background: linear-gradient(135deg, var(--c), #a78bfa); color: #fff; font-family: var(--font-display); font-size: 1.5rem; font-style: italic; }
+.m-avatar { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 50%; background: linear-gradient(135deg, var(--c), #a78bfa); color: #fff; font-family: var(--font-display); font-size: 1.5rem; }
 
 /* Education */
 .m-timeline { position: relative; display: grid; gap: 2.5rem; padding-left: 2rem; border-left: 1px solid var(--u-line); }
@@ -1293,7 +1293,7 @@ body {
 .m-check { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
 .m-check input { width: 1.1rem; height: 1.1rem; accent-color: var(--c); }
 .m-check input:checked + span { text-decoration: line-through; opacity: 0.5; }
-.m-stepnum { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid var(--c); color: var(--ink); font-family: var(--font-mono); }
+.m-stepnum { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid var(--c); color: var(--ink); font-family: var(--font-sans); }
 .m-tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); font-size: 0.75rem; font-weight: 600; }
 
 /* Rental */
@@ -1465,7 +1465,7 @@ body {
 .portal-x-label small {
   display: block;
   margin-top: 1.25rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.6875rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -1476,7 +1476,7 @@ body {
 .portal-x-label { position: relative; padding: 0 1rem; text-align: center; font-family: var(--font-display); }
 .portal-x-label b {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.35em;
@@ -1486,7 +1486,6 @@ body {
   display: block;
   margin-top: 0.75rem;
   font-size: clamp(3rem, 10vw, 8rem);
-  font-style: italic;
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: -0.04em;
@@ -1589,8 +1588,8 @@ body {
 .u-card-msg:hover { background: color-mix(in srgb, var(--art-ink) 14%, transparent); }
 .u-card-msg:focus-visible { outline: 2px solid var(--art-ink); outline-offset: 2px; }
 .u-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; font-family: var(--font-sans); }
-.u-card-top b { font-family: var(--font-display); font-size: 4.5rem; font-style: italic; font-weight: 400; line-height: 0.9; color: var(--ink); }
-.u-card strong { margin-top: auto; font-size: 2.5rem; font-style: italic; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+.u-card-top b { font-family: var(--font-display); font-size: 4.5rem; font-weight: 400; line-height: 0.9; color: var(--ink); }
+.u-card strong { margin-top: auto; font-size: 2.5rem; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
 .u-card p { position: relative; margin-top: 1rem; font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.6; color: var(--u-soft); }
 .u-card-go {
   position: relative;
@@ -1614,7 +1613,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   color: var(--u-muted);
@@ -1665,7 +1664,7 @@ body {
 @media (min-width: 900px) { .h-about { grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: start; } }
 .h-services { display: grid; gap: 0.75rem; margin-top: 1.25rem; }
 .h-services li { display: flex; gap: 1.25rem; padding: 1.25rem 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); box-shadow: 0 10px 30px -18px var(--u-shade); }
-.h-services b { font-family: var(--font-display); font-size: 1.75rem; font-style: italic; font-weight: 400; line-height: 1; color: var(--u-acid); }
+.h-services b { font-family: var(--font-display); font-size: 1.75rem; font-weight: 400; line-height: 1; color: var(--u-acid); }
 .h-services strong { font-size: 1.0625rem; font-weight: 600; }
 .h-services p { margin-top: 0.25rem; font-size: 0.9375rem; line-height: 1.55; color: var(--u-muted); }
 .h-contact { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding-top: 7rem; text-align: center; }
@@ -1784,7 +1783,7 @@ body {
 .x-folder small { display: block; max-width: 13rem; overflow: hidden; font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
 .x-folder i { position: absolute; top: 0.2rem; right: 0.35rem; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--c, var(--u-acid)); }
 .x-folder-group { margin-top: 1.5rem; }
-.x-folder-group legend { margin-bottom: 0.75rem; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-muted); }
+.x-folder-group legend { margin-bottom: 0.75rem; font-family: var(--font-sans); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--u-muted); }
 .x-folder-foot { position: sticky; bottom: -1.5rem; display: flex; justify-content: space-between; gap: 0.75rem; margin: 1.75rem -1.5rem -1.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--u-line); background: var(--panel-bg, var(--u-bg)); }
 .x-folder-foot .x-share:disabled { opacity: 0.4; cursor: default; }
 [data-page="work"] .x-bar, [data-page="templates"] .x-bar { justify-content: space-between; }
@@ -1830,8 +1829,8 @@ body {
 .x-mini button:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--to) 55%, var(--u-line)); border-left-color: var(--from); }
 .x-mini button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
 .x-mini .x-type-icon { flex: none; width: 2.5rem; height: 2.5rem; }
-.x-mini b { display: block; font-family: var(--font-display); font-size: 1.3rem; font-style: italic; font-weight: 400; line-height: 1.1; }
-.x-mini small { display: block; margin-top: 0.2rem; overflow: hidden; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
+.x-mini b { display: block; font-family: var(--font-display); font-size: 1.3rem; font-weight: 400; line-height: 1.1; }
+.x-mini small { display: block; margin-top: 0.2rem; overflow: hidden; font-family: var(--font-sans); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; text-overflow: ellipsis; white-space: nowrap; color: var(--u-muted); }
 .x-mini-go { flex: none; margin-left: auto; font-size: 1.5rem; font-style: normal; line-height: 1; color: var(--u-muted); transition: translate 0.2s, color 0.2s; }
 .x-mini button:hover .x-mini-go { translate: 0.2rem 0; color: var(--from); }
 /* Stacked (medium / small) showcase cards: an upright browser frame. */
@@ -1899,7 +1898,7 @@ body {
 .c-input:focus { border-color: var(--c); }
 .c-input::placeholder { color: var(--u-dim); }
 textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
-.c-message { min-height: 12rem; margin-top: 0.875rem; overflow: hidden; resize: none !important; font-family: var(--font-mono); font-size: 0.8125rem; }
+.c-message { min-height: 12rem; margin-top: 0.875rem; overflow: hidden; resize: none !important; font-family: var(--font-sans); font-size: 0.8125rem; }
 .c-type {
   display: inline-flex;
   align-items: center;
@@ -1926,7 +1925,7 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .h-ideas { display: grid; gap: 1rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
 .h-ideas li { display: flex; flex-direction: column; align-items: flex-start; gap: 0.625rem; padding: 1.5rem; border: 1px solid var(--u-line); border-radius: 1.25rem; background: var(--u-card); box-shadow: 0 10px 30px -18px var(--u-shade); transition: border-color 0.25s, translate 0.25s; }
 .h-ideas li:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--u-acid) 45%, var(--u-line)); }
-.h-ideas b { font-family: var(--font-display); font-size: 1.75rem; font-style: italic; font-weight: 400; line-height: 1; color: var(--u-acid); }
+.h-ideas b { font-family: var(--font-display); font-size: 1.75rem; font-weight: 400; line-height: 1; color: var(--u-acid); }
 .h-ideas strong { font-size: 1.0625rem; font-weight: 600; }
 .h-ideas li > p { font-size: 0.9375rem; line-height: 1.55; color: var(--u-muted); }
 .h-ideas .h-idea-seen { font-size: 0.8125rem; color: var(--u-dim); }
@@ -1957,7 +1956,7 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .h-review-by a:hover { color: var(--u-fg); }
 /* A client's review on a website's showcase card. */
 .m-show-review { margin-top: 1.25rem; padding: 0.875rem 1rem; border-left: 2px solid var(--p, var(--u-acid)); border-radius: 0 0.75rem 0.75rem 0; background: color-mix(in srgb, var(--u-fg) 4%, transparent); }
-.m-show-review blockquote { margin-top: 0.25rem; font-family: var(--font-display); font-size: 1.0625rem; font-style: italic; line-height: 1.45; }
+.m-show-review blockquote { margin-top: 0.25rem; font-family: var(--font-display); font-size: 1.0625rem; line-height: 1.45; }
 .m-show-review figcaption { margin-top: 0.5rem; font-size: 0.75rem; color: var(--u-muted); }
 .m-show-review strong { color: var(--u-fg); }
 .c-more { margin-top: 0.875rem; font-size: 0.8125rem; font-weight: 600; color: var(--ink); cursor: pointer; }
@@ -1995,7 +1994,7 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .t-thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--u-line); background: color-mix(in srgb, var(--c) 12%, var(--u-bg)); }
 .t-thumb iframe { position: absolute; top: 0; left: 0; width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity 0.4s; }
 .t-thumb[data-loaded] iframe { opacity: 1; }
-.t-tier { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: var(--u-acid); font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-bg); }
+.t-tier { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 999px; background: var(--u-acid); font-family: var(--font-sans); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--u-bg); }
 [data-theme="light"] .t-tier { color: #fff; }
 .t-card[data-size="small"] .t-tier { top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.45rem; font-size: 0.5rem; }
 .t-open { display: inline-flex; gap: 0.375rem; margin-top: 1.25rem; font-size: 0.875rem; font-weight: 600; color: var(--ink); }
@@ -2036,7 +2035,7 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
 .hl-punc { color: #9aa0b4; }
 .t-steps { display: grid; gap: 1rem; margin-top: 2.5rem; }
 .t-steps li { display: flex; gap: 1rem; padding: 1.125rem 1.25rem; border: 1px solid var(--u-line); border-radius: 1rem; font-size: 0.9375rem; line-height: 1.5; color: var(--u-soft); }
-.t-steps b { flex: none; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.15em; color: var(--ink); padding-top: 0.2rem; }
+.t-steps b { flex: none; font-family: var(--font-sans); font-size: 0.6875rem; letter-spacing: 0.15em; color: var(--ink); padding-top: 0.2rem; }
 .t-steps strong { color: var(--u-fg); }
 .t-steps code { font-family: var(--font-mono); font-size: 0.85em; color: var(--ink); }
 @media (min-width: 768px) { .t-steps { grid-template-columns: repeat(3, 1fr); } }
@@ -2084,3 +2083,6 @@ textarea.c-input { display: block; resize: vertical; line-height: 1.55; }
   :root[data-motion="full"]:not([data-lite]) .pop[data-closing] { animation: pop-down-out 0.32s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
   @keyframes pop-down-out { to { translate: 0 100%; } }
 }
+
+/* Numbered labels lost mono's fixed-width digits; keep "01"…"11" lined up. */
+.m-steps li::before, .m-stepnum, .t-steps b, .f-steps b, .u-card-top b, .h-services b, .h-ideas b, .u-track-meter { font-variant-numeric: tabular-nums; }

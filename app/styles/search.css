@@ -32,7 +32,7 @@
 .x-opt-card .x-type-icon svg { width: 1.1rem; height: 1.1rem; }
 .x-opt-card .x-type-icon b { font-size: 0.9rem; }
 .x-opt-card b { display: block; overflow: hidden; font-size: 0.8125rem; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
-.x-opt-card small { display: block; margin-top: 0.15rem; font-family: var(--font-mono); font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--u-muted); }
+.x-opt-card small { display: block; margin-top: 0.15rem; font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--u-muted); }
 .x-opt-card[aria-pressed="true"] { border-color: var(--to); background: color-mix(in srgb, var(--to) 16%, var(--u-card)); }
 .x-opt-card[aria-pressed="true"] small { color: var(--u-fg); }
 
