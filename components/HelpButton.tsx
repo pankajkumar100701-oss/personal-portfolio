@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { profile } from "@/data/profile";
 
 // The phone number behind the WhatsApp link, for a plain call.
@@ -15,6 +16,12 @@ export default function HelpButton() {
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelId = useId();
+  // Which page we're on, for the CSS that lifts the button clear of the home
+  // hero's bottom bar and the Contact send bar. (Was `body:has(...)`, which made
+  // every text change on the page — like the hero's zoom readout each scroll
+  // frame — recalc the whole page's styles.)
+  const path = usePathname();
+  const at = path === "/" ? "home" : path === "/contact" ? "contact" : undefined;
 
   useEffect(() => {
     if (!open) return;
@@ -37,7 +44,7 @@ export default function HelpButton() {
   const close = () => setOpen(false);
 
   return (
-    <div ref={rootRef} className="f-help">
+    <div ref={rootRef} className="f-help" data-at={at}>
       <div id={panelId} className="f-help-panel" data-open={open || undefined} inert={!open} role="dialog" aria-label="Help">
         <p className="f-help-title">Need a hand?</p>
         <p className="f-help-sub">Ask me anything. I usually reply within a few hours.</p>
