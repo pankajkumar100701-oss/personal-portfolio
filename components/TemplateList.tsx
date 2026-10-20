@@ -20,53 +20,45 @@ const sizes = [
 type Size = (typeof sizes)[number]["value"];
 const SIZE_KEY = "templates-size";
 
-// A card's preview (/templates/<slug>/preview#still). The frame is only
-// created while the card is near the screen, and it freezes after its first
-// moments (see STILL in lib/templates.ts): only the `active` card plays, the
-// one under the mouse, or on touch screens the one in the middle of the screen.
+// A card's preview: a still poster (public/template-thumbs/<slug>.webp, made
+// by scripts/template-thumbs.mjs), with the live template (/templates/<slug>/preview)
+// mounted on top only for the `active` card: the one under the mouse, or on
+// touch screens the one resting in the middle of the screen. So at most one
+// template runs at a time, and scrolling past cards never starts any.
 function Thumb({ slug, title, active, onCentre }: { slug: string; title: string; active: boolean; onCentre: (slug: string, centred: boolean) => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const frame = useRef<HTMLIFrameElement>(null);
-  const [near, setNear] = useState(false);
+  const [live, setLive] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  // Touch screens have no hover: the card crossing the middle of the screen plays.
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    // Far off screen, the frame goes away (and loads afresh when it's back).
-    const io = new IntersectionObserver(
-      (entries) => {
-        const isNear = entries.some((e) => e.isIntersecting);
-        setNear(isNear);
-        if (!isNear) setLoaded(false);
-      },
-      { rootMargin: "400px 0px" },
-    );
-    io.observe(el);
-    // Touch screens have no hover: the card crossing the middle of the screen plays.
-    let mid: IntersectionObserver | undefined;
-    if (matchMedia("(hover: none)").matches) {
-      mid = new IntersectionObserver((entries) => entries.forEach((e) => onCentre(slug, e.isIntersecting)), { rootMargin: "-42% 0px -42% 0px" });
-      mid.observe(el);
-    }
-    return () => {
-      io.disconnect();
-      mid?.disconnect();
-    };
+    if (!el || !matchMedia("(hover: none)").matches) return;
+    const mid = new IntersectionObserver((entries) => entries.forEach((e) => onCentre(slug, e.isIntersecting)), { rootMargin: "-42% 0px -42% 0px" });
+    mid.observe(el);
+    return () => mid.disconnect();
   }, [slug, onCentre]);
 
-  // Tell the frame to play or freeze (again once it has loaded).
+  // Start the live frame once the card has stayed active for a moment (a mouse
+  // sweeping across, or a flick past on a phone, starts nothing); drop it after.
   useEffect(() => {
-    frame.current?.contentWindow?.postMessage(active ? "tpl:play" : "tpl:pause", "*");
-  }, [active, loaded]);
+    if (!active || document.documentElement.dataset.motion === "reduce") return;
+    const t = window.setTimeout(() => setLive(true), matchMedia("(hover: none)").matches ? 450 : 150);
+    return () => {
+      clearTimeout(t);
+      setLive(false);
+      setLoaded(false);
+    };
+  }, [active]);
 
   return (
     <div ref={ref} className="t-thumb" data-loaded={loaded || undefined} data-active={active || undefined}>
-      {near && (
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={`/template-thumbs/${slug}.webp`} alt="" width={800} height={500} loading="lazy" decoding="async" />
+      {live && (
         <iframe
-          ref={frame}
           title={`${title} preview`}
-          src={`/templates/${slug}/preview#still`}
+          src={`/templates/${slug}/preview`}
           sandbox="allow-scripts"
           scrolling="no"
           tabIndex={-1}
