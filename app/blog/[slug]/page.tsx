@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import { findPost, formatDate, posts } from "@/data/blog";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
@@ -34,9 +35,12 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
       <nav className="u-detail-top relative z-30">
         <SiteMenu />
-        <Link href="/blog" className="whitespace-nowrap">
-          ← All posts
-        </Link>
+        <span className="flex items-center gap-5">
+          <Link href="/blog" className="whitespace-nowrap">
+            ← All posts
+          </Link>
+          <ThemeButton />
+        </span>
       </nav>
 
       <article className="u-detail-main f-post">

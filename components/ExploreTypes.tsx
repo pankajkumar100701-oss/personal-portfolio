@@ -94,7 +94,7 @@ export default function ExploreTypes() {
 
       {shown.length === 0 ? (
         <div className="m-card mt-6 rounded-2xl p-8 text-center">
-          <p className="font-display text-3xl">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Not listed? I can still build it."}</p>
+          <p className="font-display text-3xl">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Nothing on the list here."}</p>
           <p className="mt-2 text-muted">I can still build it. Tell me what you have in mind on the Contact page.</p>
           <Link href="/contact" className="u-cta-primary x-btn mt-6">
             Customise your website plan <span aria-hidden>→</span>

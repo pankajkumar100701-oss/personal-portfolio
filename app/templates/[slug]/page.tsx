@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import TemplateViewer from "@/components/TemplateViewer";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
@@ -44,6 +45,7 @@ export default async function TemplatePage({ params }: PageProps<"/templates/[sl
           <span className="hidden sm:inline">
             {String(index + 1).padStart(2, "0")} / {String(templates.length).padStart(2, "0")}
           </span>
+          <ThemeButton />
         </span>
       </nav>
 

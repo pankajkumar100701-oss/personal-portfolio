@@ -8,6 +8,7 @@ import MultitudesTrack from "@/components/MultitudesTrack";
 import ProcessSection from "@/components/ProcessSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import { profile } from "@/data/profile";
 
 // Dive into the dot, then scroll on through the multitudes as a sideways row
@@ -21,6 +22,7 @@ export default function Home() {
       <header className="site-header fixed inset-x-0 top-0 z-20">
         <nav className="flex items-center justify-between gap-3 px-4 py-4 sm:px-8 lg:px-12">
           <SiteMenu />
+          <ThemeButton />
         </nav>
       </header>
 

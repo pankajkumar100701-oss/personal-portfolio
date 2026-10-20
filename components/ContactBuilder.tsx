@@ -95,6 +95,8 @@ function useEnglish(text: string, always: boolean) {
     const timer = setTimeout(async () => {
       try {
         const res = await fetch("/api/translate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: trimmed }), signal: ctrl.signal });
+        // Refused (too many at once): don't remember it, so a later pause tries again.
+        if (!res.ok) return;
         const data = (await res.json()) as { text: string; from: string };
         translations.set(trimmed, data);
         setResult({ src: trimmed, ...data });
@@ -258,7 +260,7 @@ export default function ContactBuilder() {
   }, [copied]);
 
   const ready = name.trim() !== "" && (phone.trim() !== "" || email.trim() !== "");
-  const subject = `Website enquiry — ${nameEn?.text ?? name ?? "from your portfolio"}${business ? ` (${businessEn?.text ?? business})` : ""}`;
+  const subject = `Website enquiry — ${nameEn?.text || name.trim() || "from your portfolio"}${business ? ` (${businessEn?.text ?? business})` : ""}`;
 
   // While searching, the matching options show in full (and flash) in their lists too.
   const searching = query.trim() !== "";

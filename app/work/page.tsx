@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import WorkList from "@/components/WorkList";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
@@ -24,6 +25,7 @@ export default function WorkPage() {
             ← Home
           </Link>
           <span className="hidden sm:inline">{String(projects.length).padStart(2, "0")} sites</span>
+          <ThemeButton />
         </span>
       </nav>
 

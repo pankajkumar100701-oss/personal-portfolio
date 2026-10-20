@@ -7,8 +7,8 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Theme tokens. Dark is the default; [data-theme] is set on <html> before first
-   paint (see lib/prefs.ts). Light values are tuned for contrast: body text
+/* Theme tokens. Light is the default theme (lib/prefs.ts); [data-theme] is set
+   on <html> before first paint, and :root holds the dark values. Light values are tuned for contrast: body text
    stays near-black and every muted grey still reads on the paper background. */
 :root {
   --background: #07090d;
@@ -437,6 +437,74 @@ body {
 .menu-fps[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
 .menu-fps[data-tone="slow"] i { background: #fb7185; box-shadow: 0 0 8px #fb7185; }
   :root[data-motion="reduce"] .menu-panel, :root[data-motion="reduce"] .menu-panel[data-open], :root[data-motion="reduce"] .menu-caret::before, :root[data-motion="reduce"] .menu-caret::after { transition: none; }
+
+/* ---------- Theme button (components/ThemeButton.tsx), top right ---------- */
+.theme-pick { position: relative; flex: none; margin-left: auto; text-transform: none; letter-spacing: normal; }
+.theme-btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-bg) 70%, transparent);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, rotate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.theme-btn:hover,
+.theme-btn[aria-expanded="true"] { border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 12%, var(--panel-bg)); }
+.theme-btn[aria-expanded="true"] { rotate: -20deg; }
+.theme-btn:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+.theme-btn-ico { width: 1.2rem; height: 1.2rem; }
+.theme-btn-ico circle:nth-of-type(1) { color: #e5532d; }
+.theme-btn-ico circle:nth-of-type(2) { color: #f5b301; }
+.theme-btn-ico circle:nth-of-type(3) { color: #4c68e8; }
+.theme-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.6rem);
+  z-index: 40;
+  width: min(17rem, calc(100vw - 2rem));
+  padding: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 1.1rem;
+  background: var(--panel-bg);
+  box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.45);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.4rem) scale(0.98);
+  transform-origin: top right;
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.25s;
+}
+.theme-panel[data-open] { opacity: 1; visibility: visible; transform: none; transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.theme-title { margin: 0 0 0.6rem 0.2rem; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 50%, transparent); }
+.theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+.theme-options button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.3rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 0.8rem;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--foreground) 75%, transparent);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.theme-options button:hover { border-color: color-mix(in srgb, var(--u-acid) 60%, transparent); color: var(--foreground); }
+.theme-options button[aria-checked="true"] { border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 12%, transparent); color: var(--foreground); }
+.theme-options button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+/* A little picture of each theme: paper, ink, and half of each for System. */
+.theme-swatch { display: grid; place-items: center; width: 100%; height: 2.6rem; border-radius: 0.55rem; border: 1px solid rgb(0 0 0 / 0.08); }
+.theme-swatch svg { width: 1.1rem; height: 1.1rem; }
+.theme-swatch[data-swatch="light"] { background: #faf8f4; color: #c2461c; }
+.theme-swatch[data-swatch="dark"] { background: #07090d; color: #d7ff3f; border-color: rgb(255 255 255 / 0.1); }
+.theme-swatch[data-swatch="system"] { background: linear-gradient(135deg, #faf8f4 50%, #07090d 50%); color: #8a8d86; }
+  :root[data-motion="reduce"] :is(.theme-btn, .theme-panel, .theme-panel[data-open]) { transition: none; }
 
 /* ---------- Multitudes hero ---------- */
 .u-section {

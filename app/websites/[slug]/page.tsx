@@ -6,6 +6,7 @@ import { AddToMessage, ShareLink } from "@/components/MessageActions";
 import Websites from "@/components/multitudes/Websites";
 import { Heading, Hero } from "@/components/multitudes/ui";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import { allTypes, profile } from "@/data/profile";
 import { kinds } from "@/data/multitudes";
 import { pageMeta } from "@/lib/site";
@@ -49,6 +50,7 @@ export default async function MultitudePage({ params }: PageProps<"/websites/[sl
           <span className="hidden sm:inline">
             {m.n} / {String(multitudes.length).padStart(2, "0")}
           </span>
+          <ThemeButton />
         </span>
       </nav>
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import ContactBuilder from "@/components/ContactBuilder";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 
@@ -25,6 +26,7 @@ export default function ContactPage() {
           <Link href="/#top" className="whitespace-nowrap">
             ← Home
           </Link>
+          <ThemeButton />
         </span>
       </nav>
 

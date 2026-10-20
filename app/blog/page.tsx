@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import SiteMenu from "@/components/SiteMenu";
+import ThemeButton from "@/components/ThemeButton";
 import { formatDate, posts } from "@/data/blog";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
@@ -17,9 +18,12 @@ export default function BlogPage() {
 
       <nav className="u-detail-top relative z-30">
         <SiteMenu />
-        <Link href="/#top" className="whitespace-nowrap">
-          ← Home
-        </Link>
+        <span className="flex items-center gap-5">
+          <Link href="/#top" className="whitespace-nowrap">
+            ← Home
+          </Link>
+          <ThemeButton />
+        </span>
       </nav>
 
       <article className="u-detail-main">

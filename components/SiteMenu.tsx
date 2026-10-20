@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { findType, profile } from "@/data/profile";
-import { DEFAULT_PREFS, measureFps, motionChosen, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
+import { DEFAULT_PREFS, measureFps, motionChosen, PREFS_EVENT, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
 // Small line icons for the menu (24×24, stroked like ArtIcon).
 const I = {
@@ -51,19 +51,6 @@ const I = {
   pin: <path d="M9 4h6l-1 5 3 3v2H7v-2l3-3zM12 14v6" />,
   chat2: <path d="M4 5h16v11H9l-5 4z" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
-  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z" />,
-  sun: (
-    <>
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-    </>
-  ),
-  monitor: (
-    <>
-      <rect x="3" y="4" width="18" height="12" rx="2" />
-      <path d="M8 20h8M12 16v4" />
-    </>
-  ),
   text: <path d="M4 18 8.5 6l4.5 12M5.7 14h5.6M15 18l3-8 3 8M15.8 16h4.4" />,
   motion: <path d="M3 12c3-6 6-6 9 0s6 6 9 0" />,
   gear: (
@@ -120,17 +107,8 @@ const pages = [
   { href: "/#about", match: "", label: "About", icon: I.user },
 ];
 
-const settings: { key: keyof Prefs; label: string; icon: ReactNode; options: { value: string; label: string; icon?: ReactNode }[] }[] = [
-  {
-    key: "theme",
-    label: "Theme",
-    icon: I.moon,
-    options: [
-      { value: "dark", label: "Dark", icon: I.moon },
-      { value: "light", label: "Light", icon: I.sun },
-      { value: "system", label: "System", icon: I.monitor },
-    ],
-  },
+// The theme has its own paint-palette button (ThemeButton), top right.
+const settings: { key: Exclude<keyof Prefs, "theme">; label: string; icon: ReactNode; options: { value: string; label: string; icon?: ReactNode }[] }[] = [
   {
     key: "text",
     label: "Text size",
@@ -169,9 +147,9 @@ function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { 
 }
 
 // The logo doubles as the site menu: navigation, the Contact page, the top
-// trending website types, viewer settings (with a live frame-rate check for
-// picking a Motion level, which can be pinned on screen) and my WhatsApp and
-// email, in one panel.
+// trending website types, viewer settings (text size, and a live frame-rate
+// check for picking a Motion level, which can be pinned on screen; the theme
+// is ThemeButton's) and my WhatsApp and email, in one panel.
 export default function SiteMenu() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
@@ -186,13 +164,17 @@ export default function SiteMenu() {
   const panelId = useId();
   const pathname = usePathname();
 
-  // Stored prefs are only readable in the browser; sync them in after hydration.
+  // Stored prefs are only readable in the browser; sync them in after
+  // hydration, and again when they change elsewhere (the theme button, another tab).
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPrefs(readPrefs());
+    const sync = () => setPrefs(readPrefs());
+    sync();
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPinned(localStorage.getItem(PIN_KEY) === "1");
     } catch {}
+    window.addEventListener(PREFS_EVENT, sync);
+    return () => window.removeEventListener(PREFS_EVENT, sync);
   }, []);
 
   useEffect(() => {
@@ -248,7 +230,8 @@ export default function SiteMenu() {
   };
 
   const update = (key: keyof Prefs, value: string) => {
-    const next = { ...prefs, [key]: value } as Prefs;
+    // Fresh from storage: `prefs` may be older than a theme just picked elsewhere.
+    const next = { ...readPrefs(), [key]: value } as Prefs;
     setPrefs(next);
     savePrefs(next, key === "motion" || motionChosen());
   };

@@ -11,19 +11,29 @@ export type Prefs = {
   motion: "full" | "lite" | "reduce";
 };
 
-export const DEFAULT_PREFS: Prefs = { theme: "dark", text: "default", motion: "full" };
+export const DEFAULT_PREFS: Prefs = { theme: "light", text: "default", motion: "full" };
 
-const KEY = "prefs";
+// The values each pref can take, so a stale or hand-edited localStorage entry
+// can't put an unknown theme (no styles at all) on <html>.
+const ALLOWED: { [K in keyof Prefs]: readonly Prefs[K][] } = {
+  theme: ["dark", "light", "system"],
+  text: ["small", "default", "large"],
+  motion: ["full", "lite", "reduce"],
+};
+
+export const PREFS_KEY = "prefs";
 // Set by PerfGuard once this browser is seen dropping frames (see there).
 export const LITE_KEY = "perf-lite";
 export const PREFS_EVENT = "prefs-change";
 
 export function readPrefs(): Prefs {
+  let stored: Record<string, unknown> = {};
   try {
-    return { ...DEFAULT_PREFS, ...JSON.parse(localStorage.getItem(KEY) ?? "{}") };
-  } catch {
-    return DEFAULT_PREFS;
-  }
+    const v = JSON.parse(localStorage.getItem(PREFS_KEY) ?? "{}");
+    if (v && typeof v === "object") stored = v;
+  } catch {}
+  const pick = <K extends keyof Prefs>(k: K): Prefs[K] => ((ALLOWED[k] as readonly unknown[]).includes(stored[k]) ? (stored[k] as Prefs[K]) : DEFAULT_PREFS[k]);
+  return { theme: pick("theme"), text: pick("text"), motion: pick("motion") };
 }
 
 export function resolveTheme(theme: Prefs["theme"]) {
@@ -35,7 +45,7 @@ export function resolveTheme(theme: Prefs["theme"]) {
 // leaves it alone.
 export function motionChosen() {
   try {
-    return "motion" in JSON.parse(localStorage.getItem(KEY) ?? "{}");
+    return "motion" in JSON.parse(localStorage.getItem(PREFS_KEY) ?? "{}");
   } catch {
     return false;
   }
@@ -87,7 +97,7 @@ export function savePrefs(p: Prefs, motionPicked = motionChosen()) {
   const stored: Partial<Prefs> = { ...p };
   if (!motionPicked) delete stored.motion;
   try {
-    localStorage.setItem(KEY, JSON.stringify(stored));
+    localStorage.setItem(PREFS_KEY, JSON.stringify(stored));
   } catch {}
   applyPrefs(p, motionPicked);
   window.dispatchEvent(new Event(PREFS_EVENT));
@@ -95,7 +105,7 @@ export function savePrefs(p: Prefs, motionPicked = motionChosen()) {
 
 // Same as readPrefs + applyPrefs, inlined in <head> so the page paints in the
 // right theme before React loads.
-export const prefsScript = `(function(){try{var p=JSON.parse(localStorage.getItem("${KEY}")||"{}"),h=document.documentElement,t=p.theme||"${DEFAULT_PREFS.theme}";if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";h.dataset.theme=t;h.dataset.text=p.text||"${DEFAULT_PREFS.text}";h.dataset.motion=p.motion==="reduce"?"reduce":"full";if(p.motion==="lite"||(!p.motion&&sessionStorage.getItem("${LITE_KEY}")))h.dataset.lite=""}catch(e){}})()`;
+export const prefsScript = `(function(){try{var p=JSON.parse(localStorage.getItem("${PREFS_KEY}")||"{}"),h=document.documentElement,t=${JSON.stringify(ALLOWED.theme)}.indexOf(p.theme)<0?"${DEFAULT_PREFS.theme}":p.theme;if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";h.dataset.theme=t;h.dataset.text=${JSON.stringify(ALLOWED.text)}.indexOf(p.text)<0?"${DEFAULT_PREFS.text}":p.text;h.dataset.motion=p.motion==="reduce"?"reduce":"full";if(p.motion==="lite"||(!p.motion&&sessionStorage.getItem("${LITE_KEY}")))h.dataset.lite=""}catch(e){}})()`;
 
 // Plays an element's closing animation, then resolves. The animation is CSS
 // on `[data-closing]` (see "Closing" in globals.css), defined for Max motion

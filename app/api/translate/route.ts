@@ -45,10 +45,53 @@ async function myMemory(text: string) {
   return { text: done.map((d) => d.text).join(" ").replace(/\s+/g, " ").trim(), from: done.find((d) => d.from !== "en")?.from ?? "en" };
 }
 
+// Abuse guards: this route is only for the Contact page, not a free
+// translation proxy for anyone. Same-origin requests only, a small JSON body,
+// and a per-visitor budget (per server instance, so best-effort on serverless).
+const MAX_BODY = 16_000;
+const WINDOW_MS = 60_000;
+const PER_WINDOW = 30;
+const hits = new Map<string, { start: number; n: number }>();
+
+function sameOrigin(request: Request) {
+  // Browsers send this on every fetch; "same-origin" means our own page.
+  const site = request.headers.get("sec-fetch-site");
+  if (site) return site === "same-origin";
+  // Older browsers: fall back to comparing the Origin with our own host.
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  if (!origin || !host) return false;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
+function overBudget(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || request.headers.get("x-real-ip") || "?";
+  const now = Date.now();
+  const h = hits.get(ip);
+  if (!h || now - h.start > WINDOW_MS) {
+    // Drop stale entries now and then so the map can't grow without bound.
+    if (hits.size > 5000) for (const [k, v] of hits) if (now - v.start > WINDOW_MS) hits.delete(k);
+    hits.set(ip, { start: now, n: 1 });
+    return false;
+  }
+  return ++h.n > PER_WINDOW;
+}
+
 export async function POST(request: Request) {
+  if (!sameOrigin(request)) return Response.json({ text: "", from: "" }, { status: 403 });
+  if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ text: "", from: "" }, { status: 415 });
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY) return Response.json({ text: "", from: "" }, { status: 413 });
+  if (overBudget(request)) return Response.json({ text: "", from: "" }, { status: 429, headers: { "Retry-After": "60" } });
+
   let text = "";
   try {
-    const body = await request.json();
+    const raw = await request.text();
+    if (raw.length > MAX_BODY) return Response.json({ text: "", from: "" }, { status: 413 });
+    const body = JSON.parse(raw);
     text = typeof body?.text === "string" ? body.text.slice(0, MAX) : "";
   } catch {}
   if (!text.trim()) return Response.json({ text: "", from: "" }, { status: 400 });
