@@ -4,7 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, typ
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { ContactSearch, type SearchOption } from "@/components/ContactSearch";
-import { allTypes, findType, profile, whatsappLink } from "@/data/profile";
+import { allTypes, findType, profile } from "@/data/profile";
+import { useContact } from "@/lib/contact";
 import { currencies, money, prices, type CurrencyCode } from "@/data/pricing";
 import { addToBasket, toggleInBasket, useBasket, writeBasket } from "@/lib/basket";
 import { score, search } from "@/lib/search";
@@ -129,6 +130,7 @@ function languageName(code: string) {
 export default function ContactBuilder() {
   const basket = useBasket();
   const isPhone = useIsPhone();
+  const { email: myEmail, mailto, whatsapp } = useContact();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -275,7 +277,7 @@ export default function ContactBuilder() {
   const listTypes = typeHits ? typeHits.map((h) => h.item) : shownTypes;
   const typeMatch = (t: (typeof allTypes)[number]) => (typeHits ? (typeHits.find((h) => h.item === t)?.related ? "related" : "strong") : matchOf(typeText(t)));
   const shownIdeas = ideaOptions.filter((f, i) => allIdeasShown || i < IDEAS_SHOWN || ideas.includes(f) || matchOf(f));
-  const waHref = whatsappLink(message);
+  const waHref = whatsapp(message);
 
   const go = (id: StepId) => {
     setOpen(id);
@@ -529,7 +531,7 @@ export default function ContactBuilder() {
               Send on WhatsApp <span aria-hidden>→</span>
             </a>
             <a
-              href={ready ? `mailto:${profile.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}` : undefined}
+              href={ready && myEmail ? `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}` : undefined}
               aria-disabled={!ready}
               className="u-cta-ghost x-btn justify-center"
             >
@@ -546,8 +548,8 @@ export default function ContactBuilder() {
           )}
           <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted">
             Or reach me directly:{" "}
-            <a href={`mailto:${profile.contact.email}`} className="underline underline-offset-2">
-              {profile.contact.email}
+            <a href={mailto} className="underline underline-offset-2">
+              {myEmail}
             </a>
           </p>
         </div>

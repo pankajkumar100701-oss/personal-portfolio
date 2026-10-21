@@ -3,15 +3,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { profile } from "@/data/profile";
-
-// The phone number behind the WhatsApp link, for a plain call.
-const phone = profile.contact.whatsapp.match(/wa\.me\/(\d+)/)?.[1] ?? "";
+import { useContact } from "@/lib/contact";
 
 // A small "Help" button on every page (bottom-left, clear of the message
 // pill and the Contact page's send bar): ways to reach me, the FAQ, and a
 // note that any language is fine.
 export default function HelpButton() {
+  const { phone, mailto, whatsapp } = useContact();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -49,7 +47,7 @@ export default function HelpButton() {
         <p className="f-help-title">Need a hand?</p>
         <p className="f-help-sub">Ask me anything. I usually reply within a few hours.</p>
         <div className="f-help-grid">
-          <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" onClick={close}>
+          <a href={whatsapp()} target="_blank" rel="noopener noreferrer" onClick={close}>
             <b>WhatsApp</b>
             <small>Chat with me</small>
           </a>
@@ -59,7 +57,7 @@ export default function HelpButton() {
               <small>+{phone.slice(0, 2)} {phone.slice(2)}</small>
             </a>
           )}
-          <a href={`mailto:${profile.contact.email}`} onClick={close}>
+          <a href={mailto} onClick={close}>
             <b>Email</b>
             <small>Write to me</small>
           </a>

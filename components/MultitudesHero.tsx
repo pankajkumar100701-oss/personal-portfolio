@@ -4,6 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { profile } from "@/data/profile";
+import { useContact } from "@/lib/contact";
 import { motionReduced, PREFS_EVENT } from "@/lib/prefs";
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
@@ -460,6 +461,7 @@ export default function MultitudesHero() {
   }, []);
 
   const { hero, multitudes } = profile;
+  const { mailto } = useContact();
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");
@@ -583,7 +585,7 @@ export default function MultitudesHero() {
                 <Link href="/contact" className="u-cta-primary">
                   Customise your website plan <span aria-hidden>→</span>
                 </Link>
-                <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
+                <a href={mailto} className="u-cta-ghost">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
                     <rect x="3" y="5" width="18" height="14" rx="2" />
                     <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
@@ -644,7 +646,7 @@ export default function MultitudesHero() {
               <Link href="/explore" className="u-cta-primary">
                 Explore your type <span aria-hidden>→</span>
               </Link>
-              <a href={`mailto:${profile.contact.email}`} className="u-cta-ghost">
+              <a href={mailto} className="u-cta-ghost">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />

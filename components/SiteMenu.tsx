@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { findType, profile } from "@/data/profile";
+import { useContact } from "@/lib/contact";
 import { DEFAULT_PREFS, measureFps, motionChosen, PREFS_EVENT, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
 // Small line icons for the menu (24×24, stroked like ArtIcon).
@@ -151,6 +152,7 @@ function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { 
 // check for picking a Motion level, which can be pinned on screen; the theme
 // is ThemeButton's) and my WhatsApp and email, in one panel.
 export default function SiteMenu() {
+  const contact = useContact();
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
   // Live frame rate: frames actually shown on screen in the last second.
@@ -362,11 +364,11 @@ export default function SiteMenu() {
 
         <MenuGroup title="Get in touch" icon={I.chat2}>
           <div className="grid grid-cols-2 gap-1.5">
-            <a href={profile.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="menu-touch menu-touch-wa">
+            <a href={contact.whatsapp()} target="_blank" rel="noopener noreferrer" className="menu-touch menu-touch-wa">
               <WhatsAppLogo />
               WhatsApp
             </a>
-            <a href={`mailto:${profile.contact.email}`} title={profile.contact.email} className="menu-touch">
+            <a href={contact.mailto} title={contact.email} className="menu-touch">
               <Icon d={I.mail} />
               Email
             </a>

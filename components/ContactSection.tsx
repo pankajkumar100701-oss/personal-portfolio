@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { profile } from "@/data/profile";
+import { useContact } from "@/lib/contact";
 
 // The home page's last screen: the way to the Contact page (where visitors
 // write their message), plus WhatsApp and email.
 export default function ContactSection() {
   const { contact } = profile;
+  const { email, mailto, whatsapp } = useContact();
   return (
     <section id="contact" className="h-sec h-contact" aria-labelledby="contact-title">
       <div className="h-wrap">
@@ -21,11 +25,11 @@ export default function ContactSection() {
           <Link href="/contact" className="u-cta-primary">
             Customise your website plan <span aria-hidden>→</span>
           </Link>
-          <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
+          <a href={whatsapp()} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
             Chat on WhatsApp <span aria-hidden>→</span>
           </a>
-          <a href={`mailto:${contact.email}`} className="u-cta-ghost">
-            {contact.email}
+          <a href={mailto} className="u-cta-ghost">
+            {email || "Email me"}
           </a>
         </div>
         {contact.links.length > 0 && (

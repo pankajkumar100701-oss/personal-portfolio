@@ -25,12 +25,11 @@ export type Review = {
   site?: string; // a project title from `projects`, linked on the card
 };
 
-// Used by the contact links below and the multitude pages' calls to action.
-const email = "pankajstudio119@gmail.com";
-// WhatsApp: country code + number, digits only. Powers the Contact section and menu chat links.
-const whatsapp = "917833085612";
-// A WhatsApp chat with me, the message box pre-filled with `text`.
-export const whatsappLink = (text: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
+// My email and WhatsApp number (country code + digits), kept encoded so bots
+// scraping the pages or this repo for addresses to spam don't find them:
+// reversed, then base64. lib/contact.ts decodes them in the browser. To change
+// one: node -e 'console.log(btoa([..."NEW"].reverse().join("")))'
+export const contactCodes = { email: "bW9jLmxpYW1nQDkxMW9pZHV0c2pha25hcA==", whatsapp: "MjE2NTgwMzM4NzE5" };
 
 // A suggestion in the home page's "Ideas for your website" section. `name`
 // is what goes into the visitor's message; `seenIn` names projects (by
@@ -421,16 +420,15 @@ export const profile = {
   // page). A "coming soon" note shows while this is empty. e.g.
   // { name: "Ravi", role: "Owner, Him Woollen", text: "…", rating: 5, site: "Him Woollen" }
   reviews: [] as Review[],
-  // Swap in your real email (the `email` const above) and profile links here;
-  // the site menu and the hero's "Open for projects" read from this.
+  // Profile links here; the email and number are `contactCodes` above.
   contact: {
-    email,
-    whatsapp: whatsappLink(
+    // The WhatsApp chat's pre-filled message (lib/contact.ts builds the link).
+    whatsappText: (
       "Hi Pankaj! I came across your portfolio and I'd like a website.\n\n" +
         "About my business/idea: \n" +
         "Type of site (business / online store / portfolio / landing page): \n" +
         "When I'd like it live: \n\n" +
-        "Could you share a plan and a price? Thanks!",
+        "Could you share a plan and a price? Thanks!"
     ),
     // Profile links shown in the menu, e.g. { label: "LinkedIn", href: "https://…" }.
     links: [] as { label: string; href: string }[],
