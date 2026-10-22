@@ -2,6 +2,7 @@ import Cosmos from "@/components/Cosmos";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 import FaqSection from "@/components/FaqSection";
+import HashScroll from "@/components/HashScroll";
 import IdeasSection from "@/components/IdeasSection";
 import MultitudesHero from "@/components/MultitudesHero";
 import MultitudesTrack from "@/components/MultitudesTrack";
@@ -33,6 +34,7 @@ export default function Home() {
         <ProcessSection />
         <FaqSection />
         <ContactSection />
+        <HashScroll />
 
         <footer className="pointer-events-none absolute inset-x-0 bottom-3 z-30 px-4 text-center text-xs text-fg/50">
           <p>
