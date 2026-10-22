@@ -18,11 +18,24 @@ export default function PerfGuard() {
     // Already lite, or the viewer picked a motion level in the menu.
     if (html.hasAttribute("data-lite") || motionChosen()) return;
 
-    const enable = () => {
+    // Flipping data-lite re-styles the whole page (~1,200 elements) in one
+    // frame. Mid-dive on a slow phone that was a 100-250ms stall, so once the
+    // verdict is in it waits for the scroll to settle before applying it.
+    let idle = 0;
+    const apply = () => {
+      window.removeEventListener("scroll", defer);
       html.setAttribute("data-lite", "");
+    };
+    const defer = () => {
+      clearTimeout(idle);
+      idle = window.setTimeout(apply, 600);
+    };
+    const enable = () => {
       try {
         sessionStorage.setItem(LITE_KEY, "1");
       } catch {}
+      window.addEventListener("scroll", defer, { passive: true });
+      defer();
     };
     const nav = navigator as Navigator & { deviceMemory?: number };
     if ((nav.deviceMemory ?? 8) <= 2 || (navigator.hardwareConcurrency || 8) <= 2) return enable();
@@ -61,8 +74,10 @@ export default function PerfGuard() {
     window.addEventListener("scroll", probe, { passive: true });
     return () => {
       clearTimeout(first);
+      clearTimeout(idle);
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", probe);
+      window.removeEventListener("scroll", defer);
     };
   }, []);
   return null;
