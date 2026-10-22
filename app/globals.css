@@ -1398,7 +1398,9 @@ body {
   .u-stage { position: relative; height: auto; min-height: 100svh; padding: 96px 16px 56px; }
   .u-scene { position: static; mask: none; }
   .u-camera { position: relative; display: block; perspective: none; }
-  .u-world { width: 100%; height: auto; transform: none !important; }
+  .u-world { width: 100%; height: auto; }
+  /* (Lite: no dive, so no camera move. Phones that dive zoom this layer.) */
+  :root[data-motion="reduce"] .u-world { transform: none !important; }
   .u-orbit, .u-micro, .u-bottom { display: none; }
   .u-halo { top: 90px; }
   .u-copy { position: relative; left: auto; top: auto; transform: none !important; white-space: normal; }
@@ -1429,16 +1431,47 @@ body {
 }
   :root[data-motion="reduce"] .u-node, :root[data-motion="reduce"] .u-node > *, :root[data-motion="reduce"] .u-copy > *, :root[data-motion="reduce"] .u-copy h1 em, :root[data-motion="reduce"] .u-orb, :root[data-motion="reduce"] .u-halo, :root[data-motion="reduce"] .u-wheel { animation: none; }
   :root[data-motion="reduce"] .u-node > *, :root[data-motion="reduce"] .u-node b, :root[data-motion="reduce"] .u-node strong, :root[data-motion="reduce"] .u-node small { transition-duration: 0.01s; }
+/* Phones dive too (unless Motion is Lite): the stacked layout above becomes a
+   pinned screen with just the title, my sites and "Explore your type"; the
+   scroll zooms into the "i" like on desktop and lands on the arrival. The type
+   cards and buttons that sat under the title follow the dive instead
+   (.u-after, a second copy of the cards). */
+.u-after { display: none; }
+@media (max-width: 799px) {
+  :root:not([data-motion="reduce"]) .u-section { height: 320svh; background: transparent; }
+  :root:not([data-motion="reduce"]) .u-stage { position: sticky; height: 100svh; min-height: 0; padding: 0; }
+  :root:not([data-motion="reduce"]) .u-scene { position: absolute; inset: 0; }
+  :root:not([data-motion="reduce"]) .u-camera { position: absolute; inset: 0; display: grid; place-items: center; }
+  :root:not([data-motion="reduce"]) .u-world { width: 100%; height: 100svh; }
+  :root:not([data-motion="reduce"]) .u-copy { position: absolute; left: 50%; top: 50%; width: calc(100% - 32px); transform: translate(-50%, -50%) !important; }
+  :root:not([data-motion="reduce"]) .u-world > :is(.u-nodes, .u-mobile-cta) { display: none; }
+  :root:not([data-motion="reduce"]) :is(.u-portal, .u-arrive) { display: grid; }
+  :root:not([data-motion="reduce"]) .u-portal { display: block; }
+  /* The arrival, sized for a phone: smaller title and chips, buttons full width. */
+  :root:not([data-motion="reduce"]) .u-portal-copy { max-width: calc(100vw - 32px); }
+  :root:not([data-motion="reduce"]) .u-arrive-title { font-size: clamp(2.5rem, 13vw, 3.5rem); }
+  :root:not([data-motion="reduce"]) .u-arrive-sub { margin-top: 1rem; font-size: 0.625rem; line-height: 1.6; white-space: normal; }
+  :root:not([data-motion="reduce"]) .u-arrive-chips { gap: 0.375rem; margin-top: 1.125rem; }
+  :root:not([data-motion="reduce"]) .u-arrive-chips a { padding: 0.375rem 0.625rem 0.375rem 0.5rem; font-size: 0.6875rem; }
+  :root:not([data-motion="reduce"]) .u-arrive-cta { gap: 0.5rem; margin-top: 1.25rem; }
+  :root:not([data-motion="reduce"]) .u-arrive-cta a { padding: 0.6rem 1rem; font-size: 0.8125rem; }
+  :root:not([data-motion="reduce"]) .u-arrive-rings::before { width: 22rem; height: 22rem; margin: -11rem; }
+  :root:not([data-motion="reduce"]) .u-arrive-rings i { width: 15rem; height: 15rem; margin: -7.5rem; }
+  :root:not([data-motion="reduce"]) .u-after { display: block; padding: 2.5rem 16px 1rem; }
+  :root:not([data-motion="reduce"]) .u-after .u-nodes { margin-top: 0; }
+}
+
 /* Phones: a lighter page. Same layout, minus the effects a phone pays for on
    every frame without much to show for it: the noise grain (an SVG filter
    rastered across the whole page), the endlessly drifting / breathing glows
    and title sheen (constant repaints that drain battery and make scrolling
    stutter on mid-range phones), cursor-only spotlights (no cursor), the
-   dive's arrival (phones never dive), and backdrop blurs behind panels
+   dive's arrival on Lite (no dive there), and backdrop blurs behind panels
    that are already near-opaque. The page-to-page portal keeps its colour
    flood but drops its grain (an overlay-blended SVG filter, full screen). */
 @media (max-width: 799px) {
-  .u-grain, .portal-x::after, .u-portal, .u-arrive, .u-spot, .u-node > *::before, .u-node > *::after { display: none; }
+  .u-grain, .portal-x::after, .u-spot, .u-node > *::before, .u-node > *::after { display: none; }
+  :root[data-motion="reduce"] :is(.u-portal, .u-arrive) { display: none; }
   .u-orb, .u-halo, .u-copy h1 em { animation: none; will-change: auto; }
   /* No entrance animations or hover motion either: a plain scroll. */
   .u-node, .u-copy > *, .u-node > * { animation: none; }

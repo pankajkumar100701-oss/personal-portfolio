@@ -87,8 +87,9 @@ function fitDot(span: HTMLElement, dot: HTMLElement) {
 // scroll through the section, the camera centres on the dot and zooms into it
 // exponentially (constant perceived speed). The dot is handed off to a portal
 // disk that hollows out into a ring, punching a hole through the hero to the
-// cosmos behind it — the rest of the site lives inside the dot. Desktop +
-// motion-allowed only; elsewhere it's static.
+// cosmos behind it — the rest of the site lives inside the dot. Phones dive
+// too (just the title on the pinned screen; the type cards follow below the
+// dive, see .u-after); only the Lite motion setting keeps it static.
 //
 // Everything is a 2D transform on purpose: anything under a CSS perspective is
 // rastered at 1× and stretched, which pixelates the type.
@@ -141,8 +142,9 @@ export default function MultitudesHero() {
       if (el && el.style.clipPath !== v) el.style.clipPath = v;
     };
 
+    // Crossing 800px swaps the phone and desktop layouts: start the dive over.
     const wide = window.matchMedia("(min-width: 800px)");
-    
+
     // Dot geometry. Measured when a glide starts and on resize / font load —
     // not every frame, since forcing layout per frame is what made the dive
     // stutter on slower machines. The world's transform is cleared for the
@@ -322,7 +324,7 @@ export default function MultitudesHero() {
     };
 
     const onScroll = () => {
-      if (!wide.matches || motionReduced()) return;
+      if (motionReduced()) return;
       // Dive over most of the scroll; the last stretch rests inside the dot.
       target = clamp01((progress() - 0.03) / 0.85);
       if (!frame && target !== cur) {
@@ -332,7 +334,7 @@ export default function MultitudesHero() {
     };
 
     const onResize = () => {
-      if (!wide.matches || motionReduced()) return;
+      if (motionReduced()) return;
       measure();
       apply();
       onScroll();
@@ -343,7 +345,7 @@ export default function MultitudesHero() {
       frame = 0;
       last = 0;
       cur = target = 0;
-      if (wide.matches && !motionReduced()) {
+      if (!motionReduced()) {
         measure();
         apply();
         onScroll();
@@ -503,94 +505,165 @@ export default function MultitudesHero() {
     </>
   );
 
+  // The type cards: floating around the title on desktop; on phones a grid,
+  // under the title (Lite motion) or after the dive (.u-after).
+  const nodes = (
+    <>
+      {multitudes.map((m, i) => {
+        const style = { "--x": `${m.x}%`, "--y": `${m.y}%`, "--c": m.color, "--i": i, ...artVars(m.slug, m.color) } as CSSProperties;
+        return (
+          <li key={m.n} className="u-node" style={style}>
+            <Link href={`/websites/${m.slug}`}>
+              {/* Hover floods the card with its gradient and draws its icon. */}
+              <span className="u-node-flood" aria-hidden />
+              <span className="u-node-icon" aria-hidden>
+                <ArtIcon icon={artIcon(m.slug)} />
+              </span>
+              <b>{m.n}</b>
+              <strong>{m.title}</strong>
+              <small>{m.sub}</small>
+            </Link>
+          </li>
+        );
+      })}
+      {/* Not a business type: my 3D / WebGL demos, under Coaching / Education. */}
+      <li className="u-node u-node-3d" style={{ "--x": "4%", "--y": "82%", "--c": "var(--m-blue)", "--i": multitudes.length, ...artVars("3d", "var(--m-blue)") } as CSSProperties}>
+        <Link href="/templates">
+          <span className="u-node-flood" aria-hidden />
+          <span className="u-node-icon" aria-hidden>
+            <ArtIcon icon={artIcon("3d")} />
+          </span>
+          <b>13</b>
+          <strong>3D Websites</strong>
+          <small>WebGL / Motion / Live demos</small>
+        </Link>
+      </li>
+    </>
+  );
+
   return (
-    <section ref={sectionRef} className="u-section" aria-label="Introduction">
-      <div ref={stageRef} className="u-stage">
-        <div ref={spotRef} className="u-spot" aria-hidden />
-        <div ref={sceneRef} className="u-scene">
-          <div className="u-photo" aria-hidden />
-          <div className="u-grain" aria-hidden />
-          <div className="u-orb u-orb-a" aria-hidden />
-          <div className="u-orb u-orb-b" aria-hidden />
-          <div className="u-orb u-orb-c" aria-hidden />
+    <>
+      <section ref={sectionRef} className="u-section" aria-label="Introduction">
+        <div ref={stageRef} className="u-stage">
+          <div ref={spotRef} className="u-spot" aria-hidden />
+          <div ref={sceneRef} className="u-scene">
+            <div className="u-photo" aria-hidden />
+            <div className="u-grain" aria-hidden />
+            <div className="u-orb u-orb-a" aria-hidden />
+            <div className="u-orb u-orb-b" aria-hidden />
+            <div className="u-orb u-orb-c" aria-hidden />
 
-          <div className="u-camera">
-            <div ref={worldRef} className="u-world">
-              <div className="u-halo" aria-hidden />
-              <div className="u-orbit u-orbit-1" aria-hidden />
-              <div className="u-orbit u-orbit-2" aria-hidden />
-              <div className="u-orbit u-orbit-3" aria-hidden />
+            <div className="u-camera">
+              <div ref={worldRef} className="u-world">
+                <div className="u-halo" aria-hidden />
+                <div className="u-orbit u-orbit-1" aria-hidden />
+                <div className="u-orbit u-orbit-2" aria-hidden />
+                <div className="u-orbit u-orbit-3" aria-hidden />
 
-              <div className="u-copy">
-                <p className="u-eyebrow">{hero.eyebrow}</p>
-                <h1>
-                  {/* What Google and screen readers get: the visual title spells
-                      "Studio" with a dotless ı plus a separate dot element. */}
-                  <span className="sr-only">
-                    {hero.first} {hero.accent}
-                  </span>
-                  {/* The Pankaj Studio mark, in front of the name. */}
-                  <span className="u-mark" aria-hidden />
-                  <span aria-hidden>
-                    {hero.first}
-                    <br />
-                    <em>
-                      {iAt < 0 ? (
-                        hero.accent
-                      ) : (
-                        <>
-                          {hero.accent.slice(0, iAt)}
-                          <span className="u-i">
-                            ı<i ref={dotRef} className="u-dot" aria-hidden />
-                          </span>
-                          {hero.accent.slice(iAt + 1)}
-                        </>
-                      )}
-                    </em>
-                  </span>
-                </h1>
-                <p className="u-subline">{hero.subline}</p>
-                {/* Phones: my websites and "Explore your type" sit under the title (desktop has them in the bottom bar). */}
-                <div className="u-sites u-sites-mobile">{sites}</div>
-              </div>
-
-              <ul className="u-nodes">
-                {multitudes.map((m, i) => {
-                  const style = { "--x": `${m.x}%`, "--y": `${m.y}%`, "--c": m.color, "--i": i, ...artVars(m.slug, m.color) } as CSSProperties;
-                  return (
-                    <li key={m.n} className="u-node" style={style}>
-                      <Link href={`/websites/${m.slug}`}>
-                        {/* Hover floods the card with its gradient and draws its icon. */}
-                        <span className="u-node-flood" aria-hidden />
-                        <span className="u-node-icon" aria-hidden>
-                          <ArtIcon icon={artIcon(m.slug)} />
-                        </span>
-                        <b>{m.n}</b>
-                        <strong>{m.title}</strong>
-                        <small>{m.sub}</small>
-                      </Link>
-                    </li>
-                  );
-                })}
-                {/* Not a business type: my 3D / WebGL demos, under Coaching / Education. */}
-                <li className="u-node u-node-3d" style={{ "--x": "4%", "--y": "82%", "--c": "var(--m-blue)", "--i": multitudes.length, ...artVars("3d", "var(--m-blue)") } as CSSProperties}>
-                  <Link href="/templates">
-                    <span className="u-node-flood" aria-hidden />
-                    <span className="u-node-icon" aria-hidden>
-                      <ArtIcon icon={artIcon("3d")} />
+                <div className="u-copy">
+                  <p className="u-eyebrow">{hero.eyebrow}</p>
+                  <h1>
+                    {/* What Google and screen readers get: the visual title spells
+                        "Studio" with a dotless ı plus a separate dot element. */}
+                    <span className="sr-only">
+                      {hero.first} {hero.accent}
                     </span>
-                    <b>13</b>
-                    <strong>3D Websites</strong>
-                    <small>WebGL / Motion / Live demos</small>
-                  </Link>
-                </li>
-              </ul>
+                    {/* The Pankaj Studio mark, in front of the name. */}
+                    <span className="u-mark" aria-hidden />
+                    <span aria-hidden>
+                      {hero.first}
+                      <br />
+                      <em>
+                        {iAt < 0 ? (
+                          hero.accent
+                        ) : (
+                          <>
+                            {hero.accent.slice(0, iAt)}
+                            <span className="u-i">
+                              ı<i ref={dotRef} className="u-dot" aria-hidden />
+                            </span>
+                            {hero.accent.slice(iAt + 1)}
+                          </>
+                        )}
+                      </em>
+                    </span>
+                  </h1>
+                  <p className="u-subline">{hero.subline}</p>
+                  {/* Phones: my websites and "Explore your type" sit under the title (desktop has them in the bottom bar). */}
+                  <div className="u-sites u-sites-mobile">{sites}</div>
+                </div>
 
-              {/* Phones skip the dive, so the arrival's call to action lives here
-                  ("Explore your type" is already under the title). */}
-              <div className="u-mobile-cta">
-                <Link href="/contact" className="u-cta-primary">
-                  Talk to me <span aria-hidden>→</span>
+                <ul className="u-nodes">{nodes}</ul>
+
+                {/* Phones skip the dive, so the arrival's call to action lives here
+                    ("Explore your type" is already under the title). */}
+                <div className="u-mobile-cta">
+                  <Link href="/contact" className="u-cta-primary">
+                    Talk to me <span aria-hidden>→</span>
+                  </Link>
+                  <a href={mailto} className="u-cta-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                      <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+                    </svg> Email me
+                  </a>
+                  <a href={whatsapp(waText)} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
+                    <WhatsAppIcon /> WhatsApp
+                  </a>
+                  <p className="u-open">
+                    <i className="u-live" aria-hidden /> Open for new projects
+                  </p>
+                </div>
+
+                <span className="u-micro u-m1" aria-hidden>CREATIVE</span>
+                <span className="u-micro u-m2" aria-hidden>CURIOUS</span>
+                <span className="u-micro u-m3" aria-hidden>BUILDING</span>
+              </div>
+            </div>
+          </div>
+
+          <div ref={portalRef} className="u-portal" aria-hidden />
+          <div className="u-arrive" inert>
+            <div className="u-portal-copy">
+              <div className="u-arrive-rings" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </div>
+              <span className="u-arrive-kicker">You just dived into the i.</span>
+              <p className="u-arrive-title">
+                {(() => {
+                  let k = 0;
+                  return "Welcome to | the studio.".split(" | ").map((line, l) => (
+                    <span key={l} className="u-arrive-line">
+                      {line.split(" ").map((word) => (
+                        <span key={word} className={word.startsWith("studio") ? "u-arrive-accent" : undefined}>
+                          {[...word].map((ch) => (
+                            <span key={k} style={{ "--k": k++ } as CSSProperties}>
+                              {ch}
+                            </span>
+                          ))}
+                        </span>
+                      ))}
+                    </span>
+                  ));
+                })()}
+              </p>
+              <p className="u-arrive-sub">
+                <span>{profile.brand}</span> · Tap the kind of website you need:
+              </p>
+              <ul className="u-arrive-chips">
+                {multitudes.map((m, i) => (
+                  <li key={m.n} style={{ "--c": m.color, "--k": i } as CSSProperties}>
+                    <Link href={`/websites/${m.slug}`}>
+                      <b>{m.n}</b> {m.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="u-arrive-cta">
+                <Link href="/explore" className="u-cta-primary">
+                  Explore your type <span aria-hidden>→</span>
                 </Link>
                 <a href={mailto} className="u-cta-ghost">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
@@ -605,84 +678,25 @@ export default function MultitudesHero() {
                   <i className="u-live" aria-hidden /> Open for new projects
                 </p>
               </div>
-
-              <span className="u-micro u-m1" aria-hidden>CREATIVE</span>
-              <span className="u-micro u-m2" aria-hidden>CURIOUS</span>
-              <span className="u-micro u-m3" aria-hidden>BUILDING</span>
             </div>
           </div>
-        </div>
 
-        <div ref={portalRef} className="u-portal" aria-hidden />
-        <div className="u-arrive" inert>
-          <div className="u-portal-copy">
-            <div className="u-arrive-rings" aria-hidden>
-              <i />
-              <i />
-              <i />
-            </div>
-            <span className="u-arrive-kicker">You just dived into the i.</span>
-            <p className="u-arrive-title">
-              {(() => {
-                let k = 0;
-                return "Welcome to | the studio.".split(" | ").map((line, l) => (
-                  <span key={l} className="u-arrive-line">
-                    {line.split(" ").map((word) => (
-                      <span key={word} className={word.startsWith("studio") ? "u-arrive-accent" : undefined}>
-                        {[...word].map((ch) => (
-                          <span key={k} style={{ "--k": k++ } as CSSProperties}>
-                            {ch}
-                          </span>
-                        ))}
-                      </span>
-                    ))}
-                  </span>
-                ));
-              })()}
-            </p>
-            <p className="u-arrive-sub">
-              <span>{profile.brand}</span> · Tap the kind of website you need:
-            </p>
-            <ul className="u-arrive-chips">
-              {multitudes.map((m, i) => (
-                <li key={m.n} style={{ "--c": m.color, "--k": i } as CSSProperties}>
-                  <Link href={`/websites/${m.slug}`}>
-                    <b>{m.n}</b> {m.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="u-arrive-cta">
-              <Link href="/explore" className="u-cta-primary">
-                Explore your type <span aria-hidden>→</span>
-              </Link>
-              <a href={mailto} className="u-cta-ghost">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>
-                  <rect x="3" y="5" width="18" height="14" rx="2" />
-                  <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
-                </svg> Email me
-              </a>
-              <a href={whatsapp(waText)} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
-                <WhatsAppIcon /> WhatsApp
-              </a>
-              <p className="u-open">
-                <i className="u-live" aria-hidden /> Open for new projects
-              </p>
-            </div>
+          <div className="u-bottom">
+            <span>
+              <span className="u-wheel" aria-hidden>↕</span> Scroll to dive into the i
+            </span>
+            <div className="u-sites">{sites}</div>
+            <span ref={readoutRef} className="u-readout" aria-hidden>
+              Zoom 1.00×
+            </span>
           </div>
+          <div className="u-vignette" aria-hidden />
         </div>
-
-        <div className="u-bottom">
-          <span>
-            <span className="u-wheel" aria-hidden>↕</span> Scroll to dive into the i
-          </span>
-          <div className="u-sites">{sites}</div>
-          <span ref={readoutRef} className="u-readout" aria-hidden>
-            Zoom 1.00×
-          </span>
-        </div>
-        <div className="u-vignette" aria-hidden />
+      </section>
+      {/* Phones: the type cards, after the dive (hidden elsewhere). */}
+      <div className="u-after">
+        <ul className="u-nodes">{nodes}</ul>
       </div>
-    </section>
+    </>
   );
 }

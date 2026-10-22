@@ -285,7 +285,7 @@ export default function SiteMenu() {
             <span>
               <small className="menu-eyebrow">Talk to me</small>
               <b>Let&apos;s Connect</b>
-              <span className="menu-contact-sub">WhatsApp, call or email. No forms.</span>
+              <span className="menu-contact-sub">WhatsApp chat or call, or email. No forms.</span>
             </span>
             <span className="menu-contact-go" aria-hidden>
               <Icon d={I.arrow} />

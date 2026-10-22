@@ -7,10 +7,10 @@ import ThemeButton from "@/components/ThemeButton";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = pageMeta(`Talk to me — ${profile.brand}`, "Want a website? Just message me on WhatsApp, call or email. No forms.", "/contact");
+export const metadata: Metadata = pageMeta(`Talk to me — ${profile.brand}`, "Want a website? Just message or call me on WhatsApp, or email. No forms.", "/contact");
 
 // Its own page, away from the home page's scroll: no form, just a quick way to
-// message, call or email me (see TalkToMe).
+// message or call me on WhatsApp, or email me (see TalkToMe).
 export default function ContactPage() {
   return (
     <main className="u-detail" data-page="contact" style={{ "--c": "var(--m-coral)" } as CSSProperties}>
@@ -39,7 +39,7 @@ export default function ContactPage() {
             talk to me.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
-            No forms. Send me a message on WhatsApp, call or email, even if it&apos;s just a rough idea. We&apos;ll have a quick chat, I&apos;ll show you what I&apos;ve built, and we&apos;ll figure it out together.
+            No forms. Message or call me on WhatsApp, or email me, even if it&apos;s just a rough idea. We&apos;ll have a quick chat, I&apos;ll show you what I&apos;ve built, and we&apos;ll figure it out together.
           </p>
         </header>
 

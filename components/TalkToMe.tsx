@@ -13,7 +13,7 @@ import { basketMessage } from "@/lib/message";
 // ~/pankajstudio/talk-to-me for when there are enough enquiries to need it.
 export default function TalkToMe() {
   const basket = useBasket();
-  const { email, phone, mailto, whatsapp } = useContact();
+  const { email, phone, mailto, whatsapp, whatsappCall } = useContact();
   // Their own edits to the message; null while it's generated.
   const [edited, setEdited] = useState<string | null>(null);
 
@@ -55,9 +55,9 @@ export default function TalkToMe() {
         <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">Or reach me directly</p>
         <ul className="mt-4 grid gap-3 text-base">
           <li>
-            <span className="block text-xs text-muted">Call or WhatsApp</span>
+            <span className="block text-xs text-muted">WhatsApp: chat or call (no regular calls)</span>
             {phone ? (
-              <a href={`tel:+${phone}`} className="font-display text-2xl text-fg">
+              <a href={whatsappCall()} target="_blank" rel="noopener noreferrer" className="font-display text-2xl text-fg">
                 +{phone.slice(0, 2)} {phone.slice(2, 7)} {phone.slice(7)}
               </a>
             ) : (
@@ -76,7 +76,7 @@ export default function TalkToMe() {
             <b className="text-fg">1.</b> You message me.
           </li>
           <li>
-            <b className="text-fg">2.</b> We hop on a quick call: you tell me what you need, I show you what I&apos;ve built.
+            <b className="text-fg">2.</b> We hop on a quick WhatsApp call: you tell me what you need, I show you what I&apos;ve built.
           </li>
           <li>
             <b className="text-fg">3.</b> I send a simple plan and a fixed price. No pressure.

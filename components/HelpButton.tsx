@@ -12,7 +12,7 @@ import { basketMessage } from "@/lib/message";
 // pill): ways to reach me, the FAQ, and a note that any language is fine.
 // A round WhatsApp button sits just above it, so I'm always one tap away.
 export default function HelpButton() {
-  const { phone, mailto, whatsapp } = useContact();
+  const { mailto, whatsapp, whatsappCall } = useContact();
   // WhatsApp opens with whatever they've added around the site already in it.
   const basket = useBasket();
   const waText = basketMessage(basket, profile.contact.whatsappText);
@@ -57,12 +57,10 @@ export default function HelpButton() {
             <b>WhatsApp</b>
             <small>Chat with me</small>
           </a>
-          {phone && (
-            <a href={`tel:+${phone}`} onClick={close}>
-              <b>Call</b>
-              <small>+{phone.slice(0, 2)} {phone.slice(2)}</small>
-            </a>
-          )}
+          <a href={whatsappCall()} target="_blank" rel="noopener noreferrer" onClick={close}>
+            <b>Call</b>
+            <small>On WhatsApp only</small>
+          </a>
           <a href={mailto} onClick={close}>
             <b>Email</b>
             <small>Write to me</small>

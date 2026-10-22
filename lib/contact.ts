@@ -15,5 +15,8 @@ export function useContact() {
   const phone = loaded ? decode(contactCodes.whatsapp) : "";
   // A WhatsApp chat with me, the message box pre-filled with `text`.
   const whatsapp = (text = profile.contact.whatsappText) => (phone ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : undefined);
-  return { email, phone, whatsapp, mailto: email ? `mailto:${email}` : undefined };
+  // My number takes calls on WhatsApp only (no regular calls): "Call" opens
+  // a chat asking for one, and the call is one tap from there.
+  const whatsappCall = () => whatsapp("Hi Pankaj! Can we do a quick WhatsApp call about a website?");
+  return { email, phone, whatsapp, whatsappCall, mailto: email ? `mailto:${email}` : undefined };
 }
