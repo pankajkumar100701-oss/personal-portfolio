@@ -25,7 +25,9 @@ function read(): Basket {
   cachedRaw = raw;
   try {
     const v = JSON.parse(raw ?? "null");
-    const list = (x: unknown) => (Array.isArray(x) ? (x as string[]) : []);
+    // Only short strings, and not too many: this is whatever is in storage,
+    // and it goes into the WhatsApp message.
+    const list = (x: unknown) => (Array.isArray(x) ? x.filter((v): v is string => typeof v === "string" && v.length <= 120).slice(0, 30) : []);
     cached = { types: list(v?.types), sites: list(v?.sites), ideas: list(v?.ideas) };
   } catch {
     cached = EMPTY;

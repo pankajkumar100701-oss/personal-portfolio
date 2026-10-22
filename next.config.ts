@@ -3,8 +3,7 @@ import type { NextConfig } from "next";
 const dev = process.env.NODE_ENV === "development";
 
 // The site's Content Security Policy. Everything (fonts, images, templates) is
-// served from this site; the only outside calls are the translate API's, made
-// on the server. Inline scripts stay allowed for Next's own bootstrapping and
+// served from this site, and nothing calls out to other sites. Inline scripts stay allowed for Next's own bootstrapping and
 // the theme script in <head> (nonces would make every page dynamic); React's
 // dev mode also needs eval.
 const csp = [

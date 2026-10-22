@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import HelpButton from "@/components/HelpButton";
 import { BasketPill } from "@/components/MessageActions";
@@ -39,6 +39,15 @@ export const metadata: Metadata = {
     description: profile.tagline,
   },
   twitter: { card: "summary_large_image" },
+};
+
+// "cover" is what makes iPhones report env(safe-area-inset-*): without it
+// they read 0, and the WhatsApp / Help buttons, the phone pop-up sheets and
+// the Contact bar sat behind Safari's toolbar and the home indicator.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -33,7 +33,7 @@
 /* ---------- Help button (components/HelpButton.tsx) ---------- */
 /* Bottom-left: the message pill sits in the middle and its round badge on the
    right. On the Contact page's phone layout it rises above the send bar. */
-.f-help { position: fixed; z-index: 55; left: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+.f-help { position: fixed; z-index: 55; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
 /* The always-there WhatsApp button, stacked above Help. */
 .f-wa { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: #25d366; color: #fff; box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.55); transition: scale 0.2s; }
 .f-wa svg { width: 1.6rem; height: 1.6rem; }

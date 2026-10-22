@@ -184,9 +184,12 @@ export default function MultitudesHero() {
     let target = 0;
     let frame = 0;
 
+    // Against the stage's height (100svh on phones), not innerHeight: a phone's
+    // address bar sliding away changes innerHeight mid-scroll, which made the
+    // dive jump. The sticky stage is what actually sets the travel.
     const progress = () => {
       const rect = section.getBoundingClientRect();
-      const travel = rect.height - window.innerHeight;
+      const travel = rect.height - (sh || window.innerHeight);
       return travel > 0 ? clamp01(-rect.top / travel) : 0;
     };
 
@@ -347,11 +350,21 @@ export default function MultitudesHero() {
       }
     };
 
-    const onResize = () => {
+    const relayout = () => {
       if (motionReduced()) return;
       measure();
       apply();
       onScroll();
+    };
+    // Phones fire resize whenever the address bar slides in or out while
+    // scrolling; the stage (100svh) and the dot don't move then, so skip the
+    // re-measure (a forced layout mid-swipe) unless the size really changed.
+    let shownSize = "";
+    const onResize = () => {
+      const size = `${window.innerWidth}x${stage.clientHeight}`;
+      if (size === shownSize) return;
+      shownSize = size;
+      relayout();
     };
 
     const onModeChange = () => {
@@ -371,7 +384,7 @@ export default function MultitudesHero() {
     let alive = true;
     const fit = () => {
       fitDot(dot.parentElement!, dot);
-      onResize();
+      relayout();
     };
     fit();
     onModeChange();
@@ -384,7 +397,7 @@ export default function MultitudesHero() {
     ro.observe(world.querySelector(".u-copy")!);
     // (The title's periodic sheen ends here too; it doesn't move anything.)
     const onAnimEnd = (e: AnimationEvent) => {
-      if (e.animationName !== "u-sheen") onResize();
+      if (e.animationName !== "u-sheen") relayout();
     };
     world.addEventListener("animationend", onAnimEnd);
     window.addEventListener("scroll", onScroll, { passive: true });
