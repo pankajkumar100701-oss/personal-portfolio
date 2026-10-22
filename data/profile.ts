@@ -422,14 +422,10 @@ export const profile = {
   reviews: [] as Review[],
   // Profile links here; the email and number are `contactCodes` above.
   contact: {
-    // The WhatsApp chat's pre-filled message (lib/contact.ts builds the link).
-    whatsappText: (
-      "Hi Pankaj! I came across your portfolio and I'd like a website.\n\n" +
-        "About my business/idea: \n" +
-        "Type of site (business / online store / portfolio / landing page): \n" +
-        "When I'd like it live: \n\n" +
-        "Could you share a plan and a price? Thanks!"
-    ),
+    // The WhatsApp chat's pre-filled message (lib/contact.ts builds the link;
+    // lib/message.ts adds anything the visitor picked around the site).
+    whatsappGreeting: "Hi Pankaj! I came across your website and I'd like to talk about getting a website made.",
+    whatsappClose: "When would be a good time to chat?",
     // Profile links shown in the menu, e.g. { label: "LinkedIn", href: "https://…" }.
     links: [] as { label: string; href: string }[],
   },

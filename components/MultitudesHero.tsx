@@ -133,6 +133,10 @@ export default function MultitudesHero() {
     // The logo mark and the studio photo behind the hero go with them, so the
     // hole opens onto the cosmos (and the mark isn't rastered at 100×).
     const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro, .u-mark"), ...scene.querySelectorAll<HTMLElement>(".u-photo")];
+    // Phones also clear everything under the title (the subline, my sites,
+    // "Explore your type"): blown up 3-11x they were most of the dive's
+    // per-frame work on a phone, and its frames stalled there.
+    const earlyPhone = [...early, ...world.querySelectorAll<HTMLElement>(".u-eyebrow, .u-subline, .u-sites-mobile")];
     // The fixed backdrop layer behind the page (Cosmos). The dive's hole is
     // this layer clipped to a circle; the hero itself has no backdrop here.
     // Looked up on use, not captured: the layer can be re-created (e.g. by a
@@ -203,7 +207,7 @@ export default function MultitudesHero() {
       const clear = clamp01(1 - (zoom - 1) / 1.6);
       if (clear !== shownClear) {
         shownClear = clear;
-        for (const el of early) {
+        for (const el of wide.matches ? early : earlyPhone) {
           el.style.opacity = clear < 1 ? String(clear) : "";
           el.style.visibility = clear > 0 ? "" : "hidden";
         }
@@ -239,7 +243,8 @@ export default function MultitudesHero() {
       // screen, yet rastering them at that size every frame stalled the dive
       // for 100-250ms. Fade the world out as it rushes past (like the cards;
       // the portal has long since taken over the dot) and stop painting it.
-      const fade = clamp01(1 - (zoom - 4) / 7);
+      // (Phones let it go sooner, by 7x: rastering the giant glyphs costs them most.)
+      const fade = wide.matches ? clamp01(1 - (zoom - 4) / 7) : clamp01(1 - (zoom - 3) / 4);
       if (fade !== shownFade) {
         shownFade = fade;
         world.style.opacity = fade < 1 ? String(fade) : "";
@@ -275,7 +280,7 @@ export default function MultitudesHero() {
     const reset = () => {
       world.style.transform = "";
       world.style.transformOrigin = "";
-      for (const el of early) {
+      for (const el of earlyPhone) {
         el.style.opacity = "";
         el.style.visibility = "";
       }
@@ -470,7 +475,7 @@ export default function MultitudesHero() {
 
   const { hero, multitudes } = profile;
   const { mailto, whatsapp } = useContact();
-  const waText = basketMessage(useBasket(), profile.contact.whatsappText);
+  const waText = basketMessage(useBasket());
   // Swap the accent's first "i" for a dotless "ı" plus a real dot element, so
   // the dot can be measured and dived into.
   const iAt = hero.accent.indexOf("i");

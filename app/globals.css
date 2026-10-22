@@ -1457,6 +1457,9 @@ body {
   :root:not([data-motion="reduce"]) .u-arrive-cta a { padding: 0.6rem 1rem; font-size: 0.8125rem; }
   :root:not([data-motion="reduce"]) .u-arrive-rings::before { width: 22rem; height: 22rem; margin: -11rem; }
   :root:not([data-motion="reduce"]) .u-arrive-rings i { width: 15rem; height: 15rem; margin: -7.5rem; }
+  /* No glows on the arrival's ~20 letters and dots: each one re-blurred as they played in, the landing's slow frames on phones. */
+  :root:not([data-motion="reduce"]) .u-arrive-accent span { text-shadow: none; }
+  :root:not([data-motion="reduce"]) .u-arrive-chips b::before { box-shadow: none; }
   :root:not([data-motion="reduce"]) .u-after { display: block; padding: 2.5rem 16px 1rem; }
   :root:not([data-motion="reduce"]) .u-after .u-nodes { margin-top: 0; }
 }

@@ -88,7 +88,7 @@ const PIN_KEY = "fps-pin";
 
 const pages = [
   { href: "/#top", match: "/", label: "Home", icon: I.home },
-  { href: "/explore", match: "/explore", label: "Explore types", icon: I.compass },
+  { href: "/explore", match: "/explore", label: "Find your vibe", icon: I.compass },
   { href: "/work", match: "/work", label: "My work", icon: I.grid },
   { href: "/templates", match: "/templates", label: "Templates", icon: I.layers },
   { href: "/blog", match: "/blog", label: "Blog", icon: I.book },
@@ -140,7 +140,7 @@ function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { 
 // is ThemeButton's) and my WhatsApp and email, in one panel.
 export default function SiteMenu() {
   const contact = useContact();
-  const waText = basketMessage(useBasket(), profile.contact.whatsappText);
+  const waText = basketMessage(useBasket());
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
   // Live frame rate: frames actually shown on screen in the last second.

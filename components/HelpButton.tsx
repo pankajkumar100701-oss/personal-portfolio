@@ -3,7 +3,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { profile } from "@/data/profile";
 import { useBasket } from "@/lib/basket";
 import { useContact } from "@/lib/contact";
 import { basketMessage } from "@/lib/message";
@@ -15,7 +14,7 @@ export default function HelpButton() {
   const { mailto, whatsapp, whatsappCall } = useContact();
   // WhatsApp opens with whatever they've added around the site already in it.
   const basket = useBasket();
-  const waText = basketMessage(basket, profile.contact.whatsappText);
+  const waText = basketMessage(basket);
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);

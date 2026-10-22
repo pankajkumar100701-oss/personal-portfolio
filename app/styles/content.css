@@ -74,6 +74,34 @@
 .f-post-body li { font-size: 1.0625rem; line-height: 1.7; color: var(--u-muted); }
 .f-post-body li::marker { color: var(--c); }
 
+/* ---------- Footer (components/SiteFooter.tsx), under Contact on the home page ---------- */
+.f-foot { position: relative; border-top: 1px solid var(--u-line); padding: 3.5rem 0 2rem; font-family: var(--font-sans); color: var(--u-muted); }
+.f-foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2.5rem; }
+.f-foot-name { display: flex; align-items: center; gap: 0.7rem; font-family: var(--font-display); font-size: 1.375rem; font-weight: 500; color: var(--u-fg); }
+.f-foot-name em { margin-left: -0.35rem; font-weight: 400; color: var(--u-acid); }
+.f-foot-mark { flex: none; width: 2.6rem; height: 2.6rem; border: 1px solid var(--u-line); border-radius: 50%; background: url("/brand/ps-mark.webp") center / 62% no-repeat, var(--u-card); }
+[data-theme="light"] .f-foot-mark { background-image: url("/brand/ps-mark-light.webp"); }
+.f-foot-tag { margin-top: 1.1rem; font-size: 1rem; color: var(--u-soft); }
+.f-foot-note { margin-top: 0.75rem; font-size: 0.875rem; }
+.f-foot h2 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 500; color: var(--u-fg); }
+.f-foot ul { display: grid; gap: 0.7rem; margin-top: 1.1rem; font-size: 0.9375rem; }
+.f-foot ul a { transition: color 0.2s; }
+.f-foot ul a:hover { color: var(--u-fg); }
+.f-foot ul a:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; border-radius: 0.25rem; }
+.f-foot-icon { display: inline-flex; align-items: center; gap: 0.55rem; }
+.f-foot-icon svg { width: 1rem; height: 1rem; flex: none; }
+.f-foot-bottom { margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--u-line); text-align: center; font-size: 0.875rem; }
+.f-foot-credit { display: none; margin-top: 0.4rem; font-size: 0.75rem; }
+[data-theme="light"] .f-foot-credit { display: block; }
+.f-foot-credit a { text-decoration: underline; text-underline-offset: 2px; }
+/* Phones: the brand on top, the three lists two to a row, and room at the
+   bottom for the WhatsApp and Help buttons. */
+@media (max-width: 799px) {
+  .f-foot { padding: 3rem 0 9rem; }
+  .f-foot-grid { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+  .f-foot-brand { grid-column: 1 / -1; }
+}
+
 /* Placement overrides: last in the file so they win over the base rules above. */
 /* Phones: just the round "?" so it covers as little of the page as possible
    (the label is still read out by screen readers). */

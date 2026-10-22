@@ -1,7 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { contactCodes, profile } from "@/data/profile";
+import { contactCodes } from "@/data/profile";
+import { plainMessage } from "@/lib/message";
 
 const decode = (code: string) => [...atob(code)].reverse().join("");
 const subscribe = () => () => {};
@@ -14,7 +15,7 @@ export function useContact() {
   const email = loaded ? decode(contactCodes.email) : "";
   const phone = loaded ? decode(contactCodes.whatsapp) : "";
   // A WhatsApp chat with me, the message box pre-filled with `text`.
-  const whatsapp = (text = profile.contact.whatsappText) => (phone ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : undefined);
+  const whatsapp = (text = plainMessage) => (phone ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : undefined);
   // My number takes calls on WhatsApp only (no regular calls): "Call" opens
   // a chat asking for one, and the call is one tap from there.
   const whatsappCall = () => whatsapp("Hi Pankaj! Can we do a quick WhatsApp call about a website?");

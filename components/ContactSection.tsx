@@ -11,7 +11,7 @@ import { basketMessage } from "@/lib/message";
 export default function ContactSection() {
   const { contact } = profile;
   const { email, mailto, whatsapp } = useContact();
-  const waText = basketMessage(useBasket(), contact.whatsappText);
+  const waText = basketMessage(useBasket());
   return (
     <section id="contact" className="h-sec h-contact" aria-labelledby="contact-title">
       <div className="h-wrap">
@@ -46,15 +46,6 @@ export default function ContactSection() {
             ))}
           </ul>
         )}
-        <p className="mt-8 text-xs text-muted">
-          <Link href="/privacy" className="underline underline-offset-2 hover:text-fg">
-            Privacy Policy
-          </Link>
-          {" · "}
-          <Link href="/terms" className="underline underline-offset-2 hover:text-fg">
-            Terms &amp; Conditions
-          </Link>
-        </p>
       </div>
     </section>
   );
