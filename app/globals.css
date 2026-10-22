@@ -1460,6 +1460,18 @@ body {
   /* No glows on the arrival's ~20 letters and dots: each one re-blurred as they played in, the landing's slow frames on phones. */
   :root:not([data-motion="reduce"]) .u-arrive-accent span { text-shadow: none; }
   :root:not([data-motion="reduce"]) .u-arrive-chips b::before { box-shadow: none; }
+  /* Lighter still for phones: the arrival comes in as one block with the
+     layer's fade (no letter-by-letter or chip-by-chip transitions, no
+     spinning rings), and while zooming the world is one GPU layer, scaled as
+     a picture instead of re-drawing the giant title every frame. It drops
+     the layer once back at the top, so the title is crisp again at rest. */
+  :root:not([data-motion="reduce"]) :is(.u-portal-copy, .u-arrive-kicker, .u-arrive-sub, .u-arrive-line > span > span, .u-arrive-chips li, .u-arrive-cta) { opacity: 1; translate: none; scale: none; transition: none; }
+  :root:not([data-motion="reduce"]) .u-arrive-rings { display: none; }
+  :root:not([data-motion="reduce"]) .u-section[data-zooming] .u-world { will-change: transform; }
+  /* What clears out as the dive starts fades as one transition on the GPU
+     (data-cleared, set once from MultitudesHero), not every frame from script. */
+  :root:not([data-motion="reduce"]) :is(.u-mark, .u-eyebrow, .u-subline, .u-sites-mobile, .u-halo, .u-photo) { transition: opacity 0.35s, visibility 0s; }
+  :root:not([data-motion="reduce"]) .u-section[data-cleared] :is(.u-mark, .u-eyebrow, .u-subline, .u-sites-mobile, .u-halo, .u-photo) { opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0s 0.35s; }
   :root:not([data-motion="reduce"]) .u-after { display: block; padding: 2.5rem 16px 1rem; }
   :root:not([data-motion="reduce"]) .u-after .u-nodes { margin-top: 0; }
 }

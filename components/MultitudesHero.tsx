@@ -133,10 +133,9 @@ export default function MultitudesHero() {
     // The logo mark and the studio photo behind the hero go with them, so the
     // hole opens onto the cosmos (and the mark isn't rastered at 100×).
     const early = [nodes, ...world.querySelectorAll<HTMLElement>(".u-halo, .u-orbit, .u-micro, .u-mark"), ...scene.querySelectorAll<HTMLElement>(".u-photo")];
-    // Phones also clear everything under the title (the subline, my sites,
-    // "Explore your type"): blown up 3-11x they were most of the dive's
-    // per-frame work on a phone, and its frames stalled there.
-    const earlyPhone = [...early, ...world.querySelectorAll<HTMLElement>(".u-eyebrow, .u-subline, .u-sites-mobile")];
+    // (Phones clear these, and everything under the title too, with one CSS
+    // transition instead: see data-cleared in the CSS. Blown up 3-11x, the
+    // subline, my sites and "Explore your type" were most of a phone's work.)
     // The fixed backdrop layer behind the page (Cosmos). The dive's hole is
     // this layer clipped to a circle; the hero itself has no backdrop here.
     // Looked up on use, not captured: the layer can be re-created (e.g. by a
@@ -207,9 +206,15 @@ export default function MultitudesHero() {
       const clear = clamp01(1 - (zoom - 1) / 1.6);
       if (clear !== shownClear) {
         shownClear = clear;
-        for (const el of wide.matches ? early : earlyPhone) {
-          el.style.opacity = clear < 1 ? String(clear) : "";
-          el.style.visibility = clear > 0 ? "" : "hidden";
+        // Phones fade these out with one CSS transition as the dive starts
+        // (data-cleared), not an opacity written to each one every frame.
+        if (wide.matches) {
+          for (const el of early) {
+            el.style.opacity = clear < 1 ? String(clear) : "";
+            el.style.visibility = clear > 0 ? "" : "hidden";
+          }
+        } else if (clear < 1 !== section.hasAttribute("data-cleared")) {
+          section.toggleAttribute("data-cleared", clear < 1);
         }
       }
       // The portal is the dot (same colour, centre and radius), so the hand-off
@@ -254,7 +259,9 @@ export default function MultitudesHero() {
       // reason to keep rastering glyphs at 100×+).
       const covered = inner > Math.hypot(sw, sh) / 2 + 2;
       if (covered !== (scene.style.visibility === "hidden")) scene.style.visibility = covered ? "hidden" : "";
-      clipCosmos(covered ? "" : `circle(${inner.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`);
+      // (Phones skip the clip: re-clipping the full-screen backdrop every frame
+      // cost them more than the glows outside the hole are worth.)
+      clipCosmos(covered || !wide.matches ? "" : `circle(${inner.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`);
       // The landing fades are written as plain opacity on the few layers that
       // use it (and only when it moves): an inherited custom property here
       // re-styled every element under them each frame (the stutter around 90×).
@@ -280,7 +287,7 @@ export default function MultitudesHero() {
     const reset = () => {
       world.style.transform = "";
       world.style.transformOrigin = "";
-      for (const el of earlyPhone) {
+      for (const el of early) {
         el.style.opacity = "";
         el.style.visibility = "";
       }
@@ -304,6 +311,7 @@ export default function MultitudesHero() {
       arrive.inert = true;
       shownInside = -1;
       section.removeAttribute("data-zooming");
+      section.removeAttribute("data-cleared");
     };
 
     // Time-based easing so the glide feels the same at 60Hz and 120Hz+, and a
@@ -312,7 +320,8 @@ export default function MultitudesHero() {
     const tick = (now: number) => {
       const dt = last ? Math.min(64, now - last) : 16.7;
       last = now;
-      cur += (target - cur) * (1 - Math.exp(-dt / 170));
+      // Phones follow the finger a little more tightly (a swipe, not a wheel).
+      cur += (target - cur) * (1 - Math.exp(-dt / (wide.matches ? 170 : 110)));
       if (Math.abs(target - cur) < 0.0002) cur = target;
       apply();
       // Backdrop blur re-samples every frame under a moving transform; drop it
