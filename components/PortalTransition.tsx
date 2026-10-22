@@ -61,8 +61,7 @@ export default function PortalTransition() {
       const href = a.getAttribute("href")!.split(/[?#]/)[0];
       const m = allTypes.find((x) => href === `/websites/${x.slug}`);
       if (!m || href === location.pathname) return;
-      // Phones get a plain page change: no animation there.
-      if (motionReduced() || !window.matchMedia("(min-width: 800px)").matches) return;
+      if (motionReduced()) return;
       e.preventDefault();
       if (busy.current) return;
       busy.current = true;
