@@ -1,6 +1,8 @@
 import { profile } from "@/data/profile";
 
-// Between About and the FAQ: what clients say (profile.reviews, plain text).
+// What clients say (profile.reviews, plain text). Off the home page for now
+// (2026-10-22) until there are real reviews: add <ReviewsSection /> after
+// <AboutSection /> in app/page.tsx to bring it back.
 // Until there are some, a short honest note.
 export default function ReviewsSection() {
   const { reviews, projects } = profile;

@@ -39,7 +39,7 @@ export default function IdeasSection() {
                     ))}
                   </p>
                 )}
-                <AddToMessage kind="ideas" id={idea.name} className="h-idea-add" label="Add to plan" />
+                <AddToMessage kind="ideas" id={idea.name} className="h-idea-add" label="Add to message" />
               </li>
             );
           })}

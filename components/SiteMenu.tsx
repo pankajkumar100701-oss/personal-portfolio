@@ -5,7 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArtIcon, artIcon, artVars } from "@/components/MultitudeArt";
 import { findType, profile } from "@/data/profile";
+import { useBasket } from "@/lib/basket";
 import { useContact } from "@/lib/contact";
+import { basketMessage } from "@/lib/message";
 import { DEFAULT_PREFS, measureFps, motionChosen, PREFS_EVENT, readPrefs, savePrefs, type Prefs } from "@/lib/prefs";
 
 // Small line icons for the menu (24×24, stroked like ArtIcon).
@@ -53,14 +55,13 @@ const I = {
   chat2: <path d="M4 5h16v11H9l-5 4z" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   text: <path d="M4 18 8.5 6l4.5 12M5.7 14h5.6M15 18l3-8 3 8M15.8 16h4.4" />,
-  motion: <path d="M3 12c3-6 6-6 9 0s6 6 9 0" />,
   gear: (
     <>
       <circle cx="12" cy="12" r="3" />
       <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
     </>
   ),
-  // Speedometers for the Motion levels: needle low, middle, high.
+  // A speedometer, for Performance.
   gauge: (
     <>
       <path d="M4 17a8 8 0 1 1 16 0" />
@@ -68,25 +69,11 @@ const I = {
       <circle cx="12" cy="17" r="1" />
     </>
   ),
-  gaugeLow: (
-    <>
-      <path d="M4 17a8 8 0 1 1 16 0" />
-      <path d="M12 17 7.5 13.5" />
-    </>
-  ),
-  gaugeMid: (
-    <>
-      <path d="M4 17a8 8 0 1 1 16 0" />
-      <path d="M12 17V11" />
-    </>
-  ),
-  gaugeHigh: (
-    <>
-      <path d="M4 17a8 8 0 1 1 16 0" />
-      <path d="M12 17l4.5-3.5" />
-    </>
-  ),
   flame: <path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5.5 1 1.5 2 2 2 2S10 6 12 3z" />,
+  chevron: <path d="m9 6 6 6-6 6" />,
+  sparkle: <path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z" />,
+  send: <path d="M21 3 3 10.5l7 2.5 2.5 7zM10 13l11-10" />,
+  close: <path d="M6 6l12 12M18 6 6 18" />,
 };
 const Icon = ({ d }: { d: ReactNode }) => <ArtIcon icon={d} className="menu-ico" />;
 
@@ -112,7 +99,7 @@ const pages = [
 const settings: { key: Exclude<keyof Prefs, "theme">; label: string; icon: ReactNode; options: { value: string; label: string; icon?: ReactNode }[] }[] = [
   {
     key: "text",
-    label: "Text size",
+    label: "Text Size",
     icon: I.text,
     options: [
       { value: "small", label: "Small" },
@@ -122,13 +109,13 @@ const settings: { key: Exclude<keyof Prefs, "theme">; label: string; icon: React
   },
   {
     key: "motion",
-    label: "Motion",
-    icon: I.motion,
+    label: "Performance",
+    icon: I.gauge,
     // Lightest to heaviest, left to right.
     options: [
-      { value: "reduce", label: "Lite", icon: I.gaugeLow },
-      { value: "lite", label: "Standard", icon: I.gaugeMid },
-      { value: "full", label: "Max", icon: I.gaugeHigh },
+      { value: "reduce", label: "Lite" },
+      { value: "lite", label: "Balanced" },
+      { value: "full", label: "Max" },
     ],
   },
 ];
@@ -142,9 +129,9 @@ const trending = profile.menuTypes.map(findType).filter((t) => t !== undefined);
 function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { tone: "good" | "ok" | "slow"; text: string } {
   const ratio = shown / refresh;
   if (ratio >= 0.9) return { tone: "good", text: motion === "full" ? "Running smoothly. Max is all yours." : "Running smoothly. Try Max for the full show." };
-  if (ratio >= 0.6) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Standard if it stutters." : "Pretty smooth on this setting." };
+  if (ratio >= 0.6) return { tone: "ok", text: motion === "full" ? "Pretty smooth. Try Balanced if it stutters." : "Pretty smooth on this setting." };
   if (motion === "reduce") return { tone: "slow", text: "This device is working hard. Lite is the lightest it gets." };
-  return { tone: "slow", text: motion === "full" ? "A bit out of breath. Standard will feel better." : "Still heavy here. Lite will feel better." };
+  return { tone: "slow", text: motion === "full" ? "A bit out of breath. Balanced will feel better." : "Still heavy here. Lite will feel better." };
 }
 
 // The logo doubles as the site menu: navigation, the Contact page, the top
@@ -153,6 +140,7 @@ function fpsVerdict(shown: number, refresh: number, motion: Prefs["motion"]): { 
 // is ThemeButton's) and my WhatsApp and email, in one panel.
 export default function SiteMenu() {
   const contact = useContact();
+  const waText = basketMessage(useBasket(), profile.contact.whatsappText);
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
   // Live frame rate: frames actually shown on screen in the last second.
@@ -239,8 +227,6 @@ export default function SiteMenu() {
   };
 
   const verdict = fps === null ? null : fpsVerdict(fps, refresh, prefs.motion);
-  // The picked Motion level, shown on the folded Performance row.
-  const motionLabel = motionSetting.options.find((o) => o.value === prefs.motion)?.label;
   const shownFps = fps === null ? "··" : fps;
   // Average time each frame took to reach the screen.
   const frameMs = fps ? (1000 / fps).toFixed(1) : null;
@@ -264,27 +250,41 @@ export default function SiteMenu() {
       </button>
 
       <div id={panelId} className="menu-panel" data-open={open || undefined} inert={!open}>
-        <MenuGroup title="Navigation">
-          <ul className="grid grid-cols-2 gap-1.5">
+        <header className="menu-head">
+          <span className="menu-head-mark" aria-hidden />
+          <span>
+            <b>
+              {profile.hero.first} <em>{profile.hero.accent}</em>
+            </b>
+            <small>Ideas · Websites · Experiences</small>
+          </span>
+          <button type="button" className="menu-close" onClick={() => setOpen(false)} aria-label="Close menu">
+            <Icon d={I.close} />
+          </button>
+        </header>
+
+        <nav aria-label="Pages">
+          <ul className="grid gap-2">
             {pages.map((p) => (
               <li key={p.label}>
                 <Link href={p.href} className="menu-nav" aria-current={p.match === pathname ? "page" : undefined} onClick={() => setOpen(false)}>
                   <Icon d={p.icon} />
                   {p.label}
+                  <span className="menu-chev">
+                    <Icon d={I.chevron} />
+                  </span>
                 </Link>
               </li>
             ))}
           </ul>
-        </MenuGroup>
+        </nav>
 
         {/* Contact is its own page: quick ways to message, call or email me. */}
         <section className="menu-contact-card">
           <Link href="/contact" className="menu-contact-main" onClick={() => setOpen(false)}>
             <span>
-              <small className="menu-eyebrow">
-                <i className="u-live" aria-hidden /> Let&apos;s connect
-              </small>
-              <b>Talk to me</b>
+              <small className="menu-eyebrow">Talk to me</small>
+              <b>Let&apos;s Connect</b>
               <span className="menu-contact-sub">WhatsApp, call or email. No forms.</span>
             </span>
             <span className="menu-contact-go" aria-hidden>
@@ -294,23 +294,18 @@ export default function SiteMenu() {
         </section>
 
         <MenuGroup
-          title="Trending websites"
-          icon={I.flame}
+          title="Explore categories"
+          icon={I.sparkle}
           action={
             <Link href="/explore" className="menu-viewall" onClick={() => setOpen(false)}>
               View all →
             </Link>
           }
         >
-          <ul className="grid grid-cols-2 gap-1.5">
+          <ul className="menu-types">
             {trending.map((t) => (
               <li key={t.slug}>
-                <Link
-                  href={`/websites/${t.slug}`}
-                  className="menu-type"
-                  style={{ "--c": t.color, ...artVars(t.slug, t.color) } as CSSProperties}
-                  onClick={() => setOpen(false)}
-                >
+                <Link href={`/websites/${t.slug}`} className="menu-type" style={artVars(t.slug, t.color) as CSSProperties} onClick={() => setOpen(false)}>
                   <ArtIcon icon={artIcon(t.slug)} className="menu-ico" />
                   {t.title}
                 </Link>
@@ -321,24 +316,17 @@ export default function SiteMenu() {
 
         <MenuGroup title="Settings" icon={I.gear}>
           <div className="space-y-2">
-            {settings
-              .filter((s) => s.key !== "motion")
-              .map((s) => (
-                <Setting key={s.key} s={s} value={prefs[s.key]} onPick={(v) => update(s.key, v)} />
-              ))}
-            {/* Motion and the live FPS are for the curious: folded away
-                under "Performance" so the menu stays simple for everyone else. */}
+            {settings.map((s) => (
+              <Setting key={s.key} s={s} value={prefs[s.key]} onPick={(v) => update(s.key, v)} />
+            ))}
+            {/* The live FPS is for the curious: folded away so the menu stays
+                simple for everyone else. */}
             <details className="menu-perf" open={perfOpen} onToggle={(e) => setPerfOpen(e.currentTarget.open)}>
               <summary>
-                <span className="menu-setting-ico">
-                  <Icon d={I.gauge} />
-                </span>
-                Performance
-                <span className="menu-perf-hint">{motionLabel}</span>
+                Live FPS check
                 <span className="menu-perf-chev" aria-hidden />
               </summary>
-              <div className="space-y-2 pt-2">
-                <Setting s={motionSetting} value={prefs.motion} onPick={(v) => update("motion", v)} />
+              <div className="pt-2">
                 <div className="menu-fps" data-tone={verdict?.tone}>
                   <i aria-hidden />
                   <b>{shownFps}</b> fps
@@ -362,9 +350,9 @@ export default function SiteMenu() {
           </div>
         </MenuGroup>
 
-        <MenuGroup title="Get in touch" icon={I.chat2}>
-          <div className="grid grid-cols-2 gap-1.5">
-            <a href={contact.whatsapp()} target="_blank" rel="noopener noreferrer" className="menu-touch menu-touch-wa">
+        <MenuGroup title="Get in touch" icon={I.send}>
+          <div className="grid grid-cols-2 gap-2">
+            <a href={contact.whatsapp(waText)} target="_blank" rel="noopener noreferrer" className="menu-touch menu-touch-wa">
               <WhatsAppLogo />
               WhatsApp
             </a>
@@ -375,9 +363,14 @@ export default function SiteMenu() {
           </div>
         </MenuGroup>
 
-        <p className="px-1 text-xs text-fg/45">
-          {profile.role} · {profile.location}
-        </p>
+        <footer className="menu-foot">
+          <p>
+            {profile.role} · {profile.location}
+          </p>
+          <svg viewBox="0 0 48 12" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" aria-hidden>
+            <path d="M1 11 12 3l5 4 7-6 8 7 4-3 11 6" />
+          </svg>
+        </footer>
       </div>
 
       {/* The pinned live FPS, top-left, while the menu is closed. */}
@@ -392,7 +385,6 @@ export default function SiteMenu() {
 }
 
 type SettingDef = (typeof settings)[number];
-const motionSetting = settings.find((s) => s.key === "motion")!;
 
 // One setting: its icon and label, then its options as a segmented control.
 function Setting({ s, value, onPick }: { s: SettingDef; value: string; onPick: (value: string) => void }) {
@@ -418,8 +410,8 @@ function Setting({ s, value, onPick }: { s: SettingDef; value: string; onPick: (
 
 function MenuGroup({ title, icon, action, children }: { title: string; icon?: ReactNode; action?: ReactNode; children: ReactNode }) {
   return (
-    <section className="border-b border-fg/10 pb-4">
-      <h2 className="mb-2.5 flex items-center gap-2 px-1 font-sans text-[0.65rem] uppercase tracking-[0.25em] text-fg/45">
+    <section>
+      <h2 className="menu-group-title">
         {icon && <ArtIcon icon={icon} className="menu-ico menu-ico-acid" />}
         {title}
         {action && <span className="ml-auto normal-case tracking-normal">{action}</span>}

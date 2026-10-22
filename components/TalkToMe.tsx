@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { findType, profile } from "@/data/profile";
+import { findType } from "@/data/profile";
 import { addToBasket, useBasket, writeBasket } from "@/lib/basket";
 import { useContact } from "@/lib/contact";
+import { basketMessage } from "@/lib/message";
 
 // The Contact page: no form, just ways to talk to me. One short message box
 // (pre-filled with anything they added around the site) that opens WhatsApp,
@@ -22,16 +23,7 @@ export default function TalkToMe() {
     if (slug && findType(slug)) addToBasket("types", slug);
   }, []);
 
-  const types = basket.types.map(findType).filter((t) => t !== undefined);
-  const sites = profile.projects.filter((p) => basket.sites.includes(p.title));
-  const generated = (() => {
-    const lines = ["Hi Pankaj! I saw your website and I'd like to talk about a website for me."];
-    if (types.length) lines.push(`It's for: ${types.map((t) => t.title).join(", ")}`);
-    if (sites.length) lines.push(`I liked: ${sites.map((p) => p.title).join(", ")}`);
-    if (basket.ideas.length) lines.push(`Ideas: ${basket.ideas.join(", ")}`);
-    return lines.join("\n");
-  })();
-  const message = edited ?? generated;
+  const message = edited ?? basketMessage(basket);
   const picked = basket.types.length + basket.sites.length + basket.ideas.length > 0;
 
   return (

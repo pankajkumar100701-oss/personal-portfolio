@@ -231,24 +231,31 @@ body {
 [aria-expanded="true"] > .menu-caret::before { top: calc(50% - 0.75px); transform: rotate(45deg); }
 [aria-expanded="true"] > .menu-caret::after { top: calc(50% - 0.75px); width: 100%; transform: rotate(-45deg); }
 
+/* The open menu: a frosted-glass card with an orange accent. Light theme:
+   milky white glass; dark: the studio photo (public/wallpapers/studio-sm.webp)
+   behind smoked glass with an orange edge. */
 .menu-panel {
+  --u-acid: #e8641b;
+  --m-row: rgb(255 255 255 / 0.8);
+  --m-line: rgb(0 0 0 / 0.07);
   position: absolute;
   left: -0.7rem;
   top: calc(100% + 0.9rem);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.15rem;
   width: min(25rem, calc(100vw - 2rem));
   max-height: calc(100svh - 6rem);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
-  border-radius: 1.25rem;
-  background: var(--panel-bg);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.5);
+  padding: 1.25rem 1.1rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.8);
+  border-radius: 1.75rem;
+  /* Solid: phones and Lite motion turn the blur off, and see-through text behind would show. */
+  background: linear-gradient(180deg, #fff, #f8f4ef);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  box-shadow: 0 30px 80px -24px rgb(60 40 20 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.9);
   color: var(--foreground);
   font-family: var(--font-sans);
   opacity: 0;
@@ -263,129 +270,143 @@ body {
   transform: none;
   transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.menu-panel > section:last-of-type { border-bottom: 0; padding-bottom: 0; }
-/* Dark theme: the menu sits on the studio photo (the brand image, logo taken
-   out; public/wallpapers/studio-sm.webp), darkened so the text stays readable. */
 :root:not([data-theme="light"]) .menu-panel {
+  --u-acid: #fb7a1f;
+  --m-row: rgb(255 255 255 / 0.035);
+  --m-line: rgb(255 255 255 / 0.14);
   background:
-    linear-gradient(180deg, rgb(10 11 16 / 0.9) 0%, rgb(10 11 16 / 0.82) 45%, rgb(10 11 16 / 0.55) 100%),
+    linear-gradient(180deg, rgb(12 12 16 / 0.93) 0%, rgb(12 12 16 / 0.86) 50%, rgb(12 12 16 / 0.7) 100%),
     url("/wallpapers/studio-sm.webp") 70% center / cover no-repeat,
     var(--panel-bg);
-  border-color: color-mix(in srgb, #f59e0b 30%, rgb(255 255 255 / 0.12));
-  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6), 0 0 40px -18px rgb(245 158 11 / 0.45);
-}
-:root:not([data-theme="light"]) .menu-contact-card {
-  background:
-    linear-gradient(90deg, rgb(10 11 16 / 0.88) 35%, rgb(10 11 16 / 0.35)),
-    url("/wallpapers/studio-sm.webp") 85% 35% / 200% no-repeat;
+  border-color: color-mix(in srgb, #fb7a1f 32%, rgb(255 255 255 / 0.14));
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.65), 0 0 44px -18px rgb(251 122 31 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
 /* The panel scrolls when it's taller than the screen; its parts keep their size. */
 .menu-panel > * { flex-shrink: 0; }
-.menu-link {
-  display: block;
-  padding: 0.5rem 0.6rem;
-  border-radius: 0.6rem;
-  font-size: 0.875rem;
-  color: color-mix(in srgb, var(--foreground) 80%, transparent);
-  transition: background 0.2s, color 0.2s;
-}
-.menu-link:hover { background: color-mix(in srgb, var(--foreground) 8%, transparent); color: var(--foreground); }
-.menu-chip {
-  display: inline-block;
-  padding: 0.3rem 0.65rem;
-  border: 1px solid color-mix(in srgb, var(--c, var(--foreground)) 30%, transparent);
-  border-radius: 999px;
-  font-size: 0.75rem;
-  color: color-mix(in srgb, var(--foreground) 85%, transparent);
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-.menu-chip:hover {
-  border-color: var(--c, var(--foreground));
-  background: color-mix(in srgb, var(--c, var(--foreground)) 14%, transparent);
-}
+.menu-panel .u-live, .menu-panel .u-live::after { background: var(--u-acid); }
+
+/* Header: the mark, the name and a close button. */
+.menu-head { display: flex; align-items: center; gap: 0.75rem; padding: 0 0.25rem 0.15rem; }
+.menu-head-mark { flex: none; width: 2.6rem; height: 3.3rem; background: url("/brand/ps-mark.webp") center / contain no-repeat; }
+[data-theme="light"] .menu-head-mark { background-image: url("/brand/ps-mark-light.webp"); }
+.menu-head b { display: block; font-family: var(--font-serif), Georgia, serif; font-size: 1.6rem; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; }
+.menu-head em { font-weight: 400; color: var(--u-acid); }
+.menu-head small { display: block; margin-top: 0.35rem; font-size: 0.5rem; letter-spacing: 0.2em; white-space: nowrap; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
+.menu-close { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; margin: -0.6rem -0.25rem 0 auto; align-self: flex-start; border-radius: 50%; color: var(--foreground); cursor: pointer; transition: background 0.2s; }
+.menu-close:hover { background: color-mix(in srgb, var(--foreground) 8%, transparent); }
+.menu-close .menu-ico { width: 1.25rem; height: 1.25rem; }
+.menu-close:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+
+.menu-group-title { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.65rem; padding: 0 0.3rem; font-size: 0.625rem; letter-spacing: 0.3em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 62%, transparent); }
 .menu-segment {
   display: inline-flex;
   padding: 0.2rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
 }
 .menu-segment button {
-  padding: 0.3rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--foreground) 65%, transparent);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .menu-segment button:hover { color: var(--foreground); }
-.menu-segment button[aria-checked="true"] {
-  background: var(--foreground);
-  color: var(--background);
-}
-.menu-segment button:focus-visible,
-.menu-link:focus-visible,
-.menu-chip:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-/* Menu: icons, page tiles, the Contact card, trending type tiles, settings. */
+/* The picked option: an orange pill with a soft glow. */
+.menu-segment button[aria-checked="true"] { background: linear-gradient(180deg, color-mix(in srgb, var(--u-acid) 22%, transparent), color-mix(in srgb, var(--u-acid) 34%, transparent)); color: var(--foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-acid) 75%, transparent), 0 4px 14px -6px var(--u-acid); }
+.menu-segment button:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
 .menu-ico { flex: none; width: 1rem; height: 1rem; }
-.menu-ico-acid { width: 0.85rem; height: 0.85rem; color: var(--u-acid); }
+.menu-ico-acid { width: 0.95rem; height: 0.95rem; color: var(--u-acid); }
+
+/* Pages: one glass row each, the current one lit up in orange. */
 .menu-nav,
+.menu-type,
+.menu-setting,
+.menu-touch {
+  border: 1px solid var(--m-line);
+  border-radius: 0.95rem;
+  background: var(--m-row);
+  box-shadow: 0 6px 18px -14px rgb(0 0 0 / 0.35);
+}
+.menu-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.8rem 0.9rem 0.8rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: background 0.2s, border-color 0.2s, translate 0.2s, box-shadow 0.2s;
+}
+.menu-nav > .menu-ico { width: 1.25rem; height: 1.25rem; }
+.menu-chev { display: grid; margin-left: auto; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
+.menu-chev .menu-ico { width: 1.05rem; height: 1.05rem; }
+.menu-nav:hover { translate: 2px 0; border-color: color-mix(in srgb, var(--u-acid) 55%, transparent); }
+.menu-nav[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--u-acid) 55%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--u-acid) 26%, transparent), color-mix(in srgb, var(--u-acid) 8%, transparent));
+  box-shadow: 0 8px 24px -12px color-mix(in srgb, var(--u-acid) 80%, transparent);
+}
+:root:not([data-theme="light"]) .menu-nav[aria-current="page"] { border-color: var(--u-acid); box-shadow: 0 0 22px -6px color-mix(in srgb, var(--u-acid) 80%, transparent), inset 0 0 20px -10px var(--u-acid); }
+.menu-nav[aria-current="page"] .menu-ico { color: var(--u-acid); }
+
+/* "Let's Connect": the mountains at sunset (the studio photo, cropped to the
+   window), with an orange arrow. */
+.menu-contact-card {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--u-acid) 30%, rgb(255 255 255 / 0.7));
+  border-radius: 1.1rem;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.97) 30%, rgb(255 255 255 / 0.55) 62%, rgb(255 255 255 / 0.05)),
+    url("/wallpapers/studio-sm.webp") 88% 34% / 230% no-repeat;
+  box-shadow: 0 12px 30px -18px rgb(120 60 20 / 0.5);
+}
+:root:not([data-theme="light"]) .menu-contact-card {
+  border-color: color-mix(in srgb, var(--u-acid) 60%, transparent);
+  background:
+    linear-gradient(90deg, rgb(12 12 16 / 0.94) 28%, rgb(12 12 16 / 0.5) 62%, rgb(12 12 16 / 0.1)),
+    url("/wallpapers/studio-sm.webp") 88% 34% / 230% no-repeat;
+  box-shadow: 0 0 30px -14px var(--u-acid);
+}
+.menu-contact-main { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 1.05rem 1rem 1rem 1.25rem; }
+.menu-eyebrow { display: block; font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--u-acid); }
+.menu-contact-main b { display: block; margin-top: 0.35rem; font-family: var(--font-display); font-size: 1.75rem; font-weight: 500; line-height: 1; }
+.menu-contact-sub { display: block; margin-top: 0.4rem; font-size: 0.8125rem; line-height: 1.4; color: color-mix(in srgb, var(--foreground) 80%, transparent); }
+.menu-contact-go { display: grid; flex: none; place-items: center; width: 2.9rem; height: 2.9rem; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb15c, var(--u-acid) 70%); color: #fff; box-shadow: 0 0 0 4px rgb(255 255 255 / 0.25), 0 8px 22px -6px var(--u-acid); transition: translate 0.2s, box-shadow 0.2s; }
+.menu-contact-go .menu-ico { width: 1.2rem; height: 1.2rem; }
+.menu-contact-main:hover .menu-contact-go { translate: 3px 0; box-shadow: 0 0 0 4px rgb(255 255 255 / 0.3), 0 0 26px -2px var(--u-acid); }
+.menu-contact-card a:focus-visible, .menu-nav:focus-visible, .menu-type:focus-visible, .menu-viewall:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+
+/* Categories: two to a row; an odd last one spans the row. */
+.menu-types { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.menu-types li:last-child:nth-child(odd) { grid-column: span 2; }
 .menu-type {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
-  border-radius: 0.8rem;
+  gap: 0.7rem;
+  min-height: 3.4rem;
+  padding: 0.6rem 0.85rem;
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--foreground) 85%, transparent);
-  transition: background 0.2s, border-color 0.2s, color 0.2s, translate 0.2s;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--foreground);
+  transition: background 0.2s, border-color 0.2s, translate 0.2s, box-shadow 0.2s;
 }
-.menu-nav:hover { border-color: color-mix(in srgb, var(--u-acid) 60%, transparent); color: var(--foreground); }
-.menu-nav[aria-current="page"] { border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 14%, transparent); color: var(--foreground); box-shadow: 0 0 18px -6px color-mix(in srgb, var(--u-acid) 70%, transparent); }
-.menu-nav[aria-current="page"] .menu-ico { color: var(--u-acid); }
-/* Each trending type: a calm dark tile with its own coloured icon and a
-   faint edge in that colour, which glows on hover. */
-.menu-type {
-  position: relative;
-  overflow: hidden;
-  min-height: 2.75rem;
-  line-height: 1.2;
-  border-color: color-mix(in srgb, var(--c, var(--foreground)) 28%, color-mix(in srgb, var(--foreground) 10%, transparent));
-  background: color-mix(in srgb, var(--panel-bg) 70%, transparent);
-}
-.menu-type .menu-ico { color: var(--c, var(--u-acid)); }
-.menu-type:hover { translate: 0 -1px; border-color: var(--c, var(--u-acid)); background: color-mix(in srgb, var(--c, var(--u-acid)) 10%, var(--panel-bg)); box-shadow: 0 0 18px -8px var(--c, var(--u-acid)); color: var(--foreground); }
-.menu-viewall { font-size: 0.6875rem; font-weight: 600; color: var(--u-acid); }
+.menu-type .menu-ico { width: 1.35rem; height: 1.35rem; color: var(--u-acid); }
+.menu-type:hover { translate: 0 -1px; border-color: color-mix(in srgb, var(--u-acid) 60%, transparent); box-shadow: 0 8px 20px -12px var(--u-acid); }
+.menu-viewall { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0; color: var(--u-acid); }
 .menu-viewall:hover { text-decoration: underline; text-underline-offset: 2px; }
-.menu-contact-card {
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--u-acid) 35%, transparent);
-  border-radius: 1rem;
-  background:
-    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--u-acid) 22%, transparent), transparent 60%),
-    radial-gradient(90% 80% at 0% 100%, rgb(96 165 250 / 0.12), transparent 60%),
-    color-mix(in srgb, var(--foreground) 4%, transparent);
-}
-.menu-contact-main { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1rem 0.8rem; }
-.menu-eyebrow { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
-.menu-contact-main b { display: block; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; line-height: 1; }
-.menu-contact-sub { display: block; margin-top: 0.35rem; font-size: 0.75rem; line-height: 1.4; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
-.menu-contact-go { display: grid; flex: none; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--u-acid); color: var(--u-bg); transition: translate 0.2s, box-shadow 0.2s; }
-[data-theme="light"] .menu-contact-go { color: #fff; }
-.menu-contact-main:hover .menu-contact-go { translate: 3px 0; box-shadow: 0 0 22px -4px var(--u-acid); }
-.menu-contact-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent); }
-.menu-contact-row a { display: flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem; font-size: 0.75rem; font-weight: 600; color: color-mix(in srgb, var(--foreground) 85%, transparent); transition: background 0.2s, color 0.2s; }
-.menu-contact-row a + a { border-left: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent); }
-.menu-contact-row a:hover { background: color-mix(in srgb, var(--u-acid) 10%, transparent); color: var(--foreground); }
-.menu-contact-row .menu-ico { color: var(--u-acid); }
-.menu-contact-card a:focus-visible, .menu-nav:focus-visible, .menu-type:focus-visible, .menu-viewall:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-.menu-setting { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
-.menu-setting-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: color-mix(in srgb, var(--foreground) 75%, transparent); white-space: nowrap; }
-.menu-setting-ico { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 0.5rem; background: color-mix(in srgb, var(--foreground) 7%, transparent); color: var(--u-acid); }
-.menu-setting-ico .menu-ico { width: 0.9rem; height: 0.9rem; }
-.menu-segment button { display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap; }
-.menu-segment button .menu-ico { width: 0.8rem; height: 0.8rem; }
+
+/* Settings: each a glass row with its options on the right. */
+.menu-setting { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.45rem 0.45rem 0.85rem; }
+.menu-setting-label { display: flex; align-items: center; gap: 0.65rem; font-size: 0.875rem; color: var(--foreground); white-space: nowrap; }
+.menu-setting-ico { display: grid; place-items: center; width: 1.4rem; color: var(--foreground); }
+.menu-setting-ico .menu-ico { width: 1.15rem; height: 1.15rem; }
 /* The live frame-rate check under the settings. */
 .menu-fps { display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.6rem; border-radius: 0.6rem; background: color-mix(in srgb, var(--foreground) 5%, transparent); font-size: 0.6875rem; line-height: 1.35; color: color-mix(in srgb, var(--foreground) 70%, transparent); }
 .menu-fps { flex-wrap: wrap; }
@@ -406,27 +427,8 @@ body {
 .fps-badge[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
 .fps-badge[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
 .fps-badge[data-tone="slow"] i { background: #fb7185; box-shadow: 0 0 8px #fb7185; }
-/* "Get in touch": WhatsApp and email as two buttons. */
-.menu-touch { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem; border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent); border-radius: 0.8rem; font-size: 0.8125rem; font-weight: 600; color: var(--foreground); transition: background 0.2s, border-color 0.2s, translate 0.2s; }
-.menu-touch .menu-ico { width: 1.1rem; height: 1.1rem; color: var(--u-acid); }
-.menu-touch-wa .menu-ico { color: #25d366; }
-.menu-touch:hover { translate: 0 -1px; border-color: var(--u-acid); background: color-mix(in srgb, var(--u-acid) 10%, transparent); }
-.menu-touch-wa:hover { border-color: #25d366; background: rgb(37 211 102 / 0.1); }
-.menu-touch:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
-/* Dark theme: the menu takes the reference's warm orange accent (inside the
-   menu only; the rest of the site keeps its lime). */
-:root:not([data-theme="light"]) .menu-panel { --u-acid: #fb7a1f; }
-.menu-panel .u-live, .menu-panel .u-live::after { background: var(--u-acid); }
-/* The picked option: a soft orange tint with an orange edge, not a solid fill. */
-.menu-panel .menu-segment button[aria-checked="true"] { background: color-mix(in srgb, var(--u-acid) 18%, transparent); color: var(--foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-acid) 70%, transparent); }
-.menu-panel .menu-segment button[aria-checked="true"] .menu-ico { color: var(--u-acid); }
-/* Settings → "Performance": a fold holding Motion and the live FPS. */
-.menu-perf { border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); padding-top: 0.5rem; }
-.menu-perf summary { display: flex; align-items: center; gap: 0.5rem; padding: 0.15rem 0; list-style: none; font-size: 0.8125rem; color: color-mix(in srgb, var(--foreground) 75%, transparent); cursor: pointer; }
 .menu-perf summary::-webkit-details-marker { display: none; }
-.menu-perf summary:hover { color: var(--foreground); }
 .menu-perf summary:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; border-radius: 0.5rem; }
-.menu-perf-hint { margin-left: auto; font-size: 0.6875rem; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
 .menu-perf-chev { width: 0.45rem; height: 0.45rem; margin: 0 0.35rem 0.15rem 0.25rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: 45deg; transition: rotate 0.2s; }
 .menu-perf[open] .menu-perf-chev { rotate: 225deg; margin-bottom: -0.15rem; }
 .menu-fps-screen { font-size: inherit; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
@@ -436,6 +438,21 @@ body {
 .menu-fps[data-tone="good"] i { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
 .menu-fps[data-tone="ok"] i { background: #facc15; box-shadow: 0 0 8px #facc15; }
 .menu-fps[data-tone="slow"] i { background: #fb7185; box-shadow: 0 0 8px #fb7185; }
+/* Settings → "Live FPS check": a small fold under the settings. */
+.menu-perf { padding: 0 0.3rem; }
+.menu-perf summary { display: flex; align-items: center; gap: 0.4rem; list-style: none; font-size: 0.75rem; color: color-mix(in srgb, var(--foreground) 60%, transparent); cursor: pointer; }
+.menu-perf summary:hover { color: var(--foreground); }
+/* "Get in touch": WhatsApp and email as two orange-edged buttons. */
+.menu-touch { display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.85rem; border-color: color-mix(in srgb, var(--u-acid) 45%, transparent); font-size: 0.9375rem; font-weight: 600; color: var(--foreground); transition: background 0.2s, border-color 0.2s, translate 0.2s, box-shadow 0.2s; }
+.menu-touch .menu-ico { width: 1.35rem; height: 1.35rem; color: var(--foreground); }
+.menu-touch-wa .menu-ico { color: #25d366; }
+.menu-touch:hover { translate: 0 -1px; border-color: var(--u-acid); box-shadow: 0 8px 22px -10px var(--u-acid); }
+.menu-touch:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
+/* Footer: role and place between two hairlines, and a small mountain line. */
+.menu-foot { display: grid; justify-items: center; gap: 0.35rem; padding-top: 0.1rem; color: color-mix(in srgb, var(--foreground) 62%, transparent); }
+.menu-foot p { display: flex; align-items: center; gap: 0.75rem; width: 100%; font-size: 0.75rem; white-space: nowrap; }
+.menu-foot p::before, .menu-foot p::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--foreground) 22%, transparent); }
+.menu-foot svg { width: 2.5rem; height: 0.7rem; }
   :root[data-motion="reduce"] .menu-panel, :root[data-motion="reduce"] .menu-panel[data-open], :root[data-motion="reduce"] .menu-caret::before, :root[data-motion="reduce"] .menu-caret::after { transition: none; }
 
 /* ---------- Theme button (components/ThemeButton.tsx), top right ---------- */

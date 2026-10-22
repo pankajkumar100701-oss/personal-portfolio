@@ -80,6 +80,8 @@
   .f-help-btn { padding: 0.35rem; }
   .f-help-btn > span { width: 2rem; height: 2rem; font-size: 1rem; }
   .f-help-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* Clear of the "N in your message" pill along the bottom. */
+  .f-help[data-pill] { bottom: calc(4.25rem + env(safe-area-inset-bottom)); }
 }
 /* Desktop: bottom-right, clear of the hero's "Scroll to dive" hint; on the
    home page it sits above the hero's bottom bar (zoom readout). */

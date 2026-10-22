@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { profile } from "@/data/profile";
+import { useBasket } from "@/lib/basket";
 import { useContact } from "@/lib/contact";
+import { basketMessage } from "@/lib/message";
 
 // The home page's last screen: the way to the Contact page (quick ways to
 // reach me), plus WhatsApp and email.
 export default function ContactSection() {
   const { contact } = profile;
   const { email, mailto, whatsapp } = useContact();
+  const waText = basketMessage(useBasket(), contact.whatsappText);
   return (
     <section id="contact" className="h-sec h-contact" aria-labelledby="contact-title">
       <div className="h-wrap">
@@ -25,7 +28,7 @@ export default function ContactSection() {
           <Link href="/contact" className="u-cta-primary">
             Talk to me <span aria-hidden>→</span>
           </Link>
-          <a href={whatsapp()} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
+          <a href={whatsapp(waText)} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
             Chat on WhatsApp <span aria-hidden>→</span>
           </a>
           <a href={mailto} className="u-cta-ghost">
