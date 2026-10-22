@@ -81,7 +81,7 @@ export default function HelpButton() {
           </Link>
         </div>
         <Link href="/contact" className="f-help-lang" onClick={close}>
-          Don&apos;t speak Hindi or English? Write in your own language and I&apos;ll get it in English. <span aria-hidden>→</span>
+          <b>You can write in your own language.</b> Tamil, Bengali, Marathi, Arabic, any language. Your message gets translated into English for me, so we can still talk easily. <span aria-hidden>→</span>
         </Link>
       </div>
       <a href={whatsapp(waText)} target="_blank" rel="noopener noreferrer" className="f-wa" aria-label="Chat with me on WhatsApp" title="Chat on WhatsApp">

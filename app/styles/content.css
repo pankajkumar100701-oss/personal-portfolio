@@ -55,6 +55,7 @@
 .f-help-grid b { font-size: 0.875rem; font-weight: 600; color: var(--u-fg); }
 .f-help-grid small { font-size: 0.6875rem; color: var(--u-muted); }
 .f-help-lang { display: block; margin-top: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 0.85rem; background: color-mix(in srgb, var(--u-acid) 12%, transparent); font-size: 0.8125rem; line-height: 1.45; color: var(--u-fg); }
+.f-help-lang b { display: block; margin-bottom: 0.2rem; font-weight: 600; }
 .f-help-lang:hover { background: color-mix(in srgb, var(--u-acid) 20%, transparent); }
 @media print { .f-help { display: none; } }
 
