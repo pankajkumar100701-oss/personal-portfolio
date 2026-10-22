@@ -97,7 +97,7 @@ export default function ExploreTypes() {
           <p className="font-display text-3xl">{q.trim() ? `Nothing like “${q.trim()}” on the list.` : "Nothing on the list here."}</p>
           <p className="mt-2 text-muted">I can still build it. Tell me what you have in mind on the Contact page.</p>
           <Link href="/contact" className="u-cta-primary x-btn mt-6">
-            Customise your website plan <span aria-hidden>→</span>
+            Talk to me <span aria-hidden>→</span>
           </Link>
         </div>
       ) : (

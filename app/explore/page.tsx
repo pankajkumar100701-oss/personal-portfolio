@@ -39,7 +39,7 @@ export default function ExplorePage() {
             that fits you.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
-            Pick the ones that sound like you and add them to your message — then customise it and send it to me on WhatsApp or email.
+            Pick the ones that sound like you and add them to your message, then send it to me on WhatsApp.
           </p>
         </header>
 

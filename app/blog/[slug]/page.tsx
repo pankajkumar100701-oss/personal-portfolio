@@ -73,7 +73,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           <p className="mt-3 text-muted">I&apos;ll reply with a plan and a fixed price.</p>
           <div className="h-cta" style={{ justifyContent: "flex-start" }}>
             <Link href="/contact" className="u-cta-primary">
-              Customise your website plan <span aria-hidden>→</span>
+              Talk to me <span aria-hidden>→</span>
             </Link>
             {next.slug !== post.slug && (
               <Link href={`/blog/${next.slug}`} className="u-cta-ghost">

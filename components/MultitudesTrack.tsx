@@ -285,7 +285,7 @@ export default function MultitudesTrack() {
               <em>I&apos;ll build the rest.</em>
             </h2>
             <p className="u-track-hint">
-              From gyms and clinics to stores and homestays: the {types.length} websites people ask me for most. Open one to see what goes inside, or add it to your plan.
+              From gyms and clinics to stores and homestays: the {types.length} websites people ask me for most. Open one to see what goes inside, or add it to your message.
             </p>
             <Link href="/work" className="u-track-work">
               See my work <span aria-hidden>→</span>

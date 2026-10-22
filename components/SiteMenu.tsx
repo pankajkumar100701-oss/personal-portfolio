@@ -277,15 +277,15 @@ export default function SiteMenu() {
           </ul>
         </MenuGroup>
 
-        {/* Contact is its own page, where visitors write their message to me. */}
+        {/* Contact is its own page: quick ways to message, call or email me. */}
         <section className="menu-contact-card">
           <Link href="/contact" className="menu-contact-main" onClick={() => setOpen(false)}>
             <span>
               <small className="menu-eyebrow">
                 <i className="u-live" aria-hidden /> Let&apos;s connect
               </small>
-              <b>Customise your website plan</b>
-              <span className="menu-contact-sub">Pick what you need and send me your plan.</span>
+              <b>Talk to me</b>
+              <span className="menu-contact-sub">WhatsApp, call or email. No forms.</span>
             </span>
             <span className="menu-contact-go" aria-hidden>
               <Icon d={I.arrow} />

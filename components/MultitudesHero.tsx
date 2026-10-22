@@ -583,7 +583,7 @@ export default function MultitudesHero() {
                   ("Explore your type" is already under the title). */}
               <div className="u-mobile-cta">
                 <Link href="/contact" className="u-cta-primary">
-                  Customise your website plan <span aria-hidden>→</span>
+                  Talk to me <span aria-hidden>→</span>
                 </Link>
                 <a href={mailto} className="u-cta-ghost">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="u-mail" aria-hidden>

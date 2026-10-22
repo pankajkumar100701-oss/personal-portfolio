@@ -83,7 +83,7 @@ export function BasketPill() {
   return (
     <div ref={pillRef} className="x-pill" role="status">
       <Link href="/contact">
-        <b>{count}</b> in your message · Customise &amp; send <span aria-hidden>→</span>
+        <b>{count}</b> in your message · Send to me <span aria-hidden>→</span>
       </Link>
       <button type="button" onClick={() => leave(() => shrink(true))} aria-label="Make it small" title="Make it small">
         –

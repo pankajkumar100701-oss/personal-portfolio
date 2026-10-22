@@ -4,8 +4,8 @@ import Link from "next/link";
 import { profile } from "@/data/profile";
 import { useContact } from "@/lib/contact";
 
-// The home page's last screen: the way to the Contact page (where visitors
-// write their message), plus WhatsApp and email.
+// The home page's last screen: the way to the Contact page (quick ways to
+// reach me), plus WhatsApp and email.
 export default function ContactSection() {
   const { contact } = profile;
   const { email, mailto, whatsapp } = useContact();
@@ -19,11 +19,11 @@ export default function ContactSection() {
           <em>Let&apos;s talk.</em>
         </h2>
         <p className="h-text">
-          Tell me about your business or idea — even a rough one is fine. I&apos;ll reply with a plan and a price, no strings attached.
+          Tell me about your business or idea — even a rough one is fine. Message me on WhatsApp, we&apos;ll have a quick chat, and I&apos;ll send a plan and a price. No strings attached.
         </p>
         <div className="h-cta">
           <Link href="/contact" className="u-cta-primary">
-            Customise your website plan <span aria-hidden>→</span>
+            Talk to me <span aria-hidden>→</span>
           </Link>
           <a href={whatsapp()} target="_blank" rel="noopener noreferrer" className="u-cta-ghost">
             Chat on WhatsApp <span aria-hidden>→</span>
@@ -43,6 +43,15 @@ export default function ContactSection() {
             ))}
           </ul>
         )}
+        <p className="mt-8 text-xs text-muted">
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-fg">
+            Privacy Policy
+          </Link>
+          {" · "}
+          <Link href="/terms" className="underline underline-offset-2 hover:text-fg">
+            Terms &amp; Conditions
+          </Link>
+        </p>
       </div>
     </section>
   );

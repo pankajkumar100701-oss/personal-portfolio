@@ -33,11 +33,13 @@
 /* ---------- Help button (components/HelpButton.tsx) ---------- */
 /* Bottom-left: the message pill sits in the middle and its round badge on the
    right. On the Contact page's phone layout it rises above the send bar. */
-.f-help { position: fixed; z-index: 55; left: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); }
+.f-help { position: fixed; z-index: 55; left: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+/* The always-there WhatsApp button, stacked above Help. */
+.f-wa { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: #25d366; color: #fff; box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.55); transition: scale 0.2s; }
+.f-wa svg { width: 1.6rem; height: 1.6rem; }
+.f-wa:hover { scale: 1.06; }
+.f-wa:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
 .f-help-label { font-style: normal; }
-@media (max-width: 1023px) {
-  .f-help[data-at="contact"] { bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
-}
 .f-help-btn { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.55rem 0.95rem 0.55rem 0.55rem; border: 1px solid var(--u-line); border-radius: 999px; background: var(--u-card); color: var(--u-fg); font-size: 0.8125rem; font-weight: 600; box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.6); cursor: pointer; transition: border-color 0.2s; }
 .f-help-btn:hover, .f-help-btn[aria-expanded="true"] { border-color: var(--u-acid); }
 .f-help-btn:focus-visible { outline: 2px solid var(--u-acid); outline-offset: 2px; }
@@ -82,7 +84,7 @@
 /* Desktop: bottom-right, clear of the hero's "Scroll to dive" hint; on the
    home page it sits above the hero's bottom bar (zoom readout). */
 @media (min-width: 800px) {
-  .f-help { left: auto; right: 1.25rem; bottom: 1.25rem; }
+  .f-help { left: auto; right: 1.25rem; bottom: 1.25rem; align-items: flex-end; }
   .f-help-panel { left: auto; right: 0; }
   .f-help[data-at="home"] { bottom: 4.75rem; }
 }

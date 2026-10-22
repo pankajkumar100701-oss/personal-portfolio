@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import ContactBuilder from "@/components/ContactBuilder";
 import SiteMenu from "@/components/SiteMenu";
+import TalkToMe from "@/components/TalkToMe";
 import ThemeButton from "@/components/ThemeButton";
 import { profile } from "@/data/profile";
 import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = pageMeta(`Customise your website plan — ${profile.brand}`, "Tell me what you need: pick your type, the ideas you want and send it on WhatsApp or email.", "/contact");
+export const metadata: Metadata = pageMeta(`Talk to me — ${profile.brand}`, "Want a website? Just message me on WhatsApp, call or email. No forms.", "/contact");
 
-// Its own page, away from the home page's scroll: the visitor writes their
-// message to me step by step (see ContactBuilder).
+// Its own page, away from the home page's scroll: no form, just a quick way to
+// message, call or email me (see TalkToMe).
 export default function ContactPage() {
   return (
     <main className="u-detail" data-page="contact" style={{ "--c": "var(--m-coral)" } as CSSProperties}>
@@ -32,19 +32,19 @@ export default function ContactPage() {
 
       <article className="u-detail-main">
         <header className="m-rise">
-          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Contact · Customise your website plan</p>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-ink">Contact · Talk to me</p>
           <h1 className="mt-4 font-display text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.95] tracking-[-0.04em]">
-            Your website,
+            Just
             <br />
-            your words.
+            talk to me.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-soft sm:text-xl">
-            Pick what you need and I&apos;ll write the message for you. Change anything you like, then send it on WhatsApp or by email — I reply with a plan and a price.
+            No forms. Send me a message on WhatsApp, call or email, even if it&apos;s just a rough idea. We&apos;ll have a quick chat, I&apos;ll show you what I&apos;ve built, and we&apos;ll figure it out together.
           </p>
         </header>
 
         <div className="mt-12">
-          <ContactBuilder />
+          <TalkToMe />
         </div>
       </article>
     </main>

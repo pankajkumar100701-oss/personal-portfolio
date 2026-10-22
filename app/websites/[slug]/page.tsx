@@ -58,7 +58,7 @@ export default async function MultitudePage({ params }: PageProps<"/websites/[sl
         <Hero m={m}>
           <div className="x-type-actions mt-8">
             <Link href={`/contact?type=${m.slug}`} className="m-cta m-cta-sm">
-              Customise yours <span aria-hidden>→</span>
+              Ask me for one <span aria-hidden>→</span>
             </Link>
             <AddToMessage kind="types" id={m.slug} />
             <ShareLink path={`/websites/${m.slug}`} title={`${m.title} websites — ${profile.brand}`} />

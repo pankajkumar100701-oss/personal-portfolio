@@ -1,6 +1,6 @@
 // Blog posts (/blog and /blog/<slug>). Each post is a list of blocks: a
 // heading (h), a paragraph (p) or a bullet list (list). Newest first.
-import { domainHosting, maintenance, money, prices } from "@/data/pricing";
+import { domainHosting, maintenance, money, startsAt } from "@/data/pricing";
 
 export type Block = { h: string } | { p: string } | { list: string[] };
 export type Post = { slug: string; title: string; blurb: string; date: string; minutes: number; body: Block[] };
@@ -9,21 +9,13 @@ export const posts: Post[] = [
   {
     slug: "website-cost-india",
     title: "How much does a website cost in India in 2026?",
-    blurb: "Real numbers for small businesses, what pushes the price up, and the costs people forget about.",
+    blurb: "What decides the price for small businesses, what pushes it up, and the costs people forget about.",
     date: "2026-10-10",
     minutes: 4,
     body: [
-      { p: "It's the first thing everyone asks me, and the honest answer is: it depends on what the site has to do. But \"it depends\" isn't much help, so here are real numbers from the work I do." },
-      { h: "Rough prices" },
-      {
-        list: [
-          `A personal portfolio or one-page site: from ${money(prices.portfolio.from)}`,
-          `A business site for a shop, clinic, salon or gym (4–6 pages): ${money(prices.business.from)} to ${money(prices.fitness.from + 8000)}`,
-          `A restaurant with a menu, table booking and maps: from ${money(prices.restaurants.from)}`,
-          `Real estate, hotels or travel, with listings and enquiries: from ${money(prices["real-estate"].from)}`,
-          `An online store with cart, UPI and cash on delivery: from ${money(prices.store.from)}`,
-        ],
-      },
+      { p: "It's the first thing everyone asks me, and the honest answer is: it depends on what the site has to do." },
+      { h: "Where it starts" },
+      { p: `My websites start from ${money(startsAt)}. A simple one-page site sits at the low end; an online store with payments sits higher. The final price depends on what you're looking for and the time it takes me to build it, and I always tell you a fixed price before any work starts.` },
       { h: "What makes it cost more" },
       { p: "The number of pages matters less than you'd think. What really adds to the price is anything that has to work behind the scenes: online payments, booking slots, an admin panel where you edit things yourself, or a site in two languages." },
       { h: "The costs people forget" },

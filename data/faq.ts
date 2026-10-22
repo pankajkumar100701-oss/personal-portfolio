@@ -1,28 +1,24 @@
 // The home page's FAQ (components/FaqSection.tsx). Each answer is a few short
-// paragraphs; `link` adds a button under it. Prices and timelines come from
-// data/pricing.ts, so they stay in step with the Contact page.
-import { allTypes, findType } from "@/data/profile";
-import { domainHosting, maintenance, money, prices } from "@/data/pricing";
+// paragraphs; `link` adds a button under it. Maintenance and domain costs
+// come from data/pricing.ts.
+import { allTypes } from "@/data/profile";
+import { domainHosting, maintenance, money, startsAt } from "@/data/pricing";
 
 export type Faq = { q: string; a: string[]; link?: { label: string; href: string } };
-
-const from = (slug: string) => `${findType(slug)?.title ?? slug} from ${money(prices[slug].from)}`;
-const days = (slug: string) => `${findType(slug)?.title ?? slug}: ${prices[slug].days}`;
-const cheapest = Math.min(...Object.values(prices).map((p) => p.from));
 
 export const faqs: Faq[] = [
   {
     q: "How much does a website cost?",
     a: [
-      `It depends on what the site has to do. A rough idea: ${from("portfolio")}, ${from("business")}, ${from("restaurants")}, ${from("real-estate")} and ${from("store")}.`,
-      "Booking systems, payments, an admin panel or lots of pages add to it. Tell me what you need and I'll send a fixed price before any work starts, so there are no surprises later.",
+      `Websites start from ${money(startsAt)}. The final price depends on what you're looking for and the time it takes me to build it.`,
+      "Just message me what you need. We'll have a quick chat and I'll send a fixed price before any work starts, so there are no surprises later.",
     ],
-    link: { label: "See prices in your currency", href: "/contact" },
+    link: { label: "Talk to me", href: "/contact" },
   },
   {
     q: "How long does it take?",
     a: [
-      `Most sites go live in 1 to 4 weeks. For example, ${days("portfolio")}, ${days("salon")}, ${days("real-estate")}, ${days("store")}.`,
+      "Most sites are ready within a week: a day or two for the plan, 1 to 2 days for the design and 1 to 2 days to build. Bigger sites like online stores can take a little longer.",
       "The biggest thing that speeds it up is having your photos, text and logo ready. If you need it sooner, ask and I'll tell you honestly whether it's possible.",
     ],
   },
@@ -87,15 +83,15 @@ export const faqs: Faq[] = [
     q: "Can the site be in Hindi or another language?",
     a: [
       "Yes. I can build your site in Hindi, English or both, with a simple switch between them.",
-      "And you can write to me in any language you like. The Contact page translates your message, so I get it in English and we can still talk easily.",
+      "And you can write to me in any language you like. We'll figure it out together.",
     ],
-    link: { label: "Write your message", href: "/contact" },
+    link: { label: "Talk to me", href: "/contact" },
   },
   {
     q: "Do you work with clients outside India?",
     a: [
       "Yes, happily. I already talk to clients on WhatsApp, email and video calls, so we can work together from anywhere, and I'll fit calls around your time zone.",
-      `On the Contact page you can pick your currency to see rough prices (sites start at about ${money(cheapest, "USD")}). You can pay by PayPal or bank transfer.`,
+      "Message me on WhatsApp or email and I'll quote in your currency. You can pay by PayPal or bank transfer.",
     ],
   },
 ];

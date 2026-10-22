@@ -1,32 +1,7 @@
-// Rough starting prices and timelines, by website type (slugs from
-// data/profile.ts). Used by the Contact page's price list (in the visitor's
-// currency) and the FAQ. Edit freely: prices are in Indian rupees.
-
-export type Price = { from: number; days: string };
-
-export const prices: Record<string, Price> = {
-  store: { from: 25000, days: "3–5 weeks" },
-  "painting-art": { from: 12000, days: "2–3 weeks" },
-  fitness: { from: 12000, days: "2–3 weeks" },
-  education: { from: 15000, days: "2–4 weeks" },
-  "real-estate": { from: 20000, days: "3–4 weeks" },
-  salon: { from: 12000, days: "2–3 weeks" },
-  restaurants: { from: 12000, days: "2–3 weeks" },
-  travel: { from: 18000, days: "3–4 weeks" },
-  rental: { from: 18000, days: "3–4 weeks" },
-  business: { from: 10000, days: "1–2 weeks" },
-  medical: { from: 15000, days: "2–3 weeks" },
-  stay: { from: 20000, days: "3–4 weeks" },
-  photography: { from: 10000, days: "1–2 weeks" },
-  events: { from: 12000, days: "2–3 weeks" },
-  interior: { from: 12000, days: "2–3 weeks" },
-  professional: { from: 10000, days: "1–2 weeks" },
-  startup: { from: 8000, days: "1 week" },
-  portfolio: { from: 6000, days: "1 week" },
-  ngo: { from: 10000, days: "2–3 weeks" },
-  clubbing: { from: 12000, days: "2–3 weeks" },
-  recipes: { from: 10000, days: "2 weeks" },
-};
+// Prices in Indian rupees, used by the FAQ and the blog. No per-type price
+// list on the site for now (the old one is kept with the Contact plan builder
+// in ~/pankajstudio/talk-to-me): just where websites start.
+export const startsAt = 1000;
 
 // Keeping a site running after it's live, a month: small changes (text,
 // prices, photos) cost less; new pages and big changes, more.

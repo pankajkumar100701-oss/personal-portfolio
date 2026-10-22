@@ -128,7 +128,7 @@ export default function WorkList() {
               Clear search
             </button>
             <Link href="/contact" className="m-cta m-cta-sm">
-              Customise your website plan <span aria-hidden>→</span>
+              Talk to me <span aria-hidden>→</span>
             </Link>
           </div>
         </div>

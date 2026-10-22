@@ -16,7 +16,7 @@ export default function IdeasSection() {
           <br />
           <em>Start with these.</em>
         </h2>
-        <p className="h-text">Small touches that bring in real customers. Add the ones you like and they go straight into your plan, ready to send.</p>
+        <p className="h-text">Small touches that bring in real customers. Add the ones you like and they go straight into your message to me.</p>
 
         <ul className="h-ideas">
           {ideas.map((idea, i) => {

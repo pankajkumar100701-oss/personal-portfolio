@@ -47,7 +47,7 @@ export default function Websites({ m, n = "✦" }: { m: WebsiteType; n?: string 
           <p className="mt-3 max-w-xl text-muted">Meanwhile, see how I build for others — the same care goes into yours.</p>
           <div className="mt-6 flex flex-wrap gap-2">
             <Link href={`/contact?type=${m.slug}`} className="m-cta m-cta-sm">
-              Customise your website plan <span aria-hidden>→</span>
+              Talk to me <span aria-hidden>→</span>
             </Link>
             <Link href="/work" className="x-share">
               See my work
