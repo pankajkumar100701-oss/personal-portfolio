@@ -1043,7 +1043,7 @@ body {
 .u-node b,
 .u-node strong,
 .u-node small { position: relative; z-index: 1; transition: transform 0.8s var(--u-spring), color 0.3s, letter-spacing 0.5s, text-shadow 0.4s; }
-.u-node b { font-family: var(--font-sans); font-size: 0.625rem; letter-spacing: 0.15em; color: var(--ink); }
+.u-node b { font-family: var(--font-display); font-size: 1.375rem; font-weight: 400; line-height: 1; color: var(--ink); }
 .u-node strong { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
 .u-node small { font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--u-muted); }
 /* Desktop: every card is the same short rectangle, a line each for the
@@ -1076,7 +1076,7 @@ body {
 .u-node:focus-within > *::before,
 .u-node:focus-within > *::after { opacity: 1; }
 .u-node:hover b,
-.u-node:focus-within b { letter-spacing: 0.3em; color: var(--art-ink); }
+.u-node:focus-within b { letter-spacing: 0.06em; color: var(--art-ink); }
 /* Hover: the card floods with its multitude's gradient (MultitudeArt) and
    its icon draws itself in at the top right. */
 .u-node-flood {
