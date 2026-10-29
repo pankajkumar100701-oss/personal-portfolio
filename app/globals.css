@@ -657,7 +657,9 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  z-index: 10;
+  /* Above the resting cards (12) so the zoom never hides the eyebrow line;
+     a hovered card (14) still comes to the front. */
+  z-index: 13;
   transform: translate(-50%, -50%);
   text-align: center;
   white-space: nowrap;
@@ -1043,7 +1045,9 @@ body {
 .u-node b,
 .u-node strong,
 .u-node small { position: relative; z-index: 1; transition: transform 0.8s var(--u-spring), color 0.3s, letter-spacing 0.5s, text-shadow 0.4s; }
-.u-node b { font-family: var(--font-display); font-size: 1.375rem; font-weight: 400; line-height: 1; color: var(--ink); }
+/* Serif number, held to the old sans line's 15px so the floating cards keep
+   their height and clear the eyebrow under them. */
+.u-node b { font-family: var(--font-display); font-size: 1.125rem; font-weight: 400; line-height: 0.9375rem; color: var(--ink); }
 .u-node strong { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
 .u-node small { font-family: var(--font-sans); font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--u-muted); }
 /* Desktop: every card is the same short rectangle, a line each for the
@@ -1058,7 +1062,7 @@ body {
 [data-theme="light"] .u-node > * { box-shadow: 0 10px 30px -18px rgb(30 25 10 / 0.35); border-left-width: 2px; }
 
 .u-node:hover,
-.u-node:focus-within { z-index: 13; animation-play-state: paused; }
+.u-node:focus-within { z-index: 14; animation-play-state: paused; }
 .u-node:hover > *,
 .u-node:focus-within > * {
   outline: none;
@@ -1412,6 +1416,7 @@ body {
   .u-node > * { width: auto; height: 100%; padding: 0.875rem 0.875rem 0.9375rem; backdrop-filter: none; background: var(--u-card); }
   .u-node-3d { grid-column: 1 / -1; }
   .u-node small { font-size: 0.625rem; line-height: 1.5; }
+  .u-node b { font-size: 1.375rem; line-height: 1; }
   .u-mobile-cta {
     display: flex;
     flex-wrap: wrap;
